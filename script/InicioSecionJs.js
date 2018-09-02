@@ -1,4 +1,4 @@
-function a(){
+
 var config = {
 	apiKey: "AIzaSyBJ07lQll4dzXwtIv45WSsSd4_lzdCeT8I",
 	authDomain: "proyectotic-2018.firebaseapp.com",
@@ -8,18 +8,29 @@ var config = {
 	messagingSenderId: "248044014160"
 };
 firebase.initializeApp(config);
-//var database = firebase.database();
-const preobject = document.getElementById('object');
-alert("se cargo uno");
 
+var database = firebase.database();
 
-const dbRefObject = firebase.database().ref().child('object');
-console.log(preobject);
-dbRefObject.on('value', snap => {preobject.innerText = JSON.stringfy(snap.val(),null,3)})
+function AgregarInfo(){
+var messageListRef = firebase.database().ref('ParaProbar');
+var newMessageRef = messageListRef.push();
+newMessageRef.set({
+  'objeto': 'LohicePerro',
+  'text': 'Lanada'
+});
+}
 
-};
-
-a();
+var path = newMessageRef.toString();
+function BorarInfo(){
+var adaRef = firebase.database().ref('ParaProbar');
+adaRef.remove()
+  .then(function() {
+    console.log("Remove succeeded.")
+  })
+  .catch(function(error) {
+    console.log("Remove failed: " + error.message)
+  });
+  }
 
 
 

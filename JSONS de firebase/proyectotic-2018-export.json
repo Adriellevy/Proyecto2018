@@ -1,0 +1,27 @@
+{
+  "ParaProbar " : {
+    "Objeto" : "falso"
+  },
+  "aulas" : {
+    "Aula_1" : {
+      "Disponible" : false,
+      "Edificio" : "libertador",
+      "Nombre" : 213
+    }
+  },
+  "bloqueos" : {
+    "bloqueo_1" : {
+      "ApartirDe" : "7:45:00",
+      "Hasta" : "9:05:00",
+      "aula" : 213
+    }
+  },
+  "profesores" : {
+    "profesor_1" : {
+      "Apellido" : "gini",
+      "EsAdmin" : true,
+      "Materia" : "fisica",
+      "Nombre" : "santiago"
+    }
+  }
+}
