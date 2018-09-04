@@ -18,9 +18,9 @@ newMessageRef.set({
   'objeto': 'LohicePerro',
   'text': 'Lanada'
 });
+var path = newMessageRef.toString();
 }
 
-var path = newMessageRef.toString();
 function BorarInfo(){
 var adaRef = firebase.database().ref('ParaProbar');
 adaRef.remove()

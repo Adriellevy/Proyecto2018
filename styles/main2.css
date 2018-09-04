@@ -21,7 +21,7 @@ select#Listadias{
 	background: #e0e0e0;
 	border: 1px solid;
 	margin: 2em 0;
-
+	border-radius: 8px;
 }
 select#Listabloques{
 	padding: 1em;
@@ -32,10 +32,6 @@ select#Listabloques{
 	margin: 2em 0;
 	border-radius: 8px;
 }
-
-
-
-
 
 img#logaso{
 	
