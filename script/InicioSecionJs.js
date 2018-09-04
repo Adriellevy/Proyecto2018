@@ -14,12 +14,13 @@ var database = firebase.database();
 function AgregarInfo(){
 var messageListRef = firebase.database().ref('ParaProbar');
 var newMessageRef = messageListRef.push();
-newMessageRef.set({
-  'objeto': 'LohicePerro',
+messageListRef.set({
+'objeto': 'LohicePerro',
   'text': 'Lanada'
 });
-var path = newMessageRef.toString();
-}
+newMessageRef.set({
+  //aca creas un hijo adentro de un objeto sin nombre(o un nombre aleatorio) con las caracteristicas que quieras
+});
 
 function BorarInfo(){
 var adaRef = firebase.database().ref('ParaProbar');
