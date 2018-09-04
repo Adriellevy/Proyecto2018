@@ -28,11 +28,19 @@ function BorarInfo(){
 var adaRef = firebase.database().ref('ParaProbar');
 adaRef.remove()
   .then(function() {
-    console.log("Remove succeeded.")
+    console.log("Ya fue eliminado.")
   })
   .catch(function(error) {
-    console.log("Remove failed: " + error.message)
+    console.log("Error al eliminar: " + error.message)
   });
   }
+function leerdatos(){ 
+  var ref = firebase.database().ref();
+  ref.on("value", function(snapshot) {
+     console.log(snapshot.val().aulas.Aula_1.Nombre);// aca dsp de snapshop.val se ve lo que queres buscar dentro de proyecto-2018
+  }, function (error) {
+     console.log("Error: " + error.code);
+  });
+}
 
-
+leerdatos();
