@@ -44,7 +44,7 @@ function leerdatos(){
           for (var i = 0; i<count; i++){
               console.log(aulas['Aula_'+(i+1)].Nombre);
               var aula = aulas['Aula_'+(i+1)].Nombre;
-             $('#ListaAulas').append('<option value="'+aula+'"></option>');
+              $('#ListasAulas').append('<option value="'+aula+'">'+aula+'</option>');
             // $("#ListaAulas").click(function() {  
             //  $("#ListaAulas[value=0]").attr("selected",true);  
    // });  
