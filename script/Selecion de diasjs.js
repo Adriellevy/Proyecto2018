@@ -44,13 +44,18 @@ function leerdatos(){
           for (var i = 0; i<count; i++){
               console.log(aulas['Aula_'+(i+1)].Nombre);
               var aula = aulas['Aula_'+(i+1)].Nombre;
-              $('#ListasAulas').append('<option value="'+aula+'">'+aula+'</option>');
-            // $("#ListaAulas").click(function() {  
-            //  $("#ListaAulas[value=0]").attr("selected",true);  
-   // });  
-          }
-    });
-  }
+              $('#ListasAulas').append('<option value="'+aula+'">'+aula+'</option>');  
+            }
+        });
+     }
 
+/*
+$('#ListaAulas').change(function() {
+  var genre = $(this).val()
+  $('#ListaBloques').html('')
+
+  $('body').removeClass()
+  $('body').addClass(genre)
+})*/
 
 leerdatos();
