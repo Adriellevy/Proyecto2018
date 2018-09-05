@@ -34,13 +34,20 @@ adaRef.remove()
     console.log("Error al eliminar: " + error.message)
   });
   }
+
 function leerdatos(){ 
   var ref = firebase.database().ref();
-  ref.on("value", function(snapshot) {
-     console.log(snapshot.val().aulas.Aula_1.Nombre);// aca dsp de snapshop.val se ve lo que queres buscar dentro de proyecto-2018
-  }, function (error) {
-     console.log("Error: " + error.code);
-  });
-}
+    ref.on("value", function(snapshot) {
+       var aulas = [];
+           aulas = snapshot.val().aulas;
+       var count = Object.keys(aulas).length;
+          for (var i = 0; i<count; i++){
+              console.log(aulas['Aula_'+(i+1)].Nombre);
+              var aula = aulas['Aula_'+(i+1)].Nombre;
+             $('#ListaAulas').append('<option value="1">' + aula +'</option>');
+          }
+    });
+  }
+
 
 leerdatos();
