@@ -32,23 +32,28 @@ adaRef.remove()
     console.log("Remove failed: " + error.message)
   });
   }
-
-function leerdatos(){ 
+var texto = "123";
+function leerdatos(contraseña){ 
   var ref = firebase.database().ref();
     ref.on("value", function(snapshot) {
        var profesores = [];
            profesores = snapshot.val().profesores;
        var count = Object.keys(profesores).length;
-       console.log(profesores ['profesor_'+ 1].Contraseña);
           for (var i = 0; i<count; i++){
               console.log(profesores['profesor_'+(i+1)].Contraseña);
-              var profesores = profesores['profesor_'+(i+1)].Contraseña;
-              if(profesores === ('#contraseña').text)
-              {
-                console.log(vamo);
-              }
+              var Contraseñaprofe = profesores['profesor_'+(i+1)].Contraseña;
+                if(Contraseñaprofe == contraseña)
+                {
+                  
+                }
              }
-     }); 
-  }
-  leerdatos();
+           })
+          }
 
+
+leerdatos();
+// no funciona el click funcition, no se porque 
+$("#InicioSecion").click(function() {
+  alert('botonclick');
+  leerdatos($('#cintraseña').val());
+});
