@@ -21,7 +21,7 @@ messageListRef.set({
 newMessageRef.set({
   //aca creas un hijo adentro de un objeto sin nombre(o un nombre aleatorio) con las caracteristicas que quieras
 });
-
+}
 function BorarInfo(){
 var adaRef = firebase.database().ref('ParaProbar');
 adaRef.remove()
@@ -33,5 +33,22 @@ adaRef.remove()
   });
   }
 
-
+function leerdatos(){ 
+  var ref = firebase.database().ref();
+    ref.on("value", function(snapshot) {
+       var profesores = [];
+           profesores = snapshot.val().profesores;
+       var count = Object.keys(profesores).length;
+       console.log(profesores ['profesor_'+ 1].Contraseña);
+          for (var i = 0; i<count; i++){
+              console.log(profesores['profesor_'+(i+1)].Contraseña);
+              var profesores = profesores['profesor_'+(i+1)].Contraseña;
+              if(profesores === ('#contraseña').text)
+              {
+                console.log(vamo);
+              }
+             }
+     }); 
+  }
+  leerdatos();
 
