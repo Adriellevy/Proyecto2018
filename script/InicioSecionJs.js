@@ -49,10 +49,13 @@ function leerdatos(contraseña,Profe){
                 if(Contraseñaprofe == contraseña && UsuarioProfe == Profe )
                 {
                   var estatus  = profesores['profesor_'+(i+1)].EsAdmin;
+                  console.log(estatus);
                   if (estatus == true){
-                    window.location.href = './AgregarUsuYAulas';
+                    //window.location.href = './AgregarUsuYAulas';
+                    alert("es ADM");
                   }else{
-                    window.location.href = './Selecion de dias';
+                    //window.location.href = './Selecion de dias';
+                    alert("es profe");
                   }
                 }
              }
