@@ -9,31 +9,35 @@
 
 
 <body>
-  <div class="caja">
-    <h2>Por favor ingrese los datos</h2>
-    <select name="Days" id="Listadias">
-  <option value="Vacio">Seleccione un dia</option>
-  <option value="Lunes">Lunes</option>
-  <option value="Martes">Martes</option>
-  <option value="Miercoles">Miercoles</option>
-  <option value="Jueves">Jueves</option>
-  <option value="Viernes">Viernes</option>
-</select>
 
-<select name="Blocks" id="Listabloques">
-  <option value="Vacio">Seleccione un bloque</option>
-  <option value="1 Bloque">1 Bloque</option>
-  <option value="2 Bloque">2 Bloque</option>
-  <option value="3 bloque">3 bloque</option>
-</select>
+  <div class="busqueda">
+      <div class="caja">
+      <h2>Por favor ingrese los datos</h2>
 
-<select name="Aulas" id="ListasAulas"> 
- <option value="Vacio">selecione un aula</option>
-</select>
+      <select name="Days" id="Listadias">
+        <option value="Vacio">Seleccione un dia</option>
+        <option value="Lunes">Lunes</option>
+        <option value="Martes">Martes</option>
+        <option value="Miercoles">Miercoles</option>
+        <option value="Jueves">Jueves</option>
+        <option value="Viernes">Viernes</option>
+      </select>
+
+      <select name="Blocks" id="Listabloques">
+        <option value="Vacio">Seleccione un bloque</option>
+        <option value="1 Bloque">1 Bloque</option>
+        <option value="2 Bloque">2 Bloque</option>
+        <option value="3 bloque">3 bloque</option>
+      </select>
+      <button id="busquedaaulas"></button>
+    </div>
+
+    <img src="./images/logo.png" width="30%" height="30%" id="logaso">
+  </div>
 
 
-</div>
-<img src="./images/logo.png" width="30%" height="30%" id="logaso">
+  <div class="aulas"></div>
+  
   
   <script src="https://www.gstatic.com/firebasejs/5.4.1/firebase.js"></script>
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" ></script>
