@@ -33,7 +33,7 @@ adaRef.remove()
   });
   }
 var texto = "123";
-function leerdatos(contraseña){ 
+function leerdatos(contraseña,Profe){ 
   var ref = firebase.database().ref();
     ref.on("value", function(snapshot) {
        var profesores = [];
@@ -41,19 +41,34 @@ function leerdatos(contraseña){
        var count = Object.keys(profesores).length;
           for (var i = 0; i<count; i++){
               console.log(profesores['profesor_'+(i+1)].Contraseña);
+              console.log(profesores['profesor_'+(i+1)].Nombre);
+
               var Contraseñaprofe = profesores['profesor_'+(i+1)].Contraseña;
-                if(Contraseñaprofe == contraseña)
+              var UsuarioProfe = profesores['profesor_'+(i+1)].Nombre;
+
+                if(Contraseñaprofe == contraseña && UsuarioProfe == Profe )
                 {
-                  
+                  var estatus  = profesores['profesor_'+(i+1)].EsAdmin;
+                  if (estatus == true){
+                    window.location.href = './AgregarUsuYAulas';
+                  }else{
+                    window.location.href = './Selecion de dias';
+                  }
                 }
              }
            })
           }
 
-
-leerdatos();
+ 
 // no funciona el click funcition, no se porque 
-$("#InicioSecion").click(function() {
-  alert('botonclick');
-  leerdatos($('#cintraseña').val());
+$("#InicioSesion").click(function() {
+  console.log("paso uno");
+  var contraseña = $("#contraseña").val();
+  var Usuario = $("#Usuario").val() 
+  leerdatos(contraseña,Usuario);
 });
+
+
+
+
+
