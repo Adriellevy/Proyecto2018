@@ -32,12 +32,14 @@ function ActualizardataUsu(Nombre,apellido,Materia,contraseña){
   "Materia": Materia,
   "Nombre": Nombre
   }
+  
       var newPostKey = firebase.database().ref().child('profesores').push().key;
-      var updates = {};
+      var profesores = {};
       var count = Object.keys(profesores).length;
-      updates['/profesores/' + ("Profesor_" + (count-1))] = postData;
-      return firebase.database().ref().update(updates);
-    }
+      profesores['/profesores/' + ("Profesor_" + (count-1))] = data;
+      return firebase.database().ref().update(profesores);
+      
+     }
 
 function BorarInfo(){
 var adaRef = firebase.database().ref('ParaProbar');
