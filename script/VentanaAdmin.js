@@ -11,12 +11,11 @@ firebase.initializeApp(config);
 
 var database = firebase.database();
 
-function AgregarInfo(){
-var messageListRef = firebase.database().ref('ParaProbar');
+function AgregarInfo(Nombre,apellido,Materia,contraseña){
+var messageListRef = firebase.database().ref('profesores');
 var newMessageRef = messageListRef.push();
 messageListRef.set({
-'objeto': 'LohicePerro',
-  'text': 'Lanada'
+ // no usar esta funcion
 });
 newMessageRef.set({
   //aca creas un hijo adentro de un objeto sin nombre(o un nombre aleatorio) con las caracteristicas que quieras
@@ -24,25 +23,40 @@ newMessageRef.set({
 }
 
 function ActualizardataUsu(Nombre,apellido,Materia,contraseña){
-
-  var data ={
+ var postData = {
   "Apellido": apellido,
   "Contraseña": contraseña,
-  "EsAdmin": "false",
+  "EsAdmin": "true",
   "Materia": Materia,
   "Nombre": Nombre
-  }
-  
-      var newPostKey = firebase.database().ref().child('profesores').push().key;
-      var profesores = {};
-      var count = Object.keys(profesores).length;
-      profesores['/profesores/' + ("Profesor_" + (count-1))] = data;
-      return firebase.database().ref().update(profesores);
-      
-     }
+  };
+
+
+  // Get a key for a new Post.
+  var newPostKey = firebase.database().ref().child('profesores').push().key;
+  // Write the new post's data simultaneously in the posts list and the user's post list.
+  var updates = {}; 
+
+  updates['/profesores/Profesor_' + newPostKey ] = postData;
+
+  return firebase.database().ref().update(updates);
+} 
+function ActualizardataAula(){
+var postData = {
+
+  };
+  var newPostKey = firebase.database().ref().child('aulas').push().key;
+  // Write the new post's data simultaneously in the posts list and the user's post list.
+  var updates = {}; 
+
+  updates['/aulas/Aula_' + newPostKey ] = postData;
+
+  return firebase.database().ref().update(updates);
+}
 
 function BorarInfo(){
-var adaRef = firebase.database().ref('ParaProbar');
+   for (var i = 0; i < 310; i++){
+var adaRef = firebase.database().ref('Profesor_' + i);
 adaRef.remove()
   .then(function() {
     console.log("Remove succeeded.")
@@ -51,11 +65,6 @@ adaRef.remove()
     console.log("Remove failed: " + error.message)
   });
   }
+}
 
-ActualizardataUsu("adri","adri","fisica","123");
-
-
-
-
-
-
+ActualizardataUsu("Nombre","apellido","Materia","contraseña");
