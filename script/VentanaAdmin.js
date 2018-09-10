@@ -30,17 +30,30 @@ function ActualizardataUsu(Nombre,apellido,Materia,contraseña){
   "Materia": Materia,
   "Nombre": Nombre
   };
-
-
-  // Get a key for a new Post.
   var newPostKey = firebase.database().ref().child('profesores').push().key;
-  // Write the new post's data simultaneously in the posts list and the user's post list.
+
   var updates = {}; 
+ 
+  i = 0;
 
-  updates['/profesores/Profesor_' + newPostKey ] = postData;
-
-  return firebase.database().ref().update(updates);
+     var profesoresRef = firebase.database().ref('profesores');
+    profesoresRef.on('value', function(snapshot) {
+      var cantidad1 = 0;
+      var cantidad = [];
+      cantidad = snapshot.val();
+      console.log(cantidad)
+      cantidad1 = (Object.keys(cantidad).length);
+      cantidad1 = cantidad1 + 1;
+      console.log(cantidad1);
+      var cantidad2 = "" + cantidad1;
+      i = i + 1;
+      if(i == 1){
+    updates['/profesores/Profesor_' + cantidad2] = postData;
+    return firebase.database().ref().update(updates);
+      }
+    });     
 } 
+/*
 function ActualizardataAula(){
 var postData = {
 
@@ -56,8 +69,8 @@ var postData = {
 
 function BorarInfo(){
    for (var i = 0; i < 310; i++){
-var adaRef = firebase.database().ref('Profesor_' + i);
-adaRef.remove()
+var profesoresRef = firebase.database().ref('profesores');
+profesoresRef.remove()
   .then(function() {
     console.log("Remove succeeded.")
   })
@@ -66,5 +79,7 @@ adaRef.remove()
   });
   }
 }
-
+*/
 ActualizardataUsu("Nombre","apellido","Materia","contraseña");
+
+ 
