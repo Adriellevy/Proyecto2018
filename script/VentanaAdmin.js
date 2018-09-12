@@ -53,18 +53,61 @@ function ActualizardataUsu(Nombre,apellido,Materia,contraseña){
       }
     });     
 } 
-/*
-function ActualizardataAula(){
-var postData = {
 
+function ActualizardataAula(disponibilidad,edificio,nombre,lunesBloqueos,MartesBloqueos,MiercolesBloqueos,JuevesBloqueos,ViernesBloqueos){
+var postData = {
+    "Disponible":disponibilidad
+    "Edificio":edificio
+    "Nombre":nombre
+    "bloqueos":{
+    
+    "lunes":{
+    "1er bloque": lunesBloqueos
+    "2do bloque": lunesBloqueos
+    "3er bloque": lunesBloqueos
+      } 
+    "martes":{
+    "1er bloque": MartesBloqueos
+    "2do bloque": MartesBloqueos
+    "3er bloque": MartesBloqueos
+     }
+     "miercoles":{
+    "1er bloque": MiercolesBloqueos
+    "2do bloque": MiercolesBloqueos
+    "3er bloque": MiercolesBloqueos
+     }
+     "jueves":{
+    "1er bloque": JuevesBloqueos
+    "2do bloque": JuevesBloqueos
+    "3er bloque": JuevesBloqueos
+     }
+     "viernes":{
+    "1er bloque": ViernesBloqueos
+    "2do bloque": ViernesBloqueos
+    "3er bloque": ViernesBloqueos
+     }
+  }
   };
   var newPostKey = firebase.database().ref().child('aulas').push().key;
   // Write the new post's data simultaneously in the posts list and the user's post list.
   var updates = {}; 
+  var profesoresRef = firebase.database().ref('aulas');
+    profesoresRef.on('value', function(snapshot) {
+      var cantidad1 = 0;
+      var cantidad = [];
+      cantidad = snapshot.val();
+      console.log(cantidad)
+      cantidad1 = (Object.keys(cantidad).length);
+      cantidad1 = cantidad1 + 1;
+      console.log(cantidad1);
+      var cantidad2 = "" + cantidad1;
+      i = i + 1;
+      if(i == 1){
+  updates['/aulas/Aula_' + cantidad2 ] = postData;
 
-  updates['/aulas/Aula_' + newPostKey ] = postData;
-
-  return firebase.database().ref().update(updates);
+  return firebase.database().ref().update(updates); 
+    }
+  });
 }
 
 function BorarInfo(){
@@ -79,7 +122,15 @@ profesoresRef.remove()
   });
   }
 }
+/*funcion cuando se apreta boton1{
+ActualizardataUsu(InputNombreUsuario ,InputApellidoUsuario , InputMateriaUsuario,InputContraseñaUsuario);
+}
 */
-ActualizardataUsu("Nombre","apellido","Materia","contraseña");
+/*funcion cuando se apreta boton1{
+ActualizardataUsu(InputNombreUsuario ,InputApellidoUsuario , InputMateriaUsuario,InputContraseñaUsuario);
+}
+*/
+
+
 
  
