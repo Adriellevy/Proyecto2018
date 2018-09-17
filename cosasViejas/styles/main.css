@@ -1,0 +1,81 @@
+body {
+	background-image: url(../images/aula.jpg);
+	background-repeat: no-repeat;
+	background-size: cover;
+	font-family: 'Source Sans Pro', sans-serif;
+	display: flex;
+
+}
+div.box {
+	max-width:80%;
+	margin: 2em auto 1em 0em;
+    width: 33%;
+	display: flex; 
+    background: white;
+    align-items: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+    box-shadow: 1px 1px 25px .1px #bdbdbd;
+    border: 1px solid #212121;
+} 
+
+div.box h1 {
+	color:#17202A;
+	font-size: 2em;  
+	font-weight: 700;
+	margin: 0;
+	padding: 1em 1em ;
+	font-style: "arial";
+}
+input#usuario{
+	padding: 1em;
+	padding-right: 1em;
+	width: 80%;
+	background: #fafafa;
+	border: 1px solid;
+	margin: 1em 0;
+}
+input#contraseña{
+	padding: 1em;
+	padding-right: 1em;
+	width: 80%;
+	background: #fafafa;
+	border: 1px solid;
+	margin: 2em 0;
+}
+input#DatosUsuario{
+	border: none;
+	background-color: #424242;
+	font-size: 1em;
+	font-style: "impact";
+	padding: 1em;
+	text-align: center;
+	display: inline-block;
+	font-size: 16px;
+	color: white;
+	border-radius: 8px;
+	width: 30%;
+	cursor: pointer;
+	margin: 1em;     
+}
+input#DatosUsuario:hover{
+	background-color: #616161;
+	color: white;
+	padding: 1em;
+}
+img#logo{
+margin: 0em;
+padding-left: 10em;
+width: 30em;
+height: 30em;
+}
+
+@media screen and (max-width: 30px){
+	div.box{
+		height: 24em;
+	}
+} 
+
+
+
+
