@@ -5,6 +5,7 @@ var app = express();
 var server = http.createServer(app);
 
 app.set('port', port);
+app.use(express.static(__dirname + '/public'));
 server.listen(port);
 console.log('Server on port '+port+'...');
 
