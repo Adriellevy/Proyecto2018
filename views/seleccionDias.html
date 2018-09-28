@@ -3,38 +3,50 @@
 <head>
 	<meta charset="utf-8">
 	<title>Ocupar Aulas</title>
-	<link rel="stylesheet" type="text/css" href="../public/styles/main2.css">
+	<link rel="stylesheet" type="text/css" href="../public/styles/SeleccionDias.css">
 	<link rel="icon" type="text/css" href="../public/images/logo.png">
 </head>
 
 
 <body>
 
-  <div class="busqueda">
-      <div class="caja">
-      <h2>Por favor ingrese los datos</h2>
+    <div class="container">
 
-      <select name="Days" id="Listadias">
-        <option value="Vacio">Seleccione un dia</option>
-        <option value="Lunes">Lunes</option>
-        <option value="Martes">Martes</option>
-        <option value="Miercoles">Miercoles</option>
-        <option value="Jueves">Jueves</option>
-        <option value="Viernes">Viernes</option>
-      </select>
+      <form id="signup">
 
-      <select name="Blocks" id="Listabloques">
-        <option value="Vacio">Seleccione un bloque</option>
-        <option value="1 Bloque">1 Bloque</option>
-        <option value="2 Bloque">2 Bloque</option>
-        <option value="3 bloque">3 bloque</option>
-      </select>
-      <button id="busquedaaulas">Buscar</button>
-    </div>
+        <div class="header">
+        
+            <h3>Inicio de sesion</h3>
+            
+            <p>Por favor complete los datos</p>
+            
+        </div>
+        
+        <div class="sep"></div>
 
-    <img src="./images/logo.png" width="30%" height="30%" id="logaso">
-  </div>
+        <div class="inputs">
+        
+            <select name="Days" id="Listadias">
+              <option value="Vacio">Seleccione un dia</option>
+              <option value="Lunes">Lunes</option>
+              <option value="Martes">Martes</option>
+              <option value="Miercoles">Miercoles</option>
+              <option value="Jueves">Jueves</option>
+              <option value="Viernes">Viernes</option>
+            </select>
 
+            <select name="Blocks" id="Listabloques">
+              <option value="Vacio">Seleccione un bloque</option>
+              <option value="1 Bloque">1 Bloque</option>
+              <option value="2 Bloque">2 Bloque</option>
+              <option value="3 bloque">3 bloque</option>
+            </select>
+            
+            <a id="submit" href="#">Ingresar</a>
+        
+        </div>
+
+    </form>
 
   <div class="aulas"></div>
   
