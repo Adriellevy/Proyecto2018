@@ -1,4 +1,5 @@
 /*
+PARTE DE PORJO
 var http = require('http');
 var express = require('express');
 var port = 8080;
@@ -14,6 +15,10 @@ app.get('/login', function (req, res) {
 	res.sendFile(__dirname + '/views/inicioSesion.html');
 });
 */
+
+/* 
+PARTE DE ADRI
+PREGUTAR A ANDY ESTO
 const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -28,9 +33,9 @@ app.set('views', path.join(__dirname, '../public'));
 // middlewares
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, '../static')))
-
-
-
+*/
+/*
+function SelecciónTotal(){
 app.get('/mysql', function (req, res) {
   var sql = 'SELECT * FROM `users`'
 
@@ -47,10 +52,12 @@ app.get('/mysql', function (req, res) {
     }
   })
 })
+}
 
+function agregar(tabla,columna1,columna2,columna3,columna4,columna5,columna6){
 app.post('/mysql', function (req, res) {
   if (req.body.name && req.body.age) {
-    connection.query(`INSERT INTO \`users\` (\`name\`, \`age\`) VALUES ('${req.body.name}', '${req.body.age}')`, function (error, results, fields) {
+    connection.query(`INSERT INTO \``+tabla+`\` (\``+columna1+`\`, \``+columna2+`\`) VALUES ('${req.body.name}', '${req.body.age}')`, function (error, results, fields) {
       if (!error) {
         res.status(201).send(results)
       } else {
@@ -62,7 +69,8 @@ app.post('/mysql', function (req, res) {
     res.status(403).send({error: 'You must specify the name and age values.'})
   }
 })
-
+}
+function actualizarSiertaParte(){
 app.put('/mysql/:id', function (req, res) {
   if (req.body.name || req.body.age) {
     var sql = 'UPDATE `users` SET'
@@ -89,7 +97,59 @@ app.put('/mysql/:id', function (req, res) {
     res.status(403).send({error: 'You must specify the name or age values.'})
   }
 })
+}
 
 app.listen(3000, () => console.log('Example app listening on port 3000!'))
 
-module.exports = app; 
+
+
+function AgregarUsuariosFuncion(){
+
+}
+
+function InicioSecionFuncion(){
+
+}
+
+function SeleccionDias(){
+
+}
+
+function SolisitudesProfeFuncion(){ 
+  
+}
+
+function VentanaAdmin(){
+
+}
+
+
+connection.end();
+
+*/
+
+var mysql = require('mysql');
+var connection = mysql.createConnection({
+   host: 'localhost',
+   user: 'root',
+   password: 'Superi1289',
+   database: 'node_mysql',
+   database:'proyecto_final',
+   port: 3306
+});
+connection.connect(function(error){
+   if(error){
+      throw error;
+   }else{
+      console.log('Conexion correcta.');
+   }
+});
+var query = connection.query('SELECT * FROM `users`', function(error, result){
+  if(error){
+     throw error;
+  }else{
+     console.log(result);
+  }
+}
+);
+connection.end();
