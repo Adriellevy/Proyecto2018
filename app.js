@@ -132,7 +132,7 @@ var mysql = require('mysql');
 var connection = mysql.createConnection({
    host: 'localhost',
    user: 'root',
-   password: 'Superi1289',
+   password: 'Nimba19092001',
    database: 'node_mysql',
    database:'proyecto_final',
    port: 3306
@@ -152,4 +152,60 @@ var query = connection.query('SELECT * FROM `users`', function(error, result){
   }
 }
 );
+
+function AgregarUsuariosFuncion(){
+  var id = document.getElementById("DniUsuario").value;
+  var Nombre = document.getElementById("NombreUsuario").value;
+  var contraseña = document.getElementById("Contraseña").value;
+  var cantidad;
+  
+
+  var query = connection.query("SELECT * FROM users WHERE ID =" + id + "",function(error,result){
+    if(error){
+      throw error;
+   }else{
+      cantidad = result;
+      if(cantidad > 0){
+        console.log("Ya exsiste el usuario");
+      } else {
+        if(id === ""){
+          alert("completar campo faltante");
+          console.log("No se agrego el usuario");
+        }else if (Nombre === "" ){
+          alert("completar campo faltante");
+          console.log("No se agrego el usuario");
+        }else if (contraseña === ""){
+          alert("completar campo faltante");
+          console.log("No se agrego el usuario");
+        }else{
+          {
+            connection.query(`INSERT INTO \``+ users +`\` (\``+DNI+`\`, \``+username+`\`, \``+password+`\`, \``+role+`\` ) VALUES ('`+Nombre+`', '`+id+`','`+contraseña+`','Teacher')`, function (error, results, fields) {
+              if (!error) {
+                res.status(201).send(results)
+              } else {
+                console.error(error)
+                res.status(500).send(error)
+            }
+         })     
+       }
+     }
+   }
+  }
+ }
+);
+}
+
+function inicioSesion(){
+  var query = connection.query('/*pedir poryecto adri*/', function(error,result){
+  if(error){
+    throw error;
+ }else{
+    console.log(result);
+ }
+}
+);
+}
+
+AgregarUsuariosFuncion();
+
 connection.end();
