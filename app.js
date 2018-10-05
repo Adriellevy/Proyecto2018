@@ -1,3 +1,110 @@
+
+const mysql = require('mysql');
+const express = require('express');
+const app = express(); 
+const bodyParser = require('body-parser');
+
+var jsdom = require("jsdom");
+const { JSDOM } = jsdom;
+const { window } = new JSDOM();
+const { document } = (new JSDOM('')).window;
+global.document = document;
+
+var $ = jQuery = require('jquery')(window);
+
+
+var connection = mysql.createConnection({
+   host: 'localhost',
+   user: 'root',
+   password: 'Nimba19092001',
+   database: 'node_mysql',
+   database:'proyecto_final',
+   port: 3306
+});
+connection.connect(function(error){
+   if(error){
+      throw error;
+   }else{
+      console.log('Conexion correcta.');
+   }
+});
+// para probar si funciona la coneccion con la BD
+var query = connection.query('SELECT * FROM `users`', function(error, result){
+  if(error){
+     throw error;
+  }else{
+     console.log(result);
+  }
+}
+);
+
+
+function AgregarUsuariosFuncion(){
+  
+  var id =  $("DniUsuario").val();
+  
+  var Nombre = $("NombreUsuario").val();
+  
+  var contraseña = $("Contraseña").val();
+  var cantidad;
+
+  var query = connection.query("SELECT * FROM users WHERE ID =" + id + "",function(error,result){
+    if(error){
+      throw error;
+   }else{
+      cantidad = result;
+      if(cantidad > 0){
+        console.log("Ya exsiste el usuario");
+      } else {
+        if(id === ""){
+          alert("completar campo faltante");
+          console.log("No se agrego el usuario");
+        }else if (Nombre === "" ){
+          alert("completar campo faltante");
+          console.log("No se agrego el usuario");
+        }else if (contraseña === ""){
+          alert("completar campo faltante");
+          console.log("No se agrego el usuario");
+        }else{
+          {
+            connection.query(`INSERT INTO \``+ users +`\` (\``+DNI+`\`, \``+username+`\`, \``+password+`\`, \``+role+`\` ) VALUES ('`+Nombre+`', '`+id+`','`+contraseña+`','Teacher')`, function (error, results, fields) {
+             console.log("se a guardado el usuario");
+              if (!error) {
+                res.status(201).send(results)
+              } else {
+                console.error(error)
+                res.status(500).send(error)
+              }
+           })     
+          }
+        }
+       }
+      }
+    }
+   );
+   }
+ 
+
+function inicioSesion(){
+  var query = connection.query('/*pedir poryecto adri*/', function(error,result){
+  if(error){
+    throw error;
+ }else{
+    console.log(result);
+ }
+}
+);
+}
+
+
+$("#submit").onclick = function(){AgregarUsuariosFuncion(get)};
+  
+
+
+
+
+
+
 /*
 PARTE DE PORJO
 var http = require('http');
@@ -18,6 +125,7 @@ app.get('/login', function (req, res) {
 
 /* 
 PARTE DE ADRI
+
 PREGUTAR A ANDY ESTO
 const path = require('path');
 const express = require('express');
@@ -127,85 +235,3 @@ function VentanaAdmin(){
 connection.end();
 
 */
-
-var mysql = require('mysql');
-var connection = mysql.createConnection({
-   host: 'localhost',
-   user: 'root',
-   password: 'Nimba19092001',
-   database: 'node_mysql',
-   database:'proyecto_final',
-   port: 3306
-});
-connection.connect(function(error){
-   if(error){
-      throw error;
-   }else{
-      console.log('Conexion correcta.');
-   }
-});
-var query = connection.query('SELECT * FROM `users`', function(error, result){
-  if(error){
-     throw error;
-  }else{
-     console.log(result);
-  }
-}
-);
-
-function AgregarUsuariosFuncion(){
-  var id = document.getElementById("DniUsuario").value;
-  var Nombre = document.getElementById("NombreUsuario").value;
-  var contraseña = document.getElementById("Contraseña").value;
-  var cantidad;
-  
-
-  var query = connection.query("SELECT * FROM users WHERE ID =" + id + "",function(error,result){
-    if(error){
-      throw error;
-   }else{
-      cantidad = result;
-      if(cantidad > 0){
-        console.log("Ya exsiste el usuario");
-      } else {
-        if(id === ""){
-          alert("completar campo faltante");
-          console.log("No se agrego el usuario");
-        }else if (Nombre === "" ){
-          alert("completar campo faltante");
-          console.log("No se agrego el usuario");
-        }else if (contraseña === ""){
-          alert("completar campo faltante");
-          console.log("No se agrego el usuario");
-        }else{
-          {
-            connection.query(`INSERT INTO \``+ users +`\` (\``+DNI+`\`, \``+username+`\`, \``+password+`\`, \``+role+`\` ) VALUES ('`+Nombre+`', '`+id+`','`+contraseña+`','Teacher')`, function (error, results, fields) {
-              if (!error) {
-                res.status(201).send(results)
-              } else {
-                console.error(error)
-                res.status(500).send(error)
-            }
-         })     
-       }
-     }
-   }
-  }
- }
-);
-}
-
-function inicioSesion(){
-  var query = connection.query('/*pedir poryecto adri*/', function(error,result){
-  if(error){
-    throw error;
- }else{
-    console.log(result);
- }
-}
-);
-}
-
-AgregarUsuariosFuncion();
-
-connection.end();
