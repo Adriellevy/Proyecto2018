@@ -42,13 +42,14 @@ var query = connection.query('SELECT * FROM `users`', function(error, result){
 function AgregarUsuariosFuncion(){
   
   var id =  $("DniUsuario").val();
-  
+  id = 4;
+
   var Nombre = $("NombreUsuario").val();
   
   var contraseña = $("Contraseña").val();
   var cantidad;
 
-  var query = connection.query("SELECT * FROM users WHERE ID =" + id + "",function(error,result){
+  var query = connection.query/("SELECT * FROM `users` WHERE DNI ='" + id + "'" ,function(error,result){
     if(error){
       throw error;
    }else{
@@ -96,6 +97,7 @@ function inicioSesion(){
 );
 }
 
+AgregarUsuariosFuncion();
 
 $("#submit").onclick = function(){AgregarUsuariosFuncion(get)};
   
