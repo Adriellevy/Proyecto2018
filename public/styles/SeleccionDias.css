@@ -4,6 +4,8 @@ body {
     background-image: url(../images/aula.jpg);
     background-repeat: no-repeat;
     background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
 }
 
 .container {
