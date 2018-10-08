@@ -45,11 +45,13 @@ function AgregarUsuariosFuncion(){
   id = 4;
 
   var Nombre = $("NombreUsuario").val();
+  nombre = "adri";
   
   var contraseña = $("Contraseña").val();
+  contraseña = "adri";
   var cantidad;
 
-  var query = connection.query/("SELECT * FROM `users` WHERE DNI ='" + id + "'" ,function(error,result){
+  var query = connection.query("SELECT * FROM `users` WHERE DNI ='" + id + "'" ,function(error,result){
     if(error){
       throw error;
    }else{
@@ -68,14 +70,8 @@ function AgregarUsuariosFuncion(){
           console.log("No se agrego el usuario");
         }else{
           {
-            connection.query(`INSERT INTO \``+ users +`\` (\``+DNI+`\`, \``+username+`\`, \``+password+`\`, \``+role+`\` ) VALUES ('`+Nombre+`', '`+id+`','`+contraseña+`','Teacher')`, function (error, results, fields) {
+            connection.query(`INSERT INTO \``+ "users" +`\` (\``+ "DNI" +`\`, \`` + "username" +`\`, \``+"password"+`\`, \``+"role"+`\` ) VALUES ('`+Nombre+`', '`+id+`','`+contraseña+`','Teacher')`, function (error, results, fields) {
              console.log("se a guardado el usuario");
-              if (!error) {
-                res.status(201).send(results)
-              } else {
-                console.error(error)
-                res.status(500).send(error)
-              }
            })     
           }
         }
@@ -100,7 +96,7 @@ function inicioSesion(){
 AgregarUsuariosFuncion();
 
 $("#submit").onclick = function(){AgregarUsuariosFuncion(get)};
-  
+
 
 
 
