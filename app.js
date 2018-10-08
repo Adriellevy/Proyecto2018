@@ -40,23 +40,22 @@ var query = connection.query('SELECT * FROM `users`', function(error, result){
 
 
 function AgregarUsuariosFuncion(){
-  
-  var id =  $("DniUsuario").val();
+   var cantidad;
+  var id =  $("#DniUsuario").val();
   id = 4;
-
-  var Nombre = $("NombreUsuario").val();
+  var apellido = $("#ApellidoUsuario").val();
+  apellido = "levy";
+  var Nombre = $("#NombreUsuario").val();
   nombre = "adri";
-  
-  var contraseña = $("Contraseña").val();
-  contraseña = "adri";
-  var cantidad;
+  var contraseña = $("#Contraseña").val();
+  contraseña = "1234"; 
 
   var query = connection.query("SELECT * FROM `users` WHERE DNI ='" + id + "'" ,function(error,result){
     if(error){
       throw error;
    }else{
       cantidad = result;
-      if(cantidad > 0){
+      if(cantidad >= 1){
         console.log("Ya exsiste el usuario");
       } else {
         if(id === ""){
@@ -92,12 +91,11 @@ function inicioSesion(){
 }
 );
 }
-
 AgregarUsuariosFuncion();
+$("#submit").click(function(){
+  AgregarUsuariosFuncion(get);
 
-$("#submit").onclick = function(){AgregarUsuariosFuncion(get)};
-
-
+});
 
 
 
