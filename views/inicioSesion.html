@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8">
   <title>Iniciar sesion</title>
-  <link rel="stylesheet" type="text/css" href="../public/styles/InicioSesion.css">
-  <link rel="icon" type="text/css" href="../public/images/logo.png">
+  <link rel="stylesheet" type="text/css" href="./styles/InicioSesion.css">
+  <link rel="icon" type="text/css" href="./images/logo.png">
 </head>
 
 
 <body>
 <div class="container">
 
-    <form id="signup">
+    <form action="POST" id="signup">
 
         <div class="header">
         
@@ -25,12 +25,14 @@
 
         <div class="inputs">
         
-            <input type="text" placeholder="Nombre" autofocus />
+            <input name="nombre" id="nombre" type="text" placeholder="Nombre" autofocus />
 
-          <input type="text" placeholder="DNI" maxlength="8" />
+          <input name="dni" id="dni" type="text" placeholder="DNI" maxlength="8" />
 
-            <input type="password" placeholder="Contraseña" />
+            <input name="password" id="password" type="password" placeholder="Contraseña" />
             
+            <input type="submit" value="Ingresar">
+
             <a id="submit" href="#">Ingresar</a>
         
         </div>
@@ -42,7 +44,6 @@
 <script src="https://www.gstatic.com/firebasejs/5.4.1/firebase.js"></script>
 
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" ></script>
-  <script type="text/javascript" src="../app.js"></script>
 
 </body>
 </html>

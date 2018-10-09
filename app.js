@@ -1,43 +1,27 @@
-
-const mysql = require('mysql');
 const express = require('express');
 const app = express(); 
+var http = require('http');
+var port = 8080;
+var server = http.createServer(app);
+var indexRouter = require('./routes/index');
 const bodyParser = require('body-parser');
+//var dbConnection = require('./config/database');
 
+app.set('port', port);
+app.use(express.static(__dirname + '/public'));
+app.use(bodyParser.urlencoded({extended: false}));
+app.use('/', indexRouter);
+
+server.listen(port);
+console.log('Server on port '+port+'...');
+
+
+/*
 var jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 const { window } = new JSDOM();
 const { document } = (new JSDOM('')).window;
 global.document = document;
-
-var $ = jQuery = require('jquery')(window);
-
-
-var connection = mysql.createConnection({
-   host: 'localhost',
-   user: 'root',
-   password: 'Nimba19092001',
-   database: 'node_mysql',
-   database:'proyecto_final',
-   port: 3306
-});
-connection.connect(function(error){
-   if(error){
-      throw error;
-   }else{
-      console.log('Conexion correcta.');
-   }
-});
-// para probar si funciona la coneccion con la BD
-var query = connection.query('SELECT * FROM `users`', function(error, result){
-  if(error){
-     throw error;
-  }else{
-     console.log(result);
-  }
-}
-);
-
 
 function AgregarUsuariosFuncion(){
   
@@ -87,42 +71,22 @@ function AgregarUsuariosFuncion(){
  
 
 function inicioSesion(){
-  var query = connection.query('/*pedir poryecto adri*/', function(error,result){
-  if(error){
-    throw error;
- }else{
-    console.log(result);
- }
+  var query = connection.query('', function(error,result){
+    if(error){
+      throw error;
+    }else{
+        console.log(result);
+    }
+  });
 }
-);
-}
-
-AgregarUsuariosFuncion();
-
-$("#submit").onclick = function(){AgregarUsuariosFuncion(get)};
-  
 
 
-
+*/
 
 
 
 /*
-PARTE DE PORJO
-var http = require('http');
-var express = require('express');
-var port = 8080;
-var app = express();
-var server = http.createServer(app);
 
-app.set('port', port);
-app.use(express.static(__dirname + '/public'));
-server.listen(port);
-console.log('Server on port '+port+'...');
-
-app.get('/login', function (req, res) {
-	res.sendFile(__dirname + '/views/inicioSesion.html');
-});
 */
 
 /* 
