@@ -1,9 +1,17 @@
 var express = require('express');
 var router = express.Router();
-var connection = require('./config/database');
+var connection = require('../config/database');
+var path = require('path');
+var jsdom = require("jsdom");
+const { JSDOM } = jsdom;
+const { window } = new JSDOM();
+const { document } = (new JSDOM('')).window;
+global.document = document;
 
 router.get('/login', function (req, res) {
-	res.sendFile(__dirname + '/views/inicioSesion.html');
+    //res.sendFile(__dirname + '../views/inicioSesion.html');
+    //res.render('inicioSesion');
+    res.sendFile(path.join(__dirname, '../views/inicioSesion.html'));
 });
 
 router.post('/login', function (req, res){
