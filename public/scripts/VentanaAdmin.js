@@ -1,4 +1,4 @@
-/*
+
 var config = {
 	apiKey: "AIzaSyBJ07lQll4dzXwtIv45WSsSd4_lzdCeT8I",
 	authDomain: "proyectotic-2018.firebaseapp.com",
@@ -122,7 +122,7 @@ profesoresRef.remove()
   });
   }
 }
-funcion cuando se apreta boton1{
+/*funcion cuando se apreta boton1{
 ActualizardataUsu(InputNombreUsuario ,InputApellidoUsuario , InputMateriaUsuario,InputContraseñaUsuario);
 }
 */
