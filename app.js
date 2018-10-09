@@ -24,21 +24,22 @@ const { document } = (new JSDOM('')).window;
 global.document = document;
 
 function AgregarUsuariosFuncion(){
-  
-  var id =  $("DniUsuario").val();
+   var cantidad;
+  var id =  $("#DniUsuario").val();
   id = 4;
+  var apellido = $("#ApellidoUsuario").val();
+  apellido = "levy";
+  var Nombre = $("#NombreUsuario").val();
+  nombre = "adri";
+  var contraseña = $("#Contraseña").val();
+  contraseña = "1234"; 
 
-  var Nombre = $("NombreUsuario").val();
-  
-  var contraseña = $("Contraseña").val();
-  var cantidad;
-
-  var query = connection.query/("SELECT * FROM `users` WHERE DNI ='" + id + "'" ,function(error,result){
+  var query = connection.query("SELECT * FROM `users` WHERE DNI ='" + id + "'" ,function(error,result){
     if(error){
       throw error;
    }else{
       cantidad = result;
-      if(cantidad > 0){
+      if(cantidad >= 1){
         console.log("Ya exsiste el usuario");
       } else {
         if(id === ""){
@@ -52,14 +53,8 @@ function AgregarUsuariosFuncion(){
           console.log("No se agrego el usuario");
         }else{
           {
-            connection.query(`INSERT INTO \``+ users +`\` (\``+DNI+`\`, \``+username+`\`, \``+password+`\`, \``+role+`\` ) VALUES ('`+Nombre+`', '`+id+`','`+contraseña+`','Teacher')`, function (error, results, fields) {
+            connection.query(`INSERT INTO \``+ "users" +`\` (\``+ "DNI" +`\`, \`` + "username" +`\`, \``+"password"+`\`, \``+"role"+`\` ) VALUES ('`+Nombre+`', '`+id+`','`+contraseña+`','Teacher')`, function (error, results, fields) {
              console.log("se a guardado el usuario");
-              if (!error) {
-                res.status(201).send(results)
-              } else {
-                console.error(error)
-                res.status(500).send(error)
-              }
            })     
           }
         }
@@ -79,6 +74,11 @@ function inicioSesion(){
     }
   });
 }
+AgregarUsuariosFuncion();
+$("#submit").click(function(){
+  AgregarUsuariosFuncion(get);
+
+});
 
 
 */
