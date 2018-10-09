@@ -18,7 +18,7 @@ var connection = mysql.createConnection({
     if(error)
        throw error;
     else
-       console.log('Conexion correcta.');
+       console.log('Conexion correcta con la base de datos.');
  });
 
  module.exports = connection;
