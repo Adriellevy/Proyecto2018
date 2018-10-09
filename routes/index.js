@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var dbConnection = require('./config/database');
+var connection = require('./config/database');
 
 router.get('/login', function (req, res) {
 	res.sendFile(__dirname + '/views/inicioSesion.html');
@@ -59,7 +59,7 @@ router.post('/prueba', function (req, res) {
 
 function ValidarUsuario(dni, password){
     var sql = "SELECT name, lastName FROM users WHERE dni = "+dni+" AND password = '"+password+"'";
-    dbConnection.query(sql, function(error, result){
+    connection.query(sql, function(error, result){
         if (error) throw error;
         if (result.length === 0){
 
