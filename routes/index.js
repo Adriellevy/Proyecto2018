@@ -25,7 +25,12 @@ router.get('/solicitudes', function(req, res){
 
 });
 
-router.post('localhost:8080/mysql', function (req, res) {
+router.get('/addUsers', function (req, res){
+
+    res.sendFile(path.join(__dirname, '../views/agregarUsuarios.html'));
+});
+
+router.post('/addUsers', function (req, res) {
     console.log("info recibida")
      if (req.body.name && req.body.age) {
     var query = connection.query("SELECT * FROM `users` WHERE DNI ='" + id + "'" ,function(error,result){
