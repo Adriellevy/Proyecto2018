@@ -6,6 +6,7 @@ var port = 8080;
 var server = http.createServer(app);
 var indexRouter = require('./routes/index');
 const bodyParser = require('body-parser');
+
 //var dbConnection = require('./config/database');
 
 var jsdom = require("jsdom");
@@ -17,7 +18,8 @@ global.document = document;
 app.set('port', port);
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(__dirname + '/public'));
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json()); 
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/', indexRouter);
 
 server.listen(port);

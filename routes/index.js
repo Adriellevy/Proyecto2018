@@ -29,18 +29,30 @@ router.get('/seleccion-dias', function(req, res){
 });
 
 router.get('/solicitudes', function(req, res){
-
+    res.sendFile(path.join(__dirname, '../views/solicitudes.html'));
+    var query = connection.query(" SELECT * FROM `schedule` WHERE = '" +  /*algo*/ + "'" ,function(error,result){
+        if(error){
+        throw error;
+    }else{
+        console.log(result);
+    }
 });
+})
 
-router.get('/addUsers', function (req, res){
-
+router.get('/agregarUsuarios', function (req, res){
     res.sendFile(path.join(__dirname, '../views/agregarUsuarios.html'));
 });
 
-router.post('/addUsers', function (req, res) {
-    console.log("info recibida")
-     if (req.body.name && req.body.age) {
-    var query = connection.query("SELECT * FROM `users` WHERE DNI ='" + id + "'" ,function(error,result){
+router.post('/agregarUsuarios', function (req, res) {
+    console.log("info recibida del posteo");
+    var id = req.body.DniUsuario; 
+    var Nombre = req.body.NombreUsuario;
+    var apellido = req.body.ApellidoUsuario;
+    var contraseña = req.body.ContraseñaUsuario;
+    console.log("datos guardados");
+    if ( 1===1 /*Nombre != "" && apellido != "" && id !="" && contraseña != ""*/) { 
+        console.log("info recibida del posteo y se agrego el usuario")
+    var query = connection.query(" SELECT * FROM `users` WHERE DNI ='" + id + "'" ,function(error,result){
         if(error){
         throw error;
     }else{
@@ -59,6 +71,7 @@ router.post('/addUsers', function (req, res) {
             console.log("No se agrego el usuario");
             }else{
             {
+                // agregar apellido 
                 connection.query(`INSERT INTO \``+ "users" +`\` (\``+ "DNI" +`\`, \`` + "username" +`\`, \``+"password"+`\`, \``+"role"+`\` ) VALUES ('`+Nombre+`', '`+id+`','`+contraseña+`','Teacher')`, function (error, results, fields) {
                 console.log("se a guardado el usuario");
             })     
@@ -69,13 +82,25 @@ router.post('/addUsers', function (req, res) {
         }
     )
     } else {
-    res.status(403).send({error: 'You must specify the name and age values.'})
+    res.status(403).send({error: 'Completar campos faltantes.'})
     }
-})
+}); 
 
-router.post('/prueba', function (req, res) {
-    res.send(req.body)
-})
+
+router.get('/VentanaAdmin', function (req, res){
+    res.sendFile(path.join(__dirname, '../views/ventanaAdmin.html'));
+});
+
+
+
+
+
+module.exports = router;
+
+
+
+
+/*
 
 function ValidarUsuario(dni, password, response){
     var sql = "SELECT name, lastName FROM users WHERE dni = "+dni+" AND password = '"+password+"'";
@@ -91,6 +116,4 @@ function ValidarUsuario(dni, password, response){
         }
     });
 } 
-
-
-module.exports = router;
+*/
