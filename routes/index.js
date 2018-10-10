@@ -23,8 +23,14 @@ router.post('/login', function (req, res){
 
 router.get('/solicitudes', function(req, res){
     res.sendFile(path.join(__dirname, '../views/solicitudes.html'));
+    var query = connection.query(" SELECT * FROM `schedule` WHERE = '" +  /*algo*/ + "'" ,function(error,result){
+        if(error){
+        throw error;
+    }else{
+        console.log(result);
+    }
 });
-
+})
 
 router.get('/agregarUsuarios', function (req, res){
     res.sendFile(path.join(__dirname, '../views/agregarUsuarios.html'));
@@ -37,7 +43,7 @@ router.post('/agregarUsuarios', function (req, res) {
     var apellido = req.body.ApellidoUsuario;
     var contraseña = req.body.ContraseñaUsuario;
     console.log("datos guardados");
-    if ( 1===1/*Nombre && apellido && id && contraseña*/) { 
+    if ( 1===1 /*Nombre != "" && apellido != "" && id !="" && contraseña != ""*/) { 
         console.log("info recibida del posteo y se agrego el usuario")
     var query = connection.query(" SELECT * FROM `users` WHERE DNI ='" + id + "'" ,function(error,result){
         if(error){
