@@ -19,6 +19,13 @@ router.post('/login', function (req, res){
   var dni = req.body.dni;
   var password = req.body.password;
   console.log(dni);
+  console.log(password);
+  //res.redirect('/seleccion-dias');
+  ValidarUsuario(dni, password, res);
+});
+
+router.get('/seleccion-dias', function(req, res){
+    res.sendFile(path.join(__dirname, '../views/seleccionDias.html'));
 });
 
 router.get('/solicitudes', function(req, res){
@@ -70,18 +77,17 @@ router.post('/prueba', function (req, res) {
     res.send(req.body)
 })
 
-function ValidarUsuario(dni, password){
+function ValidarUsuario(dni, password, response){
     var sql = "SELECT name, lastName FROM users WHERE dni = "+dni+" AND password = '"+password+"'";
     connection.query(sql, function(error, result){
         if (error) throw error;
         if (result.length === 0){
-
-        console.log('No existe el usuario');
-        return false;
+            console.log('No existe el usuario');
+            return false;
         }else{
-
-        console.log(result);
-        return true;
+            console.log(result);
+            response.redirect('/seleccion-dias');
+            return true;
         }
     });
 } 

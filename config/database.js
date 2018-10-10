@@ -8,7 +8,7 @@ global.document = document;
 
 var connection = mysql.createConnection({
     host: 'localhost',
-    user: 'root',
+    user: 'porjo',
     password: '47cromosomas',
     database:'proyecto_final',
     port: 3306
