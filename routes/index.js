@@ -41,16 +41,20 @@ router.get('/solicitudes', function(req, res){
 
 router.get('/agregarUsuarios', function (req, res){
     res.sendFile(path.join(__dirname, '../views/agregarUsuarios.html'));
-});
 
-router.post('/agregarUsuarios', function (req, res) {
+    console.log("asd");
     console.log("info recibida del posteo");
     var id = req.body.DniUsuario; 
     var Nombre = req.body.NombreUsuario;
     var apellido = req.body.ApellidoUsuario;
     var contraseña = req.body.ContraseñaUsuario;
-    console.log("datos guardados");
-    if ( 1===1 /*Nombre != "" && apellido != "" && id !="" && contraseña != ""*/) { 
+    if(Nombre === "undefined" || apellido || "undefined" | id === "undefined" || id === "" || contraseña === "undefined"){
+    Console.log("Datos no especificados");
+    }else{
+    console.log("Datos guardados y especificados");
+    }
+    
+    if (Nombre != "" && apellido != "" && id !="" && contraseña != "") { 
         console.log("info recibida del posteo y se agrego el usuario")
     var query = connection.query(" SELECT * FROM `users` WHERE DNI ='" + id + "'" ,function(error,result){
         if(error){
@@ -72,7 +76,8 @@ router.post('/agregarUsuarios', function (req, res) {
             }else{
             {
                 // agregar apellido 
-                connection.query(`INSERT INTO \``+ "users" +`\` (\``+ "DNI" +`\`, \`` + "username" +`\`, \``+"password"+`\`, \``+"role"+`\` ) VALUES ('`+Nombre+`', '`+id+`','`+contraseña+`','Teacher')`, function (error, results, fields) {
+                console.log();
+                connection.query(`INSERT INTO \``+ "users" +`\` (\``+ "DNI" +`\`, \``+ "username" +`\`, \``+"password"+`\`, \``+"role"+`\` ) VALUES ('`+ "  "+`', '`+id+`','`+contraseña+`','Teacher')`, function (error, results, fields) {
                 console.log("se a guardado el usuario");
             })     
             }
@@ -84,6 +89,13 @@ router.post('/agregarUsuarios', function (req, res) {
     } else {
     res.status(403).send({error: 'Completar campos faltantes.'})
     }
+}
+
+);
+
+
+
+router.post('/agregarUsuarios', function (req, res) {
 }); 
 
 
