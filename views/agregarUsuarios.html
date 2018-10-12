@@ -11,7 +11,7 @@
 <body>
 <div class="container">
 
-    <form method="POST" action="/login" id="signup">
+    <form method="POST" action="/agregarUsuarios" id="signup">
 
         <div class="header">
         
@@ -25,15 +25,17 @@
 
         <div class="inputs">
         
-            <input type="text" placeholder="Nombre" autofocus id="NombreUsuario" />
+            <input name="NombreUsuario" type="text" placeholder="Nombre" autofocus id="NombreUsuario" />
 
-            <input type="text" placeholder="Apellido" autofocus id="ApellidoUsuario" />
+            <input name="ApellidoUsuario"  type="text" placeholder="Apellido" autofocus id="ApellidoUsuario" />
 
-        	<input type="text" placeholder="DNI" maxlength="8" id="DniUsuario" />
+        	<input name="DniUsuario" type="text" placeholder="DNI" maxlength="8" id="DniUsuario" />
 
-            <input type="password" placeholder="Contraseña" id="ContraseñaUsuario" />
+            <input name="ContraseñaUsuario" type="password" placeholder="Contraseña" id="ContraseñaUsuario" />
             
             <a id="submit" href="#">Agregar Usuario</a>
+
+            <input type="submit" value="Agregar Usuario">
         
         </div>
 
