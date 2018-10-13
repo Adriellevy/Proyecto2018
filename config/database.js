@@ -9,7 +9,7 @@ global.document = document;
 var connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '47cromosomas',
+    password: 'Superi1289',
     database:'proyecto_final',
     port: 3306
  });
