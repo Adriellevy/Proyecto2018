@@ -24,37 +24,29 @@ router.post('/login', function (req, res){
   ValidarUsuario(dni, password, res);
 });
 
-router.get('/solicitudes', function(req, res){
-    res.sendFile(path.join(__dirname, '../views/solicitudes.html'));
-})
-router.post('/solicitudes',function(req,res){
+router.get('/solicitudesProf', function(req, res){
+    res.sendFile(path.join(__dirname, '../views/seleccionDias.html'));
+});
+
+router.post('/solicitudesProf',function(req,res){
     console.log("funciona el posteo de solisitudes");
-    var Día = req.body.DniUsuario || "" ; 
-    var Bloque = req.body.NombreUsuario || "" ;
-
-    
-    console.log(DÍa,Bloque)
-
+    var Día = req.body.Listadias || "null" ; 
+    var Bloque = req.body.Listabloques || "null" ;
+    console.log(Día);
+    console.log(Bloque);
     BuscarAula(Día,Bloque);
-
 });
 
 router.get('/agregarUsuarios', function (req, res){
     res.sendFile(path.join(__dirname, '../views/agregarUsuarios.html'));
-}
-
-);
-
-
-
+});
 router.post('/agregarUsuarios', function (req, res) {
-    console.log("asd");
     console.log("info recibida del posteo");
     var id = req.body.DniUsuario || "" ; 
     var Nombre = req.body.NombreUsuario || "" ;
     var apellido = req.body.ApellidoUsuario || "" ;
     var contraseña = req.body.ContraseñaUsuario || "" ;
-    console.log(id,Nombre,apellido,contraseña,"juampi es un capo")
+    console.log("Los datos ingresados son: ",id,Nombre,apellido,contraseña)
     agregarUsuario(id,Nombre,apellido,contraseña,res);
 }); 
 
@@ -69,7 +61,6 @@ router.get('/VentanaAdmin', function (req, res){
 module.exports = router;
  
 function agregarUsuario(id, Nombre, apellido, contraseña, response){
-    
         console.log("Datos guardados y especificados");
         if (Nombre != "" && apellido != "" && id !="" && contraseña != "") { 
             console.log("info recibida del posteo y se agrego el usuario")
@@ -147,56 +138,66 @@ function ValidarUsuario(dni, password, response){
     
     }
 
-    function BuscarAula(Día,BLoque){
-        var bloquefinal;
-        var bloque;
-        var dia
-        if (BLoque === "1 BLOQUE" && Día === "Lunes" ){
+    function BuscarAula(Día,Bloque){
+        var bloquefinal; 
+        if (Bloque === "1 Bloque" && Día === "Lunes" ){
             bloquefinal = 1;
         }
-        if (BLoque === "2 BLOQUE" && Día === "Lunes" ){
+        else if (Bloque === "2 Bloque" && Día === "Lunes" ){
             bloquefinal = 2;
         }
-        if (BLoque === "3 BLOQUE" && Día === "Lunes" ){
+        else if (Bloque === "3 Bloque" && Día === "Lunes" ){
             bloquefinal = 3;
         }
-        if (BLoque === "1 BLOQUE" && Día === "Martes" ){
+        else if (Bloque === "1 Bloque" && Día === "Martes" ){
             bloquefinal = 4;
         }
-        if (BLoque === "2 BLOQUE" && Día === "Martes" ){
+        else if (Bloque === "2 Bloque" && Día === "Martes" ){
             bloquefinal = 5;
         }
-        if (BLoque === "3 BLOQUE" && Día === "Martes" ){
+        else if (Bloque === "3 Bloque" && Día === "Martes" ){
             bloquefinal = 6;
         }
-        if (BLoque === "1 BLOQUE" && Día === "miercoles" ){
+        else if (Bloque === "1 Bloque" && Día === "miercoles" ){
             bloquefinal = 7;
         } 
-        if (BLoque === "2 BLOQUE" && Día === "miercoles" ){
+        else if (Bloque === "2 Bloque" && Día === "miercoles" ){
             bloquefinal = 8;
         }
-        if (BLoque === "3 BLOQUE" && Día === "miercoles" ){
+        else if (Bloque === "3 Bloque" && Día === "miercoles" ){
             bloquefinal = 9;
         }
-        if (BLoque === "1 BLOQUE" && Día === "Jueves" ){
+        else if (Bloque === "1 Bloque" && Día === "Jueves" ){
             bloquefinal = 10;
         }
-        if (BLoque === "2 BLOQUE" && Día === "Jueves" ){
+        else if (Bloque === "2 Bloque" && Día === "Jueves" ){
             bloquefinal = 11;
         }
-        if (BLoque === "3 BLOQUE" && Día === "Jueves" ){
+        else if (Bloque === "3 Bloque" && Día === "Jueves" ){
             bloquefinal = 12;
         }
-        if (BLoque === "1 BLOQUE" && Día === "Viernes" ){
+        else if (Bloque === "1 Bloque" && Día === "Viernes" ){
             bloquefinal = 13;
         }
-        if (BLoque === "2 BLOQUE" && Día === "Viernes" ){
+        else if (Bloque === "2 Bloque" && Día === "Viernes" ){
             bloquefinal = 14;
         }
-        if (BLoque === "3 BLOQUE" && Día === "Viernes" ){
+        else if (Bloque === "3 Bloque" && Día === "Viernes" ){
             bloquefinal = 15;
         }
-        connection.query(`Select * SELECT * FROM `+"schedule"+` WHERE `+"block"+` = `+ bloquefinal +``, function (error, results, fields) {
-            console.log(results);
-    });
-}
+        console.log("El bloque final queda asi: " + bloquefinal);
+        connection.query(`SELECT * FROM ` + "schedule" + ``+` WHERE `+"block"+` = `+ bloquefinal +``, function (error, results, fields) {
+            if(error)
+            throw error;
+         else{
+         if (results != "undefined"){
+            var IDroom;
+            var string = JSON.stringify(results);
+            var json =  JSON.parse(string);
+            console.log('>> json: ', json);
+            console.log('>> schedule.idroom: ', json[0].idroom);
+            IDroom = json[0].idroom;
+            }
+         }      
+      });
+    }
