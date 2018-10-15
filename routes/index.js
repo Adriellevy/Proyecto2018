@@ -158,13 +158,13 @@ function ValidarUsuario(dni, password, response){
         else if (Bloque === "3 Bloque" && Día === "Martes" ){
             bloquefinal = 6;
         }
-        else if (Bloque === "1 Bloque" && Día === "miercoles" ){
+        else if (Bloque === "1 Bloque" && Día === "Miercoles" ){
             bloquefinal = 7;
         } 
-        else if (Bloque === "2 Bloque" && Día === "miercoles" ){
+        else if (Bloque === "2 Bloque" && Día === "Miercoles" ){
             bloquefinal = 8;
         }
-        else if (Bloque === "3 Bloque" && Día === "miercoles" ){
+        else if (Bloque === "3 Bloque" && Día === "Miercoles" ){
             bloquefinal = 9;
         }
         else if (Bloque === "1 Bloque" && Día === "Jueves" ){
@@ -187,17 +187,22 @@ function ValidarUsuario(dni, password, response){
         }
         console.log("El bloque final queda asi: " + bloquefinal);
         connection.query(`SELECT * FROM ` + "schedule" + ``+` WHERE `+"block"+` = `+ bloquefinal +``, function (error, results, fields) {
-            if(error)
-            throw error;
-         else{
-         if (results != "undefined"){
-            var IDroom;
-            var string = JSON.stringify(results);
-            var json =  JSON.parse(string);
-            console.log('>> json: ', json);
-            console.log('>> schedule.idroom: ', json[0].idroom);
-            IDroom = json[0].idroom;
+                if(error || results === 0 || results === null || results === [] )
+                throw error;
+                    else if (results != "undefined"){
+                        try{ 
+                            var IDroom;
+                            var string = JSON.stringify(results);
+                            var json =  JSON.parse(string);
+                            console.log('>> json: ', json);
+                            console.log('>> schedule.idroom: ', json[0].idroom);
+                            IDroom = json[0].idroom;
+                                if (IDroom === null){
+                                    
+                                }
+                        } catch(err) {
+                        console.log(error)
+                        }
+                    }             
+                });
             }
-         }      
-      });
-    }
