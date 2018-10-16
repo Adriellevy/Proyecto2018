@@ -186,26 +186,38 @@ function ValidarUsuario(dni, password, response){
             bloquefinal = 15;
         }
         console.log("El bloque final queda asi: " + bloquefinal);
+
         connection.query(`SELECT * FROM ` + "schedule" + ``+` WHERE `+"block"+` = `+ bloquefinal +``, function (error, results, fields) {
                 if(error || results === 0 || results === null || results === []){
+                   console.log("no hay horario disponible");
                    throw error;  
                 }
                 else if (results != "undefined"){
-                        try{ 
-                                if (results === 0){
-                                    console.log("No exsiste un aula en el horario que se pida");
-                                }
-                                else if (results >= 1){
+                        try{
+                              var IDroom;
+                              var string = JSON.stringify(results);
+                              var json =  JSON.parse(string); 
+                              IDroom = json[0].idroom;
+                            if (IDroom != null || IDroom != "null" || IDroom != "undefined" || IDroom != undefined){
                                     console.log("Existe un aula en el horario solisitado");
-                                    var IDroom;
-                                    var string = JSON.stringify(results);
-                                    var json =  JSON.parse(string);
-                                    console.log('>> json: ', json);
                                     console.log('>> schedule.idroom: ', json[0].idroom);
-                                    IDroom = json[0].idroom;
+                                        connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "id" + `=` + IDroom +``, function (error, result, fields){
+                                            if(error){
+                                                throw err;
+                                            }
+                                            else{
+                                                var nombreaula;
+                                                var string1 = JSON.stringify(result);
+                                                var json1 =  JSON.parse(string1); 
+                                                nombreaula = json1[0].name; 
+                                                console.log('>> room.name: ' + nombreaula);
+                                            }
+                                        });
                             }
-                        } catch(err) {
-                        console.log(error)
+                        
+                            
+                            } catch(err) {
+                            console.log(error)
                         }
                     }             
                 });
