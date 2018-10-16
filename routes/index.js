@@ -187,23 +187,23 @@ function ValidarUsuario(dni, password, response){
         }
         console.log("El bloque final queda asi: " + bloquefinal);
         connection.query(`SELECT * FROM ` + "schedule" + ``+` WHERE `+"block"+` = `+ bloquefinal +``, function (error, results, fields) {
-                if(error || results === 0 || results === null || results === [] )
-                throw error;
-                    else if (results != "undefined"){
+                if(error || results === 0 || results === null || results === []){
+                   throw error;  
+                }
+                else if (results != "undefined"){
                         try{ 
-                            var IDroom;
-                            var string = JSON.stringify(results);
-                            var json =  JSON.parse(string);
-                            console.log('>> json: ', json);
-                            console.log('>> schedule.idroom: ', json[0].idroom);
-                            IDroom = json[0].idroom;
-
-                                if (IDroom === null){
+                                if (results === 0){
                                     console.log("No exsiste un aula en el horario que se pida");
                                 }
-                                if (IDroom != null){
-                                    console.log("Existe un aula en el horario solisitado ");
-                                }
+                                else if (results >= 1){
+                                    console.log("Existe un aula en el horario solisitado");
+                                    var IDroom;
+                                    var string = JSON.stringify(results);
+                                    var json =  JSON.parse(string);
+                                    console.log('>> json: ', json);
+                                    console.log('>> schedule.idroom: ', json[0].idroom);
+                                    IDroom = json[0].idroom;
+                            }
                         } catch(err) {
                         console.log(error)
                         }
