@@ -197,8 +197,12 @@ function ValidarUsuario(dni, password, response){
                             console.log('>> json: ', json);
                             console.log('>> schedule.idroom: ', json[0].idroom);
                             IDroom = json[0].idroom;
+
                                 if (IDroom === null){
-                                    
+                                    console.log("No exsiste un aula en el horario que se pida");
+                                }
+                                if (IDroom != null){
+                                    console.log("Existe un aula en el horario solisitado ");
                                 }
                         } catch(err) {
                         console.log(error)
