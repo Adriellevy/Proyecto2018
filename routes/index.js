@@ -210,6 +210,7 @@ function ValidarUsuario(dni, password, response){
                                                 nombreaula = json1[0].name; 
                                                 console.log('>> room.name: ' + nombreaula);
                                                 //export(nombreaula);
+                                                
                                             }
                                         });
                             }                        
