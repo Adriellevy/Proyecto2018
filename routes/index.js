@@ -29,12 +29,11 @@ router.get('/solicitudesProf', function(req, res){
 });
 
 router.post('/solicitudesProf',function(req,res){
-    console.log("funciona el posteo de solisitudes");
     var Día = req.body.Listadias || "null" ; 
     var Bloque = req.body.Listabloques || "null" ;
-    console.log(Día);
-    console.log(Bloque);
-    BuscarAula(Día,Bloque);
+    console.log(">> Día solicitado: "+Día);
+    console.log(">> Bloque solicitado: "+Bloque);
+    BuscarAula(Día,Bloque,res);
 });
 
 router.get('/agregarUsuarios', function (req, res){
@@ -46,7 +45,7 @@ router.post('/agregarUsuarios', function (req, res) {
     var Nombre = req.body.NombreUsuario || "" ;
     var apellido = req.body.ApellidoUsuario || "" ;
     var contraseña = req.body.ContraseñaUsuario || "" ;
-    console.log("Los datos ingresados son: ",id,Nombre,apellido,contraseña)
+    console.log(">>Los datos ingresados son: ",id,Nombre,apellido,contraseña)
     agregarUsuario(id,Nombre,apellido,contraseña,res);
 }); 
 
@@ -138,7 +137,7 @@ function ValidarUsuario(dni, password, response){
     
     }
 
-    function BuscarAula(Día,Bloque){
+    function BuscarAula(Día,Bloque,response){
         var bloquefinal; 
         if (Bloque === "1 Bloque" && Día === "Lunes" ){
             bloquefinal = 1;
@@ -186,8 +185,8 @@ function ValidarUsuario(dni, password, response){
             bloquefinal = 15;
         }
         console.log("El bloque final queda asi: " + bloquefinal);
-
-        connection.query(`SELECT * FROM ` + "schedule" + ``+` WHERE `+"block"+` = `+ bloquefinal +``, function (error, results, fields) {
+    try{
+        connection.query(`SELECT * FROM ` + "schedule" + ``+` WHERE `+"block"+` = `+ bloquefinal +` && `+"status" +` = 1`, function (error, results, fields) {
                 if(error || results === 0 || results === null || results === []){
                    console.log("no hay horario disponible");
                    throw error;  
@@ -199,7 +198,6 @@ function ValidarUsuario(dni, password, response){
                               var json =  JSON.parse(string); 
                               IDroom = json[0].idroom;
                             if (IDroom != null || IDroom != "null" || IDroom != "undefined" || IDroom != undefined){
-                                    console.log("Existe un aula en el horario solisitado");
                                     console.log('>> schedule.idroom: ', json[0].idroom);
                                         connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "id" + `=` + IDroom +``, function (error, result, fields){
                                             if(error){
@@ -211,14 +209,17 @@ function ValidarUsuario(dni, password, response){
                                                 var json1 =  JSON.parse(string1); 
                                                 nombreaula = json1[0].name; 
                                                 console.log('>> room.name: ' + nombreaula);
+                                                //export(nombreaula);
                                             }
                                         });
-                            }
-                        
+                            }                        
                             
                             } catch(err) {
                             console.log(error)
                         }
                     }             
                 });
-            }
+            }catch(err){
+                console.log(error)
+        }
+        } 
