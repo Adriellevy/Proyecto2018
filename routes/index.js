@@ -20,6 +20,7 @@ router.get('/solicitudesProf', function(req, res){
 
 router.get('/solisitudesAdm',function(req,res){
     res.sendFile(path.join(__dirname, '../views/solicitudes.html'));
+    cargaSolisitudes();
 })
 
 router.get('/agregarUsuarios', function (req, res){
@@ -45,7 +46,7 @@ router.post('/solicitudesProf',function(req,res){
     BuscarAula(Día,Bloque,res);
 });
 
-router.post('/SolisitudesAdm',function(req,res){
+router.post('/SolicitudesAdm',function(req,res){
     SolicitudesAdm();
 });
 
@@ -62,6 +63,7 @@ router.post('/agregarUsuarios', function (req, res) {
 router.get('/VentanaAdmin', function (req, res){
     res.sendFile(path.join(__dirname, '../views/ventanaAdmin.html'));
     console.log("una computadora se ha conectado a la pagina /ventanaAdmin ")
+    
 });
 
 module.exports = router;
@@ -133,19 +135,6 @@ function ValidarUsuario(dni, password, response){
         }
     });
 } 
-
-
-
-
-function SolicitudesAdm(){
-
-    
-}
-
-
-
-
-
 
 function BuscarAula(Día,Bloque,response){
         var bloquefinal; 
@@ -221,7 +210,7 @@ function BuscarAula(Día,Bloque,response){
                                                 console.log('>> room.name: ' + nombreaula);
                                                 //export(nombreaula);
                                                 exports.nombre = nombreaula;
-                                                var botonOn = require('./module');
+                                                var botonOn = require('.//*pagina de d solisitudprof*/');
                                                 if (botonOn === "ON"){
                                                     connection.query(`UPDATE ` + "schedule" +` SET ` + "status" + `= 2 `+" && block ="+bloquefinal+` WHERE `+ "status" +`= 0 && `+"idroom"+`=`+ IDroom +``, function (error, result, fields){
                                                         if(error){
@@ -246,3 +235,34 @@ function BuscarAula(Día,Bloque,response){
         }
         } 
 
+
+        function SolicitudesAdm(){
+        }
+        
+        function cargaSolisitudes(){
+            connection.query(`SELECT * FROM `+"schedule" +` WHERE `+"status"+` = 2`, function (error, results, fields) {
+                if(error){
+                   console.log("no hay horario disponible");
+                   throw error;  
+                }
+                else{
+                            var IDroom;
+                            var string = JSON.stringify(results);
+                            var json =  JSON.parse(string); 
+                            IDroom = json[0].idroom;
+                            connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "id" + `=` + IDroom +``, function (error, result, fields){
+                                if(error){
+                                    throw err;
+                                }else{
+                                    var nombreaula;
+                                    var string1 = JSON.stringify(result);
+                                    var json1 =  JSON.parse(string1); 
+                                    nombreaula = json1[0].name;
+                                    exports.nombre = nombreaula;
+                                }
+                            });
+                }
+            });
+
+        }
+        
