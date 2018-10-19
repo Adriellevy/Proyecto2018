@@ -258,6 +258,7 @@ function BuscarAula(Día,Bloque,response){
                                     var string1 = JSON.stringify(result);
                                     var json1 =  JSON.parse(string1); 
                                     nombreaula = json1[0].name;
+                                    console.log(nombreaula);
                                     exports.nombre = nombreaula;
                                 }
                             });
