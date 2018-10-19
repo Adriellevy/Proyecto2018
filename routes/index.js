@@ -54,10 +54,10 @@ router.post('/solicitudesProf',function(req,res){
     BuscarAula(Día,Bloque,res);
 });
 
-router.post('/SolicitudesAdm',function(req,res){
+router.post('/solicitudesAdm',function(req,res){
     SolicitudesAdm();
+    
 });
-
 router.get('/VentanaAdmin', function (req, res){
     res.sendFile(path.join(__dirname, '../views/ventanaAdmin.html'));
     console.log("una computadora se ha conectado a la pagina /ventanaAdmin ")
@@ -211,6 +211,36 @@ function BuscarAula(Día,Bloque,response){
 
 
         function SolicitudesAdm(){
+            var BOTON = require('./VentanaAdm.js');
+            if (BOTON === "ON" ){
+                connection.query(`UPDATE ` + "schedule" +` SET ` + "status" + `= 1 `+ ` WHERE `+ "status" +`= 2 && `+"idroom"+`=`+ IDroom +``, function (error, result, fields){
+                    if(error){
+                        throw(err);
+                        IDroomADM === "";
+                        BOTON === "";
+                        nombreaulaAdM === "";
+                    }
+                    else{ 
+                        console.log(">>se a aceptado el uso del aula: "+ nombreaulaAdM);
+                        IDroomADM === "";
+                        BOTON === "";
+                        nombreaulaAdM === "";
+                    }
+                });
+            }
+            else if(BOTON === "OFF"){
+                connection.query(`UPDATE ` + "schedule" +` SET ` + "status" + `= 0 `+" && block =" + bloquefinal +` WHERE `+ "status" +`= 2 && `+"idroom"+`=`+ IDroom +``, function (error, result, fields){
+                    if(error){
+                        throw(err);
+                    }
+                    else{ 
+                        console.log(">>se a negado el uso del aula: " + IDroomADM);
+                    }
+                });
+            }else{
+                SolicitudesAdm;
+                console.log("se rrepite function")
+            }
         }
         
         function cargaSolisitudes(){
@@ -220,24 +250,30 @@ function BuscarAula(Día,Bloque,response){
                    throw error;  
                 }
                 else{
-                            var IDroom;
+                            
                             var string = JSON.stringify(results);
                             var json =  JSON.parse(string); 
-                            IDroom = json[0].idroom;
-                            connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "id" + `=` + IDroom +``, function (error, result, fields){
-                                if(error){
-                                    throw err;
-                                }else{
-                                    var nombreaula;
-                                    var string1 = JSON.stringify(result);
-                                    var json1 =  JSON.parse(string1); 
-                                    nombreaula = json1[0].name;
-                                    console.log(nombreaula);
-                                    exports.nombre = nombreaula;
-                                }
+                            
+                            for (let i = 0; i  < results.length; i++) {
+                                const element = results[i].idroom;    
+                                    if(json != [] || json != null || json != "null" || json != ""){
+                                    connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "id" + `=` + results[i].idroom +``, function (error, result, fields){
+                                        if(error){
+                                            throw err;
+                                        }else{
+                                            
+                                            var string1 = JSON.stringify(result);
+                                            var json1 =  JSON.parse(string1); 
+                                            nombreaulaAdM = json1[0].name;
+                                            ListaNombredeaulas.push(nombreaulaAdM);
+                                            console.log(nombreaulaAdM);
+                                            exports.nombre = nombreaulaAdM;
+                                        
+                                    }
                             });
-                }
-            });
-
-        }
+                        }
+                } 
+            }
+        });
+    }
         
