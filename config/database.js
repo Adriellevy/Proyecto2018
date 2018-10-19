@@ -18,15 +18,7 @@ var connection = mysql.createConnection({
     if(error)
        throw error;
     else
-       console.log('Conexion correcta con la base de datos.');
-       var query = connection.query(" SELECT * FROM `users`",function(error,result){
-            if(error){
-            throw error;
-        }else{
-              console.log(result);
-        }
-      });
-      
+       console.log('Conexion correcta con la base de datos.');      
  });
 
  module.exports = connection;
