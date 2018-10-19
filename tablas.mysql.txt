@@ -1,0 +1,16 @@
+SELECT * FROM users_subject as us inner JOIN 
+subjects as s ON us.idsubject = s.id
+
+
+SELECT * FROM users_subject as us inner JOIN
+ users as u ON us.idusers = u.id
+
+SELECT * FROM rooms as r inner JOIN
+ schedule as s ON r.id = s.idroom
+
+
+SELECT * FROM schedule as s inner JOIN
+users as u ON s.idroom = u.id
+
+SELECT * FROM schedule as sc inner JOIN 
+subjects as s ON sc.idsubject = s.id
