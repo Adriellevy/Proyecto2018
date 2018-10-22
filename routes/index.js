@@ -113,149 +113,99 @@ function ValidarUsuario(dni, password, response){
 } 
 
 function BuscarAula(Día,Bloque,response){
-        var bloquefinal; 
-        if (Bloque === "1 Bloque" && Día === "Lunes" ){
-            bloquefinal = 1;
-        }
-        else if (Bloque === "2 Bloque" && Día === "Lunes" ){
-            bloquefinal = 2;
-        }
-        else if (Bloque === "3 Bloque" && Día === "Lunes" ){
-            bloquefinal = 3;
-        }
-        else if (Bloque === "1 Bloque" && Día === "Martes" ){
-            bloquefinal = 4;
-        }
-        else if (Bloque === "2 Bloque" && Día === "Martes" ){
-            bloquefinal = 5;
-        }
-        else if (Bloque === "3 Bloque" && Día === "Martes" ){
-            bloquefinal = 6;
-        }
-        else if (Bloque === "1 Bloque" && Día === "Miercoles" ){
-            bloquefinal = 7;
-        } 
-        else if (Bloque === "2 Bloque" && Día === "Miercoles" ){
-            bloquefinal = 8;
-        }
-        else if (Bloque === "3 Bloque" && Día === "Miercoles" ){
-            bloquefinal = 9;
-        }
-        else if (Bloque === "1 Bloque" && Día === "Jueves" ){
-            bloquefinal = 10;
-        }
-        else if (Bloque === "2 Bloque" && Día === "Jueves" ){
-            bloquefinal = 11;
-        }
-        else if (Bloque === "3 Bloque" && Día === "Jueves" ){
-            bloquefinal = 12;
-        }
-        else if (Bloque === "1 Bloque" && Día === "Viernes" ){
-            bloquefinal = 13;
-        }
-        else if (Bloque === "2 Bloque" && Día === "Viernes" ){
-            bloquefinal = 14;
-        }
-        else if (Bloque === "3 Bloque" && Día === "Viernes" ){
-            bloquefinal = 15;
-        }
-        console.log("El bloque final queda asi: " + bloquefinal);
-    try{
-        connection.query(`SELECT * FROM ` + "schedule" + ``+` WHERE `+"block"+` = `+ bloquefinal +` && `+"status" +` = 0`, function (error, results, fields) {
-                if(error || results === 0 || results === null || results === []){
-                   console.log("no hay horario disponible");
-                   throw error;  
-                }
-                else if (results != "undefined"){
-                    try{
-                          var IDroom;
-                          var string = JSON.stringify(results);
-                          var json =  JSON.parse(string); 
-                          IDroom = json[0].idroom;
-                            if (IDroom != null || IDroom != "null" || IDroom != "undefined" || IDroom != undefined){
-                                    console.log('>> schedule.idroom: ', json[0].idroom);
-                                        connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "id" + `=` + IDroom +``, function (error, result, fields){
-                                            if(error){
-                                                throw err;
-                                            }
-                                            else{
-                                                var nombreaula;
-                                                var string1 = JSON.stringify(result);
-                                                var json1 =  JSON.parse(string1); 
-                                                nombreaula = json1[0].name; 
-                                                console.log('>> room.name: ' + nombreaula);
-                                                //export(nombreaula);
-                                                exports.nombre = nombreaula;
-                                                var botonOn = require('.//*pagina de d solisitudprof*/');
-                                                if (botonOn === "ON"){
-                                                    connection.query(`UPDATE ` + "schedule" +` SET ` + "status" + `= 2 `+" && block ="+bloquefinal+` WHERE `+ "status" +`= 0 && `+"idroom"+`=`+ IDroom +``, function (error, result, fields){
-                                                        if(error){
-                                                            throw(err);
-                                                        }
-                                                        else{ 
-                                                            console.log("se a actualizado el estado del aula");
-                                                        }
-                                                    });
-                                                }
-                                            }
-                                        });
-                            }                        
-                            
-                            } catch(err) {
-                            console.log(error)
-                        }
-                    }             
-                });
-            }catch(err){
-                console.log(error)
-        }
-        } 
-
-
-        function SolicitudesAdm(){
-            var BOTON = require('./VentanaAdm.js');
-            if (BOTON === "ON" ){
-                connection.query(`UPDATE ` + "schedule" +` SET ` + "status" + `= 1 `+ ` WHERE `+ "status" +`= 2 && `+"idroom"+`=`+ IDroom +``, function (error, result, fields){
-                    if(error){
-                        throw(err);
-                        IDroomADM === "";
-                        BOTON === "";
-                        nombreaulaAdM === "";
-                    }
-                    else{ 
-                        console.log(">>se a aceptado el uso del aula: "+ nombreaulaAdM);
-                        IDroomADM === "";
-                        BOTON === "";
-                        nombreaulaAdM === "";
-                    }
-                });
-            }
-            else if(BOTON === "OFF"){
-                connection.query(`UPDATE ` + "schedule" +` SET ` + "status" + `= 0 `+" && block =" + bloquefinal +` WHERE `+ "status" +`= 2 && `+"idroom"+`=`+ IDroom +``, function (error, result, fields){
-                    if(error){
-                        throw(err);
-                    }
-                    else{ 
-                        console.log(">>se a negado el uso del aula: " + IDroomADM);
-                    }
-                });
-            }else{
-                SolicitudesAdm;
-                console.log("se rrepite function")
-            }
-        }
+    var bloquefinal; 
+    var IDPROf; 
+    var IDSUb; 
+    var nombreAula; 
+    
+    IDPROf = /*require('./seleccionDias.js') ||*/ "1" ;
+    IDSUb = /*require('./seleccionDias.js') ||*/ "1";
+    nombreAula = /*require('./seleccionDias.js') ||*/ "1";
+    
+    if (Bloque === "1 Bloque" && Día === "Lunes" ){
+        bloquefinal = 1;
+    }
+    else if (Bloque === "2 Bloque" && Día === "Lunes" ){
+        bloquefinal = 2;
+    }
+    else if (Bloque === "3 Bloque" && Día === "Lunes" ){
+        bloquefinal = 3;
+    }
+    else if (Bloque === "1 Bloque" && Día === "Martes" ){
+        bloquefinal = 4;
+    }
+    else if (Bloque === "2 Bloque" && Día === "Martes" ){
+        bloquefinal = 5;
+    }
+    else if (Bloque === "3 Bloque" && Día === "Martes" ){
+        bloquefinal = 6;
+    }
+    else if (Bloque === "1 Bloque" && Día === "Miercoles" ){
+        bloquefinal = 7;
+    } 
+    else if (Bloque === "2 Bloque" && Día === "Miercoles" ){
+        bloquefinal = 8;
+    }
+    else if (Bloque === "3 Bloque" && Día === "Miercoles" ){
+        bloquefinal = 9;
+    }
+    else if (Bloque === "1 Bloque" && Día === "Jueves" ){
+        bloquefinal = 10;
+    }
+    else if (Bloque === "2 Bloque" && Día === "Jueves" ){
+        bloquefinal = 11;
+    }
+    else if (Bloque === "3 Bloque" && Día === "Jueves" ){
+        bloquefinal = 12;
+    }
+    else if (Bloque === "1 Bloque" && Día === "Viernes" ){
+        bloquefinal = 13;
+    }
+    else if (Bloque === "2 Bloque" && Día === "Viernes" ){
+        bloquefinal = 14;
+    }
+    else if (Bloque === "3 Bloque" && Día === "Viernes" ){
+        bloquefinal = 15;
+    }
+    console.log("El bloque final queda asi: " + bloquefinal);
+try{ 
+    nombreAula = 209; 
+    connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "name" + `=` + nombreAula +``, function (error, result, fields){
+    if(error){
+        throw error;
+    }
+    else if (result != undefined){
+        var IdAula;
+        var string1 = JSON.stringify(result);
+        var json1 =  JSON.parse(string1); 
+        IdAula = json1[0].id; 
+        console.log(">> room.name: " + IdAula);
+        console.log(">> Shoudle.block: "+ IdAula);
         
+            connection.query(`INSERT INTO `+"schedule"+`(`+"idteacher"+`, `+"idsubject"+`, `+"idroom"+`, `+"block"+`, `+"repeat"+`, `+"status"+`) VALUES (`+IDPROf+`,`+IDSUb+`,`+ nombreAula+`,`+bloquefinal+`,3,`+1+`)`,function (error, results, fields) {
+                if(error){
+                    throw error;  
+                }else{
+
+                    
+                }
+              });
+            }
+         });
+}catch(err){
+    
+    }
+}
+    
         function cargaSolisitudes(){
-            connection.query(`SELECT * FROM `+"schedule" +` WHERE `+"status"+` = 2`, function (error, results, fields) {
+            connection.query(`SELECT * FROM `+"schedule" +` WHERE `+"status"+` = 1`, function (error, results, fields) {
                 if(error){
                    console.log("no hay horario disponible");
                    throw error;  
                 }
                 else{
-                            
                             var string = JSON.stringify(results);
                             var json =  JSON.parse(string); 
-                            
                             for (let i = 0; i  < results.length; i++) {
                                 const element = results[i].idroom;    
                                     if(json != [] || json != null || json != "null" || json != ""){
@@ -263,19 +213,16 @@ function BuscarAula(Día,Bloque,response){
                                         if(error){
                                             throw err;
                                         }else{
-                                            
                                             var string1 = JSON.stringify(result);
                                             var json1 =  JSON.parse(string1); 
                                             nombreaulaAdM = json1[0].name;
                                             ListaNombredeaulas.push(nombreaulaAdM);
                                             console.log(nombreaulaAdM);
                                             exports.nombre = nombreaulaAdM;
-                                        
                                     }
                             });
                         }
-                } 
-            }
-        });
-    }
-        
+                    }
+                }
+            });
+        }
