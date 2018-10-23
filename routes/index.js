@@ -8,6 +8,7 @@ const { window } = new JSDOM();
 const { document } = (new JSDOM('')).window;
 global.document = document;
 var ListaNombredeaulas = [];
+var idaula;
 
 router.get('/login', function (req, res) {
     //res.sendFile(__dirname + '../views/inicioSesion.html');
@@ -58,6 +59,7 @@ router.post('/solicitudesProf',function(req,res){
 router.post('/solicitudesAdm',function(req,res){
     cargaSolisitudes();
     RtaAdm(); 
+
 });
 router.get('/VentanaAdmin', function (req, res){
     res.sendFile(path.join(__dirname, '../views/ventanaAdmin.html'));
@@ -210,6 +212,7 @@ try{
                             for (let i = 0; i  < results.length; i++) {
                                 const element = results[i].idroom;    
                                     if(json != [] || json != null || json != "null" || json != ""){
+
                                     connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "id" + `=` + results[i].idroom +``, function (error, result, fields){
                                         if(error){
                                             throw err;
@@ -228,7 +231,47 @@ try{
             });
         }
         function RtaAdm(){
-            var msg = require('./Selecion de diasjs.js');
+            try{
+            var msg = require('./seleccion diasjs.js');
             console.log(msg);
-        }
+            }catch(error){
+                console.log("no hay aulas que se subtrayeron del html")
+            }
+            if(msg === true){
+                connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "id" + `=` + msg +``, function (error, result, fields){
+                    if(error){
+                        throw err;
+                    }else{
+                        var string1 = JSON.stringify(result);
+                        var json1 =  JSON.parse(string1); 
+                        var idaula = json1[0].id;
+                connection.query(`UPDATE `+"schedule"+` SET `+"status"+`= 2 WHERE `+"status"+` = 1 AND `+"idroom"+` =`+ idaula+``, function (error, results, fields) {
+                    if(error){
+                    }
+                    else{
+                        console.log(">> An application for the classroom has been approved ht class room is:" + msg); 
+                    }
+                });
+            }
         
+               
+        });
+    }else if(msg === false){
+        connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "id" + `=` + msg +``, function (error, result, fields){
+            if(error){
+                throw err;
+            }else{
+                var string1 = JSON.stringify(result);
+                var json1 =  JSON.parse(string1); 
+                var idaula = json1[0].id;
+        connection.query(`UPDATE `+"schedule"+` SET `+"status"+`= 0 WHERE `+"status"+` = 1 AND `+"idroom"+` =`+ idaula+``, function (error, results, fields) {
+            if(error){
+            }
+            else{
+                console.log(">> An application for the classroom has been approved ht class room is:" + msg); 
+                    }
+                });
+            }
+        });
+    } 
+}
