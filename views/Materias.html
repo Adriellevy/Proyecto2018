@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Materias y profesores</title>
+    <link rel="stylesheet" type="text/css" href="../public/styles/Materia.css">
+    <link rel="icon" type="text/css" href="../images/logo.png">
+</head>
+
+
+<body>
+
+<main>
+  <div class="container">
+
+      <form method="POST" action="/login" id="signup">
+
+        <div class="header">
+        
+            <h3>Materias</h3>
+            
+        </div>
+        
+        <div class="sep"></div>
+
+        <div class="inputs">
+        
+            <a id="submit" href="#">Matematica</a>
+            <a id="submit" href="#">Biologia</a>
+            <a id="submit" href="#">Ingles</a>
+        
+        </div>
+
+    </form>
+
+  </div>
+  <div class="container">
+
+    <form id="signup">
+
+        <div class="header">
+        
+            <h3>Profesores</h3>
+                
+        </div>
+        
+        <div class="sep"></div>
+
+        <div class="inputs">
+
+            
+            <a id="submit" href="#">Rafa</a>
+            <a id="submit" href="#">Amancay</a>
+            <a id="submit" href="#">Nora</a>
+        
+        </div>
+
+    </form>
+
+</div>
+
+
+<div class="container">
+
+      <form method="POST"  id="signup">
+
+        <div class="header">
+        
+            <h3>Agregar materias y profesores</h3>
+            
+        </div>
+        
+        <div class="sep"></div>
+
+        <div class="inputs">
+        
+            <input type="text" placeholder="Materia" maxlength="8" required id="mater" name="mater" />
+
+            <input type="text" placeholder="Profesor" maxlength="8" required id="prof" name="prof" />
+            
+            <input type="submit" value="Agregar" id="submit" onclick= "addElement ()">
+        
+        </div>
+
+    </form>
+
+
+</main>
+
+
+
+    
+  
+  
+  <script type="text/javascript" src="../public/scripts/profesymaterias.js"></script>
+
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" ></script>
+  
+</body>
+</html>

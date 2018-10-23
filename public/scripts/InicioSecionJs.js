@@ -1,8 +1,10 @@
-alert('hasuod');
+
+$('input#submit').click(function () {
+  alert('InicioSesion');
+});
 
 $('form').submit(function(e){
-    //e.preventDefault();
-    alert('form');
+    e.preventDefault();
 });
 
 
