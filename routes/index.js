@@ -7,6 +7,7 @@ const { JSDOM } = jsdom;
 const { window } = new JSDOM();
 const { document } = (new JSDOM('')).window;
 global.document = document;
+var ListaNombredeaulas = [];
 
 router.get('/login', function (req, res) {
     //res.sendFile(__dirname + '../views/inicioSesion.html');
@@ -16,11 +17,9 @@ router.get('/login', function (req, res) {
 
 router.get('/solicitudesProf', function(req, res){
     res.sendFile(path.join(__dirname, '../views/seleccionDias.html'));
-    var msg = require('./Selecion de diasjs.js');
-    console.log(msg);
 });
 
-router.get('/solicitudes',function(req,res){
+router.get('/solicitudesAdm',function(req,res){
     res.sendFile(path.join(__dirname, '../views/solicitudes.html'));
     cargaSolisitudes();
 })
@@ -57,8 +56,8 @@ router.post('/solicitudesProf',function(req,res){
 });
 
 router.post('/solicitudesAdm',function(req,res){
-    SolicitudesAdm();
-    
+    cargaSolisitudes();
+    RtaAdm(); 
 });
 router.get('/VentanaAdmin', function (req, res){
     res.sendFile(path.join(__dirname, '../views/ventanaAdmin.html'));
@@ -67,7 +66,6 @@ router.get('/VentanaAdmin', function (req, res){
 });
 
 module.exports = router;
-
 
 router.get('/VentanaAdmin', function (req, res){
 res.sendFile(path.join(__dirname, '../views/ventanaAdmin.html'));
@@ -208,6 +206,7 @@ try{
                 else{
                             var string = JSON.stringify(results);
                             var json =  JSON.parse(string); 
+                            console.log(">> saved json next step, search room");
                             for (let i = 0; i  < results.length; i++) {
                                 const element = results[i].idroom;    
                                     if(json != [] || json != null || json != "null" || json != ""){
@@ -217,15 +216,19 @@ try{
                                         }else{
                                             var string1 = JSON.stringify(result);
                                             var json1 =  JSON.parse(string1); 
-                                            nombreaulaAdM = json1[0].name;
-                                            ListaNombredeaulas.push(nombreaulaAdM);
-                                            console.log(nombreaulaAdM);
-                                            exports.nombre = nombreaulaAdM;
+                                            nombreAula = json1[0].name;
+                                            console.log(nombreAula);
+                                            ListaNombredeaulas.push(nombreAula);
+                                            exports.nombre = nombreAula;
                                     }
                             });
                         }
                     }
                 }
             });
+        }
+        function RtaAdm(){
+            var msg = require('./Selecion de diasjs.js');
+            console.log(msg);
         }
         
