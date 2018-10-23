@@ -1,18 +1,19 @@
-var mater;
+    var mater;
     var prof;
     var status;
 
         //submit
         function sub(){
-            mater = document.getElementById("mater").value;
-            prof = document.getElementById("prof").value;
-         alert(mater+" "+prof);
+            
         };
 
 
         document.body.onload = addElement;
 
 function addElement () { 
+  mater = document.getElementById("mater").value;
+  prof = document.getElementById("prof").value;
+  alert(mater+" "+prof);
   // crea un nuevo div 
   // y añade contenido 
   var newa = document.createElement("a"); 

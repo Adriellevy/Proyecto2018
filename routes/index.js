@@ -16,6 +16,8 @@ router.get('/login', function (req, res) {
 
 router.get('/solicitudesProf', function(req, res){
     res.sendFile(path.join(__dirname, '../views/seleccionDias.html'));
+    var msg = require('./Selecion de diasjs.js');
+    console.log(msg);
 });
 
 router.get('/solicitudes',function(req,res){
@@ -169,7 +171,7 @@ function BuscarAula(Día,Bloque,response){
     }
     console.log("El bloque final queda asi: " + bloquefinal);
 try{ 
-    nombreAula = 209; 
+    
     connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "name" + `=` + nombreAula +``, function (error, result, fields){
     if(error){
         throw error;
@@ -226,3 +228,4 @@ try{
                 }
             });
         }
+        
