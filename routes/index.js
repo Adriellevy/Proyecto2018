@@ -57,7 +57,8 @@ router.post('/solicitudesProf',function(req,res){
 });
 
 router.post('/solicitudesAdm',function(req,res){
-    cargaSolisitudes();
+    var nombre = cargaSolisitudes();
+    exports.nombre = nombre; 
     RtaAdm(); 
 
 });
@@ -202,17 +203,22 @@ try{
         function cargaSolisitudes(){
             connection.query(`SELECT * FROM `+"schedule" +` WHERE `+"status"+` = 1`, function (error, results, fields) {
                 if(error){
-                   console.log("no hay horario disponible");
+                   console.log(">> There is not a request for a schedule");
                    throw error;  
                 }
                 else{
                             var string = JSON.stringify(results);
                             var json =  JSON.parse(string); 
-                            console.log(">> saved json next step, search room");
+                            console.log(">> The json is saved the next step: search in rooms");
+                        if (json === [] || json === null || json === "null" || json === ""){
+                                console.log(">> The Json is empty")
+                                exports.json = json;
+                        }else{                            
                             for (let i = 0; i  < results.length; i++) {
-                                const element = results[i].idroom;    
+                                const element = results[i].idroom;   
+                                console.log(">> A `for` request to the table `rooms` is running out");
                                     if(json != [] || json != null || json != "null" || json != ""){
-
+                                        
                                     connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "id" + `=` + results[i].idroom +``, function (error, result, fields){
                                         if(error){
                                             throw err;
@@ -220,16 +226,18 @@ try{
                                             var string1 = JSON.stringify(result);
                                             var json1 =  JSON.parse(string1); 
                                             nombreAula = json1[0].name;
-                                            console.log(nombreAula);
+                                            //console.log(nombreAula);
                                             ListaNombredeaulas.push(nombreAula);
                                             exports.nombre = nombreAula;
                                     }
                             });
                         }
+                        
                     }
-                }
-            });
-        }
+                } 
+             }    
+        });
+    }return(nombreAula)
         function RtaAdm(){
             try{
             var msg = require('./seleccion diasjs.js');
