@@ -23,7 +23,12 @@ router.get('/solicitudesProf', function(req, res){
 router.get('/solicitudesAdm',function(req,res){
     res.sendFile(path.join(__dirname, '../views/solicitudes.html'));
     cargaSolisitudes();
-})
+});
+router.get('/VentanaAdmin', function (req, res){
+    res.sendFile(path.join(__dirname, '../views/ventanaAdmin.html'));
+    console.log("una computadora se ha conectado a la pagina /ventanaAdmin ")
+    
+});
 
 router.get('/agregarUsuarios', function (req, res){
     res.sendFile(path.join(__dirname, '../views/agregarUsuarios.html'));
@@ -51,9 +56,11 @@ router.post('/login', function (req, res){
 router.post('/solicitudesProf',function(req,res){
     var Día = req.body.Listadias || "null" ; 
     var Bloque = req.body.Listabloques || "null" ;
-    console.log(">> Día solicitado: "+Día);
-    console.log(">> Bloque solicitado: "+Bloque);
-    BuscarAula(Día,Bloque,res);
+    var NAula = req.body.ListaAulas;
+    console.log(">> Día solicitado: " + Día);
+    console.log(">> Bloque solicitado: " + Bloque);
+    console.log(">> Aula solicitada: "+ NAula);
+    Solicitaraula(Día,Bloque,res,NAula);
 });
 
 router.post('/solicitudesAdm',function(req,res){
@@ -62,19 +69,10 @@ router.post('/solicitudesAdm',function(req,res){
     RtaAdm(); 
 
 });
-router.get('/VentanaAdmin', function (req, res){
-    res.sendFile(path.join(__dirname, '../views/ventanaAdmin.html'));
-    console.log("una computadora se ha conectado a la pagina /ventanaAdmin ")
-    
-});
+
 
 module.exports = router;
 
-router.get('/VentanaAdmin', function (req, res){
-res.sendFile(path.join(__dirname, '../views/ventanaAdmin.html'));
-});
-
-module.exports = router;
 
 function AgregarUsuario(dni, nombre, apellido, password, rol, response){
     var sql = "SELECT * FROM users WHERE dni = "+dni;
@@ -115,16 +113,12 @@ function ValidarUsuario(dni, password, response){
     });
 } 
 
-function BuscarAula(Día,Bloque,response){
+function Solicitaraula(Día,Bloque,response,AULA){
     var bloquefinal; 
     var IDPROf; 
     var IDSUb; 
-    var nombreAula; 
-    
-    IDPROf = /*require('./seleccionDias.js') ||*/ "1" ;
-    IDSUb = /*require('./seleccionDias.js') ||*/ "1";
-    nombreAula = /*require('./seleccionDias.js') ||*/ "1";
-    
+    var nombreAula =AULA;  
+        
     if (Bloque === "1 Bloque" && Día === "Lunes" ){
         bloquefinal = 1;
     }
@@ -173,7 +167,7 @@ function BuscarAula(Día,Bloque,response){
     console.log("El bloque final queda asi: " + bloquefinal);
 try{ 
     
-    connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "name" + `=` + nombreAula +``, function (error, result, fields){
+    connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "name" + `= "` + nombreAula +`"`, function (error, result, fields){
     if(error){
         throw error;
     }
@@ -185,12 +179,12 @@ try{
         console.log(">> room.name: " + IdAula);
         console.log(">> Shoudle.block: "+ IdAula);
         
-            connection.query(`INSERT INTO `+"schedule"+`(`+"idteacher"+`, `+"idsubject"+`, `+"idroom"+`, `+"block"+`, `+"repeat"+`, `+"status"+`) VALUES (`+IDPROf+`,`+IDSUb+`,`+ nombreAula+`,`+bloquefinal+`,3,`+1+`)`,function (error, results, fields) {
+            connection.query(`INSERT INTO `+"schedule"+`(`+"idteacher"+`, `+"idsubject"+`, `+"idroom"+`, `+"block"+`, `+"repeat"+`, `+"status"+`) VALUES (`+/*IDPROf*/ 1 +`,`+ /*IDSUb*/ 1+`,`+ nombreAula+`,`+bloquefinal+`,3,1)`,function (error, results, fields) {
                 if(error){
                     throw error;  
                 }else{
 
-                    
+                     
                 }
               });
             }
@@ -237,7 +231,7 @@ try{
                 } 
              }    
         });
-    }return(nombreAula)
+    }
         function RtaAdm(){
             try{
             var msg = require('./seleccion diasjs.js');
