@@ -68,9 +68,12 @@ router.post('/solicitudesProf',function(req,res){
 });
 
 router.post('/solicitudesAdm',function(req,res){
-<<<<<<< HEAD
-    cargaSolicitudes();
-    RtaAdm(); 
+  //cargaSolicitudes(res);
+    //res.send(ListaNombredeaulas);
+
+    rta = req.body.action;
+    console.log(rta);
+    RtaAdm(req);
 });
 
 router.post('/cierreSesion',function(response){
@@ -279,8 +282,9 @@ try{
 
 
 
-        function RtaAdm(req){
-            if(req.body.action === 'aprobar'){
+         function RtaAdm(req){
+            var rsta = req.body.action
+            if(rsta === 'aprobar'){
                 msg = req.body.aula;
              connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "id" + `=` + msg +``, function (error, result, fields){
                     if(error){
@@ -289,18 +293,19 @@ try{
                         var string1 = JSON.stringify(result);
                         var json1 =  JSON.parse(string1); 
                         var idaula = json1[0].id;
+                        console.log(">> id aula: " + idaula);
                 connection.query(`UPDATE `+"schedule"+` SET `+"status"+`= 2 WHERE `+"status"+` = 1 AND `+"idroom"+` =`+ idaula+``, function (error, results, fields) {
                     if(error){
                     }
                     else{
-                        console.log(">> An application for the classroom has been approved ht class room is:" + msg); 
+                        console.log(">> Una solicitud ha sido aprobada: " + msg); 
                     }
                 });
             
             }
                
         });
-    }else if(req.body.action === 'rechazar'){
+    }else if(rsta === 'rechazar'){
         msg = req.body.aula;
         connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "id" + `=` + msg +``, function (error, result, fields){
             if(error){
@@ -313,10 +318,12 @@ try{
             if(error){
             }
             else{
-                console.log(">> An application for the classroom has been approved ht class room is:" + msg); 
+                console.log(">> Una solicitud ha sido rechasada: " + msg); 
                     }
                 });
             }
         });
-    } 
+    }else{
+    console.log("El posteo que se envio es indefinido")
+} 
 }
