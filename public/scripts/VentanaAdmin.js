@@ -17,6 +17,16 @@ var newMessageRef = messageListRef.push();
 messageListRef.set({
  // no usar esta funcion
 });
+
+function cerrarSesion(){
+
+  $.post('/cierreSesion', function(data){
+    console.log(data);
+  });
+
+}
+
+
 newMessageRef.set({
   //aca creas un hijo adentro de un objeto sin nombre(o un nombre aleatorio) con las caracteristicas que quieras
 });

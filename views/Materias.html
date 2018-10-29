@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <title>Materias y profesores</title>
-    <link rel="stylesheet" type="text/css" href="../public/styles/Materia.css">
-    <link rel="icon" type="text/css" href="../images/logo.png">
+    <link rel="stylesheet" type="text/css" href="./styles/Materia.css">
+    <link rel="icon" type="text/css" href="./images/logo.png">
 </head>
 
 
@@ -25,9 +25,7 @@
 
         <div class="inputs">
         
-            <a id="submit" href="#">Matematica</a>
-            <a id="submit" href="#">Biologia</a>
-            <a id="submit" href="#">Ingles</a>
+                <ul id="materias">
         
         </div>
 
@@ -49,9 +47,10 @@
         <div class="inputs">
 
             
-            <a id="submit" href="#">Rafa</a>
-            <a id="submit" href="#">Amancay</a>
-            <a id="submit" href="#">Nora</a>
+            <ul id="profes">
+                
+
+            </ul>
         
         </div>
 
@@ -95,6 +94,24 @@
   <script type="text/javascript" src="../public/scripts/profesymaterias.js"></script>
 
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" ></script>
-  
+  <script>
+    $.get( "/profes", function(result) {
+        for(var i = 0; i<result.length; i++){
+            var nombre = result[i].name;
+            var apellido = result[i].lastName;
+            var li = $('<li></li>');
+            li.html(nombre + ' ' + apellido);
+            $('ul#profes').append(li);
+        }
+    });
+    $.get( "/listadomaterias", function(result) {
+        for(var i = 0; i<result.length; i++){
+            var subject = result[i].name;               
+            var li = $('<li></li>');
+            li.html(subject);
+            $('ul#materias').append(li);
+        }
+    });
+  </script>
 </body>
 </html>

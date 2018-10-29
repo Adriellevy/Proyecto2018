@@ -19,6 +19,10 @@ router.get('/solicitudesProf', function(req, res){
     res.sendFile(path.join(__dirname, '../views/seleccionDias.html'));
 });
 
+router.get('/materias', function(req, res){
+    res.sendFile(path.join(__dirname, '../views/Materias.html'));
+});
+
 router.get('/solicitudesAdm',function(req,res){
     res.sendFile(path.join(__dirname, '../views/solicitudes.html'));
     cargaSolisitudes();
@@ -56,9 +60,30 @@ router.post('/solicitudesProf',function(req,res){
 });
 
 router.post('/solicitudesAdm',function(req,res){
-    cargaSolisitudes();
+    cargaSolicitudes();
     RtaAdm(); 
 });
+
+router.post('/cierreSesion',function(response){
+    response.redirect('/login');
+});
+
+router.get('/profes', function(req, res){
+    var sql = "SELECT name, lastName FROM users WHERE role = 'teacher'";
+    connection.query(sql, function(error, result){
+        if (error) throw error;
+        res.send(result);
+    });
+});
+
+router.get('/listadomaterias', function(req, res){
+    var sql = "SELECT * FROM subjects";
+    connection.query(sql, function(error, result){
+        if (error) throw error;
+        res.send(result);
+    });
+});
+
 router.get('/VentanaAdmin', function (req, res){
     res.sendFile(path.join(__dirname, '../views/ventanaAdmin.html'));
     console.log("una computadora se ha conectado a la pagina /ventanaAdmin ")
@@ -197,7 +222,7 @@ try{
     }
 }
     
-        function cargaSolisitudes(){
+        function cargaSolicitudes(){
             connection.query(`SELECT * FROM `+"schedule" +` WHERE `+"status"+` = 1`, function (error, results, fields) {
                 if(error){
                    console.log("no hay horario disponible");
