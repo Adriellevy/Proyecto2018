@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>Ocupar Aulas</title>
-	<link rel="stylesheet" type="text/css" href="../public/styles/SeleccionDias.css">
+	<link rel="stylesheet" type="text/css" href="../styles/SeleccionDias.css">
 	<link rel="icon" type="text/css" href="../images/logo.png">
 </head>
 
@@ -13,7 +13,7 @@
 <main>
   <div class="container">
 
-      <form method="POST" action="/login" id="signup">
+      <form method="POST" action="/solicitudesProf" id="signup">
 
         <div class="header">
         
@@ -43,16 +43,14 @@
               <option value="3 Bloque">3 bloque</option>
             </select>
             
-            <input type="submit" value="Buscar" id="submit">
+            <input type="submit" value="Hacer la solisitud de aula" id="submit">
         
         </div>
 
-    </form>
+    
 
   </div>
   <div class="container">
-
-    <form id="signup">
 
         <div class="header">
         
@@ -64,15 +62,21 @@
 
         <div class="inputs">
 
-            
-            <a id="submit" href="#">Aula 209</a>
-            <a id="submit" href="#">Aula L1</a>
-            <a id="submit" href="#">Aula L2</a>
-        
+            <select name="ListaAulas" id="ListaAulas">
+                <option value="Vacio">Seleccione un bloque</option>
+                <option value="L1">LABORATORIO 1</option>
+                <option value="L2">LABORATORIO 2</option>
+                <option value="L3">LABORATORIO 3</option>
+                <option value="L208">AULA 208</option> 
+                <option value="L209">AULA 209</option> 
+                <option value="L213">AULA 213</option>
+          </select>
+
+  
         </div>
 
     </form>
-
+</form>
 </div>
 
 </main>

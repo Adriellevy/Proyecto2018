@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 var config = {
 	apiKey: "AIzaSyBJ07lQll4dzXwtIv45WSsSd4_lzdCeT8I",
@@ -144,3 +145,7 @@ ActualizardataUsu(InputNombreUsuario ,InputApellidoUsuario , InputMateriaUsuario
 
 
  
+=======
+var msg = require('../routes/index.js'); 
+console.log(msg);
+>>>>>>> 5f2bac3b5a135dc79b1fe4511cde5b0679940446

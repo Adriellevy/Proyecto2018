@@ -8,6 +8,7 @@ const { window } = new JSDOM();
 const { document } = (new JSDOM('')).window;
 global.document = document;
 var ListaNombredeaulas = [];
+var idaula;
 
 router.get('/login', function (req, res) {
     //res.sendFile(__dirname + '../views/inicioSesion.html');
@@ -26,7 +27,12 @@ router.get('/materias', function(req, res){
 router.get('/solicitudesAdm',function(req,res){
     res.sendFile(path.join(__dirname, '../views/solicitudes.html'));
     cargaSolisitudes();
-})
+});
+router.get('/VentanaAdmin', function (req, res){
+    res.sendFile(path.join(__dirname, '../views/ventanaAdmin.html'));
+    console.log("una computadora se ha conectado a la pagina /ventanaAdmin ")
+    
+});
 
 router.get('/agregarUsuarios', function (req, res){
     res.sendFile(path.join(__dirname, '../views/agregarUsuarios.html'));
@@ -54,12 +60,15 @@ router.post('/login', function (req, res){
 router.post('/solicitudesProf',function(req,res){
     var Día = req.body.Listadias || "null" ; 
     var Bloque = req.body.Listabloques || "null" ;
-    console.log(">> Día solicitado: "+Día);
-    console.log(">> Bloque solicitado: "+Bloque);
-    BuscarAula(Día,Bloque,res);
+    var NAula = req.body.ListaAulas;
+    console.log(">> Día solicitado: " + Día);
+    console.log(">> Bloque solicitado: " + Bloque);
+    console.log(">> Aula solicitada: "+ NAula);
+    Solicitaraula(Día,Bloque,res,NAula);
 });
 
 router.post('/solicitudesAdm',function(req,res){
+<<<<<<< HEAD
     cargaSolicitudes();
     RtaAdm(); 
 });
@@ -91,12 +100,17 @@ router.get('/VentanaAdmin', function (req, res){
 });
 
 module.exports = router;
+=======
+    var nombre = cargaSolisitudes();
+    exports.nombre = nombre; 
+    RtaAdm(); 
+>>>>>>> 5f2bac3b5a135dc79b1fe4511cde5b0679940446
 
-router.get('/VentanaAdmin', function (req, res){
-res.sendFile(path.join(__dirname, '../views/ventanaAdmin.html'));
 });
 
+
 module.exports = router;
+
 
 function AgregarUsuario(dni, nombre, apellido, password, rol, response){
     var sql = "SELECT * FROM users WHERE dni = "+dni;
@@ -137,16 +151,12 @@ function ValidarUsuario(dni, password, response){
     });
 } 
 
-function BuscarAula(Día,Bloque,response){
+function Solicitaraula(Día,Bloque,response,AULA){
     var bloquefinal; 
     var IDPROf; 
     var IDSUb; 
-    var nombreAula; 
-    
-    IDPROf = /*require('./seleccionDias.js') ||*/ "1" ;
-    IDSUb = /*require('./seleccionDias.js') ||*/ "1";
-    nombreAula = /*require('./seleccionDias.js') ||*/ "1";
-    
+    var nombreAula =AULA;  
+        
     if (Bloque === "1 Bloque" && Día === "Lunes" ){
         bloquefinal = 1;
     }
@@ -195,7 +205,7 @@ function BuscarAula(Día,Bloque,response){
     console.log("El bloque final queda asi: " + bloquefinal);
 try{ 
     
-    connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "name" + `=` + nombreAula +``, function (error, result, fields){
+    connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "name" + `= "` + nombreAula +`"`, function (error, result, fields){
     if(error){
         throw error;
     }
@@ -207,12 +217,12 @@ try{
         console.log(">> room.name: " + IdAula);
         console.log(">> Shoudle.block: "+ IdAula);
         
-            connection.query(`INSERT INTO `+"schedule"+`(`+"idteacher"+`, `+"idsubject"+`, `+"idroom"+`, `+"block"+`, `+"repeat"+`, `+"status"+`) VALUES (`+IDPROf+`,`+IDSUb+`,`+ nombreAula+`,`+bloquefinal+`,3,`+1+`)`,function (error, results, fields) {
+            connection.query(`INSERT INTO `+"schedule"+`(`+"idteacher"+`, `+"idsubject"+`, `+"idroom"+`, `+"block"+`, `+"repeat"+`, `+"status"+`) VALUES (`+/*IDPROf*/ 1 +`,`+ /*IDSUb*/ 1+`,`+ nombreAula+`,`+bloquefinal+`,3,1)`,function (error, results, fields) {
                 if(error){
                     throw error;  
                 }else{
 
-                    
+                     
                 }
               });
             }
@@ -225,16 +235,22 @@ try{
         function cargaSolicitudes(){
             connection.query(`SELECT * FROM `+"schedule" +` WHERE `+"status"+` = 1`, function (error, results, fields) {
                 if(error){
-                   console.log("no hay horario disponible");
+                   console.log(">> There is not a request for a schedule");
                    throw error;  
                 }
                 else{
                             var string = JSON.stringify(results);
                             var json =  JSON.parse(string); 
-                            console.log(">> saved json next step, search room");
+                            console.log(">> The json is saved the next step: search in rooms");
+                        if (json === [] || json === null || json === "null" || json === ""){
+                                console.log(">> The Json is empty")
+                                exports.json = json;
+                        }else{                            
                             for (let i = 0; i  < results.length; i++) {
-                                const element = results[i].idroom;    
+                                const element = results[i].idroom;   
+                                console.log(">> A `for` request to the table `rooms` is running out");
                                     if(json != [] || json != null || json != "null" || json != ""){
+                                        
                                     connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "id" + `=` + results[i].idroom +``, function (error, result, fields){
                                         if(error){
                                             throw err;
@@ -242,18 +258,60 @@ try{
                                             var string1 = JSON.stringify(result);
                                             var json1 =  JSON.parse(string1); 
                                             nombreAula = json1[0].name;
-                                            console.log(nombreAula);
+                                            //console.log(nombreAula);
                                             ListaNombredeaulas.push(nombreAula);
                                             exports.nombre = nombreAula;
                                     }
                             });
                         }
+                        
                     }
-                }
-            });
-        }
+                } 
+             }    
+        });
+    }
         function RtaAdm(){
-            var msg = require('./Selecion de diasjs.js');
+            try{
+            var msg = require('./seleccion diasjs.js');
             console.log(msg);
-        }
+            }catch(error){
+                console.log("no hay aulas que se subtrayeron del html")
+            }
+            if(msg === true){
+                connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "id" + `=` + msg +``, function (error, result, fields){
+                    if(error){
+                        throw err;
+                    }else{
+                        var string1 = JSON.stringify(result);
+                        var json1 =  JSON.parse(string1); 
+                        var idaula = json1[0].id;
+                connection.query(`UPDATE `+"schedule"+` SET `+"status"+`= 2 WHERE `+"status"+` = 1 AND `+"idroom"+` =`+ idaula+``, function (error, results, fields) {
+                    if(error){
+                    }
+                    else{
+                        console.log(">> An application for the classroom has been approved ht class room is:" + msg); 
+                    }
+                });
+            }
         
+               
+        });
+    }else if(msg === false){
+        connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "id" + `=` + msg +``, function (error, result, fields){
+            if(error){
+                throw err;
+            }else{
+                var string1 = JSON.stringify(result);
+                var json1 =  JSON.parse(string1); 
+                var idaula = json1[0].id;
+        connection.query(`UPDATE `+"schedule"+` SET `+"status"+`= 0 WHERE `+"status"+` = 1 AND `+"idroom"+` =`+ idaula+``, function (error, results, fields) {
+            if(error){
+            }
+            else{
+                console.log(">> An application for the classroom has been approved ht class room is:" + msg); 
+                    }
+                });
+            }
+        });
+    } 
+}
