@@ -10,34 +10,6 @@ global.document = document;
 var ListaNombredeaulas = [];
 var idaula;
 
-router.get('/login', function (req, res) {
-    //res.sendFile(__dirname + '../views/inicioSesion.html');
-    //res.render('inicioSesion');
-    res.sendFile(path.join(__dirname, '../views/inicioSesion.html'));
-});
-
-router.get('/solicitudesProf', function(req, res){
-    res.sendFile(path.join(__dirname, '../views/seleccionDias.html'));
-});
-
-router.get('/materias', function(req, res){
-    res.sendFile(path.join(__dirname, '../views/Materias.html'));
-});
-
-router.get('/solicitudesAdm',function(req,res){
-    res.sendFile(path.join(__dirname, '../views/solicitudes.html'));
-    cargaSolisitudes();
-});
-router.get('/VentanaAdmin', function (req, res){
-    res.sendFile(path.join(__dirname, '../views/ventanaAdmin.html'));
-    console.log("una computadora se ha conectado a la pagina /ventanaAdmin ")
-    
-});
-
-router.get('/agregarUsuarios', function (req, res){
-    res.sendFile(path.join(__dirname, '../views/agregarUsuarios.html'));
-});
-
 router.post('/agregarUsuarios', function (req, res) {
     var dni = req.body.DniUsuario; 
     var nombre = req.body.NombreUsuario;
@@ -78,7 +50,7 @@ router.post('/solicitudesProf',function(req,res){
 router.post('/solicitudesAdm',function(req,res){
     //cargaSolicitudes(res);
     //res.send(ListaNombredeaulas);
-    rta = req.body.action;
+    rta = req.body.accion;
     console.log(">>" + rta);
     RtaAdm(req);
 });
@@ -182,7 +154,7 @@ function ValidarUsuario(dni, password, response){
         }
     });
 } 
-unction Solicitaraula(Día,Bloque,response,AULA,repeticion){
+function Solicitaraula(Día,Bloque,response,AULA,repeticion){
     ok = false;
     var bloquefinal; 
     var IDPROf; 
@@ -319,7 +291,7 @@ try{
 
          function RtaAdm(req){
 
-            var rsta = req.body.action
+            var rsta = req.body.accion
             console.log(">> stta: "+rsta)
             if(rsta =='aprobar'){
                 msg = req.body.aula;
