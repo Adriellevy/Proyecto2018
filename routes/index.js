@@ -118,14 +118,6 @@ router.get('/VentanaAdmin', function (req, res){
 });
 
 module.exports = router;
-<<<<<<< HEAD
-=======
-  
-
-
-module.exports = router;
->>>>>>> b068deb51f77f2da6ca1fda3d11c07c59adcf489
-
 
 function AgregarUsuario(dni, nombre, apellido, password, rol, response){
     var sql = "SELECT * FROM users WHERE dni = "+dni;
@@ -153,7 +145,7 @@ function agregarMateria(materia, response){
             console.log('Materia ya existe');
             console.log(result);
         }else{
-            sql = "INSERT INTO subjects (materia)VALUE("+materia+");
+            sql = "INSERT INTO subjects (materia) VALUE ("+materia+")";
             connection.query(sql, function (err, result) {
                 if (err) throw err;
                 console.log("1 record inserted");

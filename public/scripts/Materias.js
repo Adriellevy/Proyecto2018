@@ -11,6 +11,7 @@ $.get( "/profes", function(result) {
         $('select#prof').append(option);
     }
 });
+
 $.get( "/listadomaterias", function(result) {
     for(var i = 0; i<result.length; i++){
         var subject = result[i].name;               
