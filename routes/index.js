@@ -46,6 +46,14 @@ router.post('/agregarUsuarios', function (req, res) {
     AgregarUsuario(dni, nombre, apellido, password, 'teacher', res);
 }); 
 
+router.post('/agregarMateria',function (req, res){
+
+    var materia = req.body.materia;
+    agregarMateria(materia, res);
+
+});
+
+
 
 router.post('/login', function (req, res){
     console.log('post');
@@ -68,7 +76,6 @@ router.post('/solicitudesProf',function(req,res){
 });
 
 router.post('/solicitudesAdm',function(req,res){
-<<<<<<< HEAD
     cargaSolicitudes();
     RtaAdm(); 
 });
@@ -77,8 +84,15 @@ router.post('/cierreSesion',function(response){
     response.redirect('/login');
 });
 
+router.post('/asignarMateria', function(req, res, next){
+    var profesor = req.body.profesor;
+    var materia = req.body.materia;
+    console.log(req.body);
+    asignarMateria(profesor, materia, res);
+});
+
 router.get('/profes', function(req, res){
-    var sql = "SELECT name, lastName FROM users WHERE role = 'teacher'";
+    var sql = "SELECT * FROM users WHERE role = 'teacher'";
     connection.query(sql, function(error, result){
         if (error) throw error;
         res.send(result);
@@ -98,16 +112,6 @@ router.get('/VentanaAdmin', function (req, res){
     console.log("una computadora se ha conectado a la pagina /ventanaAdmin ")
     
 });
-
-module.exports = router;
-=======
-    var nombre = cargaSolisitudes();
-    exports.nombre = nombre; 
-    RtaAdm(); 
->>>>>>> 5f2bac3b5a135dc79b1fe4511cde5b0679940446
-
-});
-
 
 module.exports = router;
 
@@ -130,6 +134,32 @@ function AgregarUsuario(dni, nombre, apellido, password, rol, response){
     });
 }
 
+
+function agregarMateria(materia, response){
+    connection.query(sql, function (err, result) {
+        if (err) throw err;
+        if (result.length > 0){
+            console.log('Materia ya existe');
+            console.log(result);
+        }else{
+            sql = "INSERT INTO subjects (materia)VALUE("+materia+");
+            connection.query(sql, function (err, result) {
+                if (err) throw err;
+                console.log("1 record inserted");
+                response.redirect('/Materias');
+            });
+        }
+    });
+
+
+}
+
+function asignarMateria (profesor, materia, response){
+    var sql = "INSERT INTO users_subject (idusers, idsubject) VALUES ("+profesor+", "+materia+")";
+    connection.query(sql, function(error, result){
+        response.send('Se agrego la materia.');
+    });
+}
 
 function ValidarUsuario(dni, password, response){
     var sql = "SELECT name, lastName, role FROM users WHERE dni = "+dni+" AND password = '"+password+"'";

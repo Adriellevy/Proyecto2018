@@ -22,7 +22,7 @@ main {
     margin: 0 2em;
 }
 
-#signup {
+form {
     padding: 0px 25px 25px;
     background: #fff;
     box-shadow: 
@@ -35,35 +35,35 @@ main {
     position: static;
 }
 
-#signup .header {
+form .header {
     margin-bottom: 20px;
 }
 
-#signup .header h3 {
+form .header h3 {
     color: #333333;
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 5px;
 }
 
-#signup .header p {
+form .header p {
     color: #8f8f8f;
     font-size: 14px;
     font-weight: 300;
 }
 
-#signup .sep {
+form .sep {
     height: 1px;
     background: #e8e8e8;
     width: 406px;
     margin: 0px -25px;
 }
 
-#signup .inputs {
+form .inputs {
     margin-top: 25px;
 }
 
-#signup .inputs label {
+form .inputs label {
     color: #8f8f8f;
     font-size: 12px;
     font-weight: 300;
@@ -80,7 +80,7 @@ input:-moz-placeholder {
     color:    #b5b5b5;
 }
 
-#signup .inputs #Listadias, #Listabloques{
+form .inputs #Listadias, #Listabloques{
     background: #f5f5f5;
     font-size: 0.8rem;
     -moz-border-radius: 3px;
@@ -94,7 +94,7 @@ input:-moz-placeholder {
     clear: both;
 }  
 
-#signup .inputs #Listabloques{
+form .inputs #Listabloques{
     background: #f5f5f5;
     font-size: 0.8rem;
     -moz-border-radius: 3px;
@@ -107,7 +107,7 @@ input:-moz-placeholder {
     box-shadow: inset 0px 2px 3px rgba( 0,0,0,0.1 );
     clear: both;
 }
-#signup .inputs input[type=text]{
+form .inputs input[type=text]{
     background: #f5f5f5;
     font-size: 0.8rem;
     -moz-border-radius: 3px;
@@ -120,19 +120,19 @@ input:-moz-placeholder {
     box-shadow: inset 0px 2px 3px rgba( 0,0,0,0.1 );
     clear: both;
 }
-#signup .inputs input[type=text]:focus{
+form .inputs input[type=text]:focus{
     background: #fff;
     box-shadow: 0px 0px 0px 3px #fff38e, inset 0px 2px 3px rgba( 0,0,0,0.2 ), 0px 5px 5px rgba( 0,0,0,0.15 );
     outline: none;   
 }
 
-#signup .inputs label.terms {
+form .inputs label.terms {
     float: left;
     font-size: 14px;
     font-style: italic;
 }
 
-#signup .inputs #submit {
+form .inputs #submit {
     width: 100%;
     margin-top: 20px;
     padding: 15px 0;
@@ -171,7 +171,7 @@ input:-moz-placeholder {
     clear: both;
 }
 
-#signup .inputs #submit:hover {
+form .inputs #submit:hover {
     background: -moz-linear-gradient(
         top,
         #a4b0cb 0%,

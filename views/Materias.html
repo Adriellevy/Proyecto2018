@@ -61,7 +61,7 @@
 
 <div class="container">
 
-      <form method="POST"  id="signup">
+      <form method="POST" action="/asignarMateria" id="asignarMateria">
 
         <div class="header">
         
@@ -73,10 +73,18 @@
 
         <div class="inputs">
         
-            <input type="text" placeholder="Materia" maxlength="8" required id="mater" name="mater" />
+            <!-- <input type="text" placeholder="Materia" maxlength="8" required id="mater" name="mater" /> -->
 
-            <input type="text" placeholder="Profesor" maxlength="8" required id="prof" name="prof" />
+            <select required id="mater" name="mater">
+                <option value="" disabled selected>Materia...</option>
+            </select>
+
+            <!-- <input type="text" placeholder="Profesor" maxlength="8" required id="prof" name="prof" /> -->
             
+            <select required id="prof" name="prof">
+                <option value="" disabled selected>Profesor...</option>
+            </select>
+
             <input type="submit" value="Agregar" id="submit" onclick= "addElement()">
         
         </div>
@@ -94,24 +102,6 @@
   <script type="text/javascript" src="../public/scripts/profesymaterias.js"></script>
 
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" ></script>
-  <script>
-    $.get( "/profes", function(result) {
-        for(var i = 0; i<result.length; i++){
-            var nombre = result[i].name;
-            var apellido = result[i].lastName;
-            var li = $('<li></li>');
-            li.html(nombre + ' ' + apellido);
-            $('ul#profes').append(li);
-        }
-    });
-    $.get( "/listadomaterias", function(result) {
-        for(var i = 0; i<result.length; i++){
-            var subject = result[i].name;               
-            var li = $('<li></li>');
-            li.html(subject);
-            $('ul#materias').append(li);
-        }
-    });
-  </script>
+  <script src="./scripts/Materias.js"></script>
 </body>
 </html>
