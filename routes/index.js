@@ -76,11 +76,10 @@ router.post('/solicitudesProf',function(req,res){
 });
 
 router.post('/solicitudesAdm',function(req,res){
-  //cargaSolicitudes(res);
+    //cargaSolicitudes(res);
     //res.send(ListaNombredeaulas);
-
     rta = req.body.action;
-    console.log(rta);
+    console.log(">>" + rta);
     RtaAdm(req);
 });
 
@@ -319,16 +318,18 @@ try{
 
 
          function RtaAdm(req){
+
             var rsta = req.body.action
-            if(rsta === 'aprobar'){
+            console.log(">> stta: "+rsta)
+            if(rsta =='aprobar'){
                 msg = req.body.aula;
-             connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "id" + `=` + msg +``, function (error, result, fields){
+             connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "name" + `= "`+msg+`"`, function (error, resulta, fields){
                     if(error){
                         throw err;
                     }else{
-                        var string1 = JSON.stringify(result);
-                        var json1 =  JSON.parse(string1); 
-                        var idaula = json1[0].id;
+                        var stringa = JSON.stringify(resulta);
+                        var jsona =  JSON.parse(stringa); 
+                        var idaula = jsona[0].id;
                         console.log(">> id aula: " + idaula);
                 connection.query(`UPDATE `+"schedule"+` SET `+"status"+`= 2 WHERE `+"status"+` = 1 AND `+"idroom"+` =`+ idaula+``, function (error, results, fields) {
                     if(error){
@@ -341,15 +342,20 @@ try{
             }
                
         });
-    }else if(rsta === 'rechazar'){
+    }else{
+        console.log(">> rsta != aprobar")
+    }
+    if(rsta == 'rechazar'){
         msg = req.body.aula;
-        connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "id" + `=` + msg +``, function (error, result, fields){
+        console.log(msg);
+        connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "name" + `="`+msg+`"`, function (error, result, fields){
             if(error){
                 throw err;
             }else{
                 var string1 = JSON.stringify(result);
                 var json1 =  JSON.parse(string1); 
                 var idaula = json1[0].id;
+                console.log(">> id aula: " + idaula);
         connection.query(`UPDATE `+"schedule"+` SET `+"status"+`= 0 WHERE `+"status"+` = 1 AND `+"idroom"+` =`+ idaula+``, function (error, results, fields) {
             if(error){
             }
@@ -360,6 +366,6 @@ try{
             }
         });
     }else{
-    console.log("El posteo que se envio es indefinido")
-} 
+        console.log(">> rsta != rechazar");
+    }
 }
