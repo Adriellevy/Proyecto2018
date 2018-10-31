@@ -8,5 +8,13 @@ miOption.setAttribute("label","casa");
  
 // Añadimos el option al select
 miSelect.appendChild(miOption);
- 
 
+var listaAulas = $('#ListaAulas');
+function enviar (accion) {
+	$.post( '/solicitudesAdm', {
+		accion: accion,
+		aula: listaAulas.val()
+	}, function( data ) {
+		alert('Datos enviados!');
+	});
+}
