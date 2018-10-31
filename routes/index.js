@@ -76,8 +76,12 @@ router.post('/solicitudesProf',function(req,res){
 });
 
 router.post('/solicitudesAdm',function(req,res){
-    cargaSolicitudes();
-    RtaAdm(); 
+  //cargaSolicitudes(res);
+    //res.send(ListaNombredeaulas);
+
+    rta = req.body.action;
+    console.log(rta);
+    RtaAdm(req);
 });
 
 router.post('/cierreSesion',function(response){
@@ -114,6 +118,13 @@ router.get('/VentanaAdmin', function (req, res){
 });
 
 module.exports = router;
+<<<<<<< HEAD
+=======
+  
+
+
+module.exports = router;
+>>>>>>> b068deb51f77f2da6ca1fda3d11c07c59adcf489
 
 
 function AgregarUsuario(dni, nombre, apellido, password, rol, response){
@@ -180,12 +191,13 @@ function ValidarUsuario(dni, password, response){
         }
     });
 } 
-
-function Solicitaraula(Día,Bloque,response,AULA){
+unction Solicitaraula(Día,Bloque,response,AULA,repeticion){
+    ok = false;
     var bloquefinal; 
     var IDPROf; 
     var IDSUb; 
     var nombreAula =AULA;  
+    var repeticionaula= repeticion; 
         
     if (Bloque === "1 Bloque" && Día === "Lunes" ){
         bloquefinal = 1;
@@ -232,7 +244,14 @@ function Solicitaraula(Día,Bloque,response,AULA){
     else if (Bloque === "3 Bloque" && Día === "Viernes" ){
         bloquefinal = 15;
     }
-    console.log("El bloque final queda asi: " + bloquefinal);
+    if(repeticion === "semanalmene"){
+        repeticionaula = 3;
+    }else if (repeticion === "mensualmente"){
+        repeticionaula = 2;
+    }else if(repeticionaula === "anualmente"){
+        repeticion = 1;
+    }
+    console.log(">> bloque final: " + bloquefinal);
 try{ 
     
     connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "name" + `= "` + nombreAula +`"`, function (error, result, fields){
@@ -244,25 +263,24 @@ try{
         var string1 = JSON.stringify(result);
         var json1 =  JSON.parse(string1); 
         IdAula = json1[0].id; 
-        console.log(">> room.name: " + IdAula);
-        console.log(">> Shoudle.block: "+ IdAula);
-        
-            connection.query(`INSERT INTO `+"schedule"+`(`+"idteacher"+`, `+"idsubject"+`, `+"idroom"+`, `+"block"+`, `+"repeat"+`, `+"status"+`) VALUES (`+/*IDPROf*/ 1 +`,`+ /*IDSUb*/ 1+`,`+ nombreAula+`,`+bloquefinal+`,3,1)`,function (error, results, fields) {
-                if(error){
-                    throw error;  
-                }else{
-
-                     
+        console.log(">> room.id: " + IdAula);
+        console.log(">> Shoudle.block: "+ bloquefinal);
+            connection.query('INSERT INTO `schedule`(`idusers`, `idsubject`, `idroom`, `block`, `repeat`, `status`) VALUES (2,1,'+IdAula+',' +bloquefinal+','+repeticionaula+',1)',function (error, results, fields) {
+                    if(error){
+                        throw error;  
+                    }else{
+                         ok = true;
+                    }
+                });
                 }
-              });
-            }
-         });
-}catch(err){
-    
+            });
+    }catch(err){
+        
+        }
     }
-}
-    
-        function cargaSolicitudes(){
+        
+        function cargaSolicitudes(response){
+            ListaNombredeaulas = [];
             connection.query(`SELECT * FROM `+"schedule" +` WHERE `+"status"+` = 1`, function (error, results, fields) {
                 if(error){
                    console.log(">> There is not a request for a schedule");
@@ -288,9 +306,8 @@ try{
                                             var string1 = JSON.stringify(result);
                                             var json1 =  JSON.parse(string1); 
                                             nombreAula = json1[0].name;
-                                            //console.log(nombreAula);
+                                            console.log(nombreAula);
                                             ListaNombredeaulas.push(nombreAula);
-                                            exports.nombre = nombreAula;
                                     }
                             });
                         }
@@ -300,33 +317,40 @@ try{
              }    
         });
     }
-        function RtaAdm(){
-            try{
-            var msg = require('./seleccion diasjs.js');
-            console.log(msg);
-            }catch(error){
-                console.log("no hay aulas que se subtrayeron del html")
-            }
-            if(msg === true){
-                connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "id" + `=` + msg +``, function (error, result, fields){
+
+
+
+
+
+
+
+
+
+         function RtaAdm(req){
+            var rsta = req.body.action
+            if(rsta === 'aprobar'){
+                msg = req.body.aula;
+             connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "id" + `=` + msg +``, function (error, result, fields){
                     if(error){
                         throw err;
                     }else{
                         var string1 = JSON.stringify(result);
                         var json1 =  JSON.parse(string1); 
                         var idaula = json1[0].id;
+                        console.log(">> id aula: " + idaula);
                 connection.query(`UPDATE `+"schedule"+` SET `+"status"+`= 2 WHERE `+"status"+` = 1 AND `+"idroom"+` =`+ idaula+``, function (error, results, fields) {
                     if(error){
                     }
                     else{
-                        console.log(">> An application for the classroom has been approved ht class room is:" + msg); 
+                        console.log(">> Una solicitud ha sido aprobada: " + msg); 
                     }
                 });
+            
             }
-        
                
         });
-    }else if(msg === false){
+    }else if(rsta === 'rechazar'){
+        msg = req.body.aula;
         connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "id" + `=` + msg +``, function (error, result, fields){
             if(error){
                 throw err;
@@ -338,10 +362,12 @@ try{
             if(error){
             }
             else{
-                console.log(">> An application for the classroom has been approved ht class room is:" + msg); 
+                console.log(">> Una solicitud ha sido rechasada: " + msg); 
                     }
                 });
             }
         });
-    } 
+    }else{
+    console.log("El posteo que se envio es indefinido")
+} 
 }
