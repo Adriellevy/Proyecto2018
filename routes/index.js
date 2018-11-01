@@ -77,7 +77,7 @@ router.post('/solicitudesProf',function(req,res){
     console.log(">> Día solicitado: " + Día);
     console.log(">> Bloque solicitado: " + Bloque);
     console.log(">> Aula solicitada: "+ NAula);
-    Solicitaraula(Día,Bloque,res,NAulax,tiempo,idsub,idprof);
+    Solicitaraula(Día,Bloque,res,NAula,tiempo,idsub,idprof);
 });
 
 router.post('/solicitudesAdm',function(req,res){
@@ -249,6 +249,10 @@ function Solicitaraula(Día,Bloque,response,AULA,repeticion,idsub,idprof){
         repeticion = 1;
     }
     console.log(">> bloque final: " + bloquefinal);
+    console.log(">> Repeticion: " + repeticionaula);
+    console.log(">> IDSUb: " + IDSUb);
+    console.log(">> IDPROF: " + IDPROf);
+    console.log(">> AULA: " + nombreAula);
 try{ 
     
     connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "name" + `= "` + nombreAula +`"`, function (error, result, fields){
@@ -257,6 +261,7 @@ try{
     }
     else if (result != undefined){
         var IdAula;
+        console.log(">> idaula: " + IdAula);
         var string1 = JSON.stringify(result);
         var json1 =  JSON.parse(string1); 
         IdAula = json1[0].id; 
