@@ -71,10 +71,13 @@ router.post('/solicitudesProf',function(req,res){
     var Día = req.body.Listadias || "null" ; 
     var Bloque = req.body.Listabloques || "null" ;
     var NAula = req.body.ListaAulas;
+    var tiempo = req.body.ListaTiempo
+    var idsub = req.body.idsub; 
+    var idprof = req.body.idprof;
     console.log(">> Día solicitado: " + Día);
     console.log(">> Bloque solicitado: " + Bloque);
     console.log(">> Aula solicitada: "+ NAula);
-    Solicitaraula(Día,Bloque,res,NAula);
+    Solicitaraula(Día,Bloque,res,NAulax,tiempo,idsub,idprof);
 });
 
 router.post('/solicitudesAdm',function(req,res){
@@ -185,13 +188,13 @@ function ValidarUsuario(dni, password, response){
         }
     });
 } 
-function Solicitaraula(Día,Bloque,response,AULA,repeticion){
+function Solicitaraula(Día,Bloque,response,AULA,repeticion,idsub,idprof){
     ok = false;
     var bloquefinal; 
-    var IDPROf; 
-    var IDSUb; 
-    var nombreAula =AULA;  
-    var repeticionaula= repeticion; 
+    var IDPROf = idprof; 
+    var IDSUb = idsub; 
+    var nombreAula = AULA;  
+    var repeticionaula = repeticion; 
         
     if (Bloque === "1 Bloque" && Día === "Lunes" ){
         bloquefinal = 1;
@@ -259,7 +262,7 @@ try{
         IdAula = json1[0].id; 
         console.log(">> room.id: " + IdAula);
         console.log(">> Shoudle.block: "+ bloquefinal);
-            connection.query('INSERT INTO `schedule`(`idusers`, `idsubject`, `idroom`, `block`, `repeat`, `status`) VALUES (2,1,'+IdAula+',' +bloquefinal+','+repeticionaula+',1)',function (error, results, fields) {
+            connection.query('INSERT INTO `schedule`(`idusers`, `idsubject`, `idroom`, `block`, `repeat`, `status`) VALUES ('+IDPROf+','+IDSUb+','+IdAula+',' +bloquefinal+','+repeticionaula+',1)',function (error, results, fields) {
                     if(error){
                         throw error;  
                     }else{
