@@ -1,0 +1,20 @@
+var bloques = document.getElementById("Listabloques").value;
+var dias = document.getElementById("Listadias").value;
+var tiempo = document.getElementById("ListaTiempo").value;
+var aulas = document.getElementById("ListaAulas").value;
+var id = 2;
+var mat = 1;
+
+function enviar(accion){
+	alert('asd2');
+	$.post('http://localhost:8080/solicitudesProf',{
+	Listabloques: bloques ,
+	Listadias: dias ,
+	ListaTiempo: tiempo ,
+	ListaAulas: aulas ,
+	idsub: mat ,
+	idprof: id 
+	}, function(data) {
+		alert('Datos enviados!');
+	});
+}
