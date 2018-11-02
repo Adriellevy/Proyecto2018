@@ -5,6 +5,7 @@ var aulas = document.getElementById("ListaAulas").value;
 var id = 2;
 var mat = 1;
 alert("concha");
+console.log (bloques, dias, tiempo, id, mat)
 
 function enviar(accion){
 	alert('asd2');
