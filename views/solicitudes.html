@@ -58,10 +58,13 @@
         alert('asd2');
         $.post('http://localhost:8000/solicitudesAdm',{
             accion: "aprobar", 
-            aula: listaAulas.val()	
+            aula: listaAulas.val()
+            	
         }, function(data) {
             alert('Datos enviados!');
         });
+        alert('solicitud enviada!');
+        redirect('/solicitudesProf');
     }
     
         $.get('/solicitud',function(result){
