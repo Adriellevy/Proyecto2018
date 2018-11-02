@@ -4,6 +4,7 @@ var tiempo = document.getElementById("ListaTiempo").value;
 var aulas = document.getElementById("ListaAulas").value;
 var id = 2;
 var mat = 1;
+alert("concha");
 
 function enviar(accion){
 	alert('asd2');
