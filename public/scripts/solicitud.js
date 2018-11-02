@@ -10,14 +10,14 @@ miSelect.appendChild(miOption);
 var listaAulas = $('#ListaAulas');
 function enviar(accion){
 	alert('asd2');
-	$.post('http://localhost:8080/solicitudesAdm',{
+	$.post('http://localhost:8000/solicitudesAdm',{
 		accion: "aprobar", /*cambiar aprobar hardcoreado*/
 		aula: listaAulas.val()	
 	}, function(data) {
 		alert('Datos enviados!');
 	});
 }
-	$.get('http://localhost:8080/solicitudesAdm',function(){
+	$.get('http://localhost:8000/solicitudesAdm',function(){
 		var ave = sessionStorage.getItem("nombreaula");
 		 console.log(ave)
 	});

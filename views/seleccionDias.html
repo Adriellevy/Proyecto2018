@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>Ocupar Aulas</title>
-	<link rel="stylesheet" type="text/css" href="../public/styles/SeleccionDias.css">
+	<link rel="stylesheet" type="text/css" href="styles/SeleccionDias.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">    
 	<link rel="icon" type="text/css" href="../images/logo.png">
 </head>
@@ -97,7 +97,30 @@
   
   
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" ></script>
-
+  <script>
+    alert("paso 1");
+    function enviar(accion){
+        var bloques = document.getElementById("Listabloques").value;
+        var dias = document.getElementById("Listadias").value;
+        var tiempo = document.getElementById("ListaTiempo").value;
+        var aulas = document.getElementById("ListaAulas").value;
+        var id = 2;
+        var mat = 1;
+        alert('paso 2');
+        console.log (bloques, dias, tiempo, id, mat)
+        $.post('http://localhost:8000/solicitudesProf',{
+        Listabloques: bloques ,
+        Listadias: dias ,
+        ListaTiempo: tiempo ,
+        ListaAulas: aulas ,
+        idsub: mat ,
+        idprof: id
+        }, function(data) {
+            alert('Datos enviados!');
+        });
+        alert('Datos enviados!');
+        redirect('/solicitudesProf');
+    }</script>
   <script type="text/javascript" src="../public/scripts/selecion de diasjs.js" ></script>
   
   

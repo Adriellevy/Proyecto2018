@@ -9,6 +9,8 @@ const { document } = (new JSDOM('')).window;
 global.document = document;
 var ListaNombredeaulas = [];
 var idaula;
+var script = document.createElement('script');
+script.src = '//code.jquery.com/jquery-1.11.0.min.js';
 
 router.get('/login', function (req, res) {
     //res.sendFile(__dirname + '../views/inicioSesion.html');
@@ -25,10 +27,10 @@ router.get('/materias', function(req, res){
 });
 
 router.get('/solicitudesAdm',function(req,res){
-   // res.sendFile(path.join(__dirname, '../views/solicitudes.html'));
+    res.sendFile(path.join(__dirname, '../views/solicitudes.html'));
     cargaSolicitudes(res);
-    res.send(ListaNombredeaulas);
 });
+
 router.get('/VentanaAdmin', function (req, res){
     res.sendFile(path.join(__dirname, '../views/ventanaAdmin.html'));
     console.log("una computadora se ha conectado a la pagina /ventanaAdmin ")
@@ -55,8 +57,6 @@ router.post('/agregarMateria',function (req, res){
 
 });
 
-
-
 router.post('/login', function (req, res){
     console.log('post');
     var dni = req.body.dni;
@@ -66,7 +66,6 @@ router.post('/login', function (req, res){
     //res.redirect('/seleccion-dias');
     ValidarUsuario(dni, password, res);
   });
-
 router.post('/solicitudesProf',function(req,res){
     var Día = req.body.Listadias || "null" ; 
     var Bloque = req.body.Listabloques || "null" ;
@@ -114,6 +113,10 @@ router.get('/listadomaterias', function(req, res){
         res.send(result);
     });
 });
+
+router.get('/solicitud',function(req,res){
+    res.send(ListaNombredeaulas);
+})
 
 router.get('/VentanaAdmin', function (req, res){
     res.sendFile(path.join(__dirname, '../views/ventanaAdmin.html'));
@@ -241,11 +244,11 @@ function Solicitaraula(Día,Bloque,response,AULA,repeticion,idsub,idprof){
     else if (Bloque === "3 Bloque" && Día === "Viernes" ){
         bloquefinal = 15;
     }
-    if(repeticion === "semanalmene"){
+    if(repeticion === "semanal"){
         repeticionaula = 3;
-    }else if (repeticion === "mensualmente"){
+    }else if (repeticion === "mensual"){
         repeticionaula = 2;
-    }else if(repeticionaula === "anualmente"){
+    }else if(repeticionaula === "anual"){
         repeticion = 1;
     }
     console.log(">> bloque final: " + bloquefinal);
@@ -261,7 +264,6 @@ try{
     }
     else if (result != undefined){
         var IdAula;
-        console.log(">> idaula: " + IdAula);
         var string1 = JSON.stringify(result);
         var json1 =  JSON.parse(string1); 
         IdAula = json1[0].id; 
@@ -308,9 +310,8 @@ try{
                                             var string1 = JSON.stringify(result);
                                             var json1 =  JSON.parse(string1); 
                                             nombreAula = json1[0].name;
-                                            console.log(nombreAula);
                                             ListaNombredeaulas.push(nombreAula);
-                                           //response.send(nombreAula);
+                                            console.log(ListaNombredeaulas);
                                     }
                             });
                         }

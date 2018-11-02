@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <title>Solicitudes</title>
-    <link rel="stylesheet" type="text/css" href="../public/styles/solicitudes.css">
-   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">  
+    <link rel="stylesheet" type="text/css" href="styles/solicitudes.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">  
     <link rel="icon" type="text/css" href="../Images/logo.png">
 </head>
 
@@ -27,13 +27,7 @@
         <div class="inputs">
 
         <select name="ListaAulas" id="ListaAulas">
-                <option value="Vacio">Seleccione un Aula</option>
-                <option value="L1">LABORATORIO 1</option>
-                <option value="L2">LABORATORIO 2</option>
-                <option value="L3">LABORATORIO 3</option>
-                <option value="L208">AULA 208</option> 
-                <option value="L209">AULA 209</option> 
-                <option value="L213">AULA 213</option>
+                
           </select>
 
         
@@ -49,6 +43,37 @@
 </body>
 
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" ></script>
+  <script>
+    alert('asd');
+    var miSelect=document.getElementById("ListaAulas");
+    // Creamos un objeto option
+    var miOption=document.createElement("option");
+    // Añadimos las propiedades value y label
+    miOption.setAttribute("value","1");
+    miOption.setAttribute("label","casa");
+    // Añadimos el option al select
+    // miSelect.appendChild(miOption);
+    var listaAulas = $('#ListaAulas');
+    function enviar(accion){
+        alert('asd2');
+        $.post('http://localhost:8000/solicitudesAdm',{
+            accion: "aprobar", 
+            aula: listaAulas.val()	
+        }, function(data) {
+            alert('Datos enviados!');
+        });
+    }
+    
+        $.get('/solicitud',function(result){
+            alert("hiso el get");
+            alert(result);
+            for(var i = 0; i<result.length; i++){
+             $('#ListaAulas').append('<option id=”opcion1″ value='+result[i]+'>'+result[i]+'</option>');
+            }
+            
+        });
+        
+     </script>
   <script type="text/javascript" src="../public/scripts/solicitud.js"></script>
 
   
