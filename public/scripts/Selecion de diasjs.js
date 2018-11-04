@@ -9,7 +9,7 @@ console.log (bloques, dias, tiempo, id, mat)
 
 function enviar(accion){
 	alert('asd2');
-	$.post('http://localhost:8000/solicitudesProf',{
+	$.post('http://localhost:8080/solicitudesProf',{
 	Listabloques: bloques ,
 	Listadias: dias ,
 	ListaTiempo: tiempo ,

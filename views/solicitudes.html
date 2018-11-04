@@ -44,7 +44,7 @@
 
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" ></script>
   <script>
-    alert('asd');
+    alert('paso 1');
     var miSelect=document.getElementById("ListaAulas");
     // Creamos un objeto option
     var miOption=document.createElement("option");
@@ -55,8 +55,7 @@
     // miSelect.appendChild(miOption);
     var listaAulas = $('#ListaAulas');
     function enviar(accion){
-        alert('asd2');
-        $.post('http://localhost:8000/solicitudesAdm',{
+        $.post('http://localhost:8080/solicitudesAdm',{
             accion: "aprobar", 
             aula: listaAulas.val()
             	
@@ -68,13 +67,18 @@
     }
     
         $.get('/solicitud',function(result){
-            alert("hiso el get");
+           
+            if(result == ""){
+                alert("No hay ninguna solcisitud pendiente, espere y lugo recarge la pagina"); 
+            }else
+            { 
             alert(result);
             for(var i = 0; i<result.length; i++){
              $('#ListaAulas').append('<option id=”opcion1″ value='+result[i]+'>'+result[i]+'</option>');
             }
-            
+        }
         });
+        
         
      </script>
   <script type="text/javascript" src="../public/scripts/solicitud.js"></script>

@@ -9,6 +9,7 @@ const { document } = (new JSDOM('')).window;
 global.document = document;
 var ListaNombredeaulas = [];
 var idaula;
+var ok;
 var script = document.createElement('script');
 script.src = '//code.jquery.com/jquery-1.11.0.min.js';
 
@@ -77,6 +78,7 @@ router.post('/solicitudesProf',function(req,res){
     console.log(">> Bloque solicitado: " + Bloque);
     console.log(">> Aula solicitada: "+ NAula);
     Solicitaraula(Día,Bloque,res,NAula,tiempo,idsub,idprof);
+    res.redirect('/solicitudesProf');
 });
 
 router.post('/solicitudesAdm',function(req,res){
@@ -244,11 +246,11 @@ function Solicitaraula(Día,Bloque,response,AULA,repeticion,idsub,idprof){
     else if (Bloque === "3 Bloque" && Día === "Viernes" ){
         bloquefinal = 15;
     }
-    if(repeticion === "semanal"){
+    if(repeticion == "semanal"){
         repeticionaula = 3;
-    }else if (repeticion === "mensual"){
+    }else if (repeticion == "mensual"){
         repeticionaula = 2;
-    }else if(repeticionaula === "anual"){
+    }else if(repeticionaula == "anual"){
         repeticion = 1;
     }
     console.log(">> bloque final: " + bloquefinal);
@@ -266,6 +268,7 @@ try{
         var IdAula;
         var string1 = JSON.stringify(result);
         var json1 =  JSON.parse(string1); 
+        if(json1 != ""){
         IdAula = json1[0].id; 
         console.log(">> room.id: " + IdAula);
         console.log(">> Shoudle.block: "+ bloquefinal);
@@ -276,8 +279,10 @@ try{
                          ok = true;
                     }
                 });
-                }
-            });
+                
+            }
+        } 
+    });
     }catch(err){
         
         }
@@ -300,7 +305,6 @@ try{
                         }else{                            
                             for (let i = 0; i  < results.length; i++) {
                                 const element = results[i].idroom;   
-                                console.log(">> A `for` request to the table `rooms` is running out");
                                     if(json != [] || json != null || json != "null" || json != ""){
                                         
                                     connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "id" + `=` + results[i].idroom +``, function (error, result, fields){
