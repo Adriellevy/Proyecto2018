@@ -58,7 +58,10 @@ rrouter.post('/agregarMateria',function (req, res){
 
 });
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 63515fd4b6dbed90dcd1db649070ff8467fcce7a
 router.post('/login', function (req, res){
     console.log('post');
     var dni = req.body.dni;
