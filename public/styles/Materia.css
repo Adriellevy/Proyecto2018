@@ -202,7 +202,6 @@ select#Listabloques{
     border-radius: 8px;
 }
 button{
-    margin-top: 3em
     cursor: pointer;
     position: absolute;
     top: 1em;

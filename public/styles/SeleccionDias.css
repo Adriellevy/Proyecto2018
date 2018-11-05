@@ -13,7 +13,7 @@ main {
     height: 100%;
     display: flex;
     justify-content: center;
-    
+    margin-left: -2em;
 }
 
 .container {
@@ -219,7 +219,7 @@ select#ListaTiempo{
     border-radius: 8px;
 }
 button{
-   cursor: pointer;
+    cursor: pointer;
     position: absolute;
     top: 1em;
     right: 5em;

@@ -9,6 +9,9 @@ const { document } = (new JSDOM('')).window;
 global.document = document;
 var ListaNombredeaulas = [];
 var idaula;
+var ok;
+var script = document.createElement('script');
+script.src = '//code.jquery.com/jquery-1.11.0.min.js';
 
 router.get('/login', function (req, res) {
     //res.sendFile(__dirname + '../views/inicioSesion.html');
@@ -26,8 +29,9 @@ router.get('/materias', function(req, res){
 
 router.get('/solicitudesAdm',function(req,res){
     res.sendFile(path.join(__dirname, '../views/solicitudes.html'));
-    cargaSolisitudes();
+    cargaSolicitudes(res);
 });
+
 router.get('/VentanaAdmin', function (req, res){
     res.sendFile(path.join(__dirname, '../views/ventanaAdmin.html'));
     console.log("una computadora se ha conectado a la pagina /ventanaAdmin ")
@@ -38,6 +42,7 @@ router.get('/agregarUsuarios', function (req, res){
     res.sendFile(path.join(__dirname, '../views/agregarUsuarios.html'));
 });
 
+
 router.post('/agregarUsuarios', function (req, res) {
     var dni = req.body.DniUsuario; 
     var nombre = req.body.NombreUsuario;
@@ -46,13 +51,12 @@ router.post('/agregarUsuarios', function (req, res) {
     AgregarUsuario(dni, nombre, apellido, password, 'teacher', res);
 }); 
 
-router.post('/agregarMateria',function (req, res){
+rrouter.post('/agregarMateria',function (req, res){
 
     var materia = req.body.materia;
     agregarMateria(materia, res);
 
 });
-
 
 
 router.post('/login', function (req, res){
@@ -64,29 +68,31 @@ router.post('/login', function (req, res){
     //res.redirect('/seleccion-dias');
     ValidarUsuario(dni, password, res);
   });
-
 router.post('/solicitudesProf',function(req,res){
     var Día = req.body.Listadias || "null" ; 
     var Bloque = req.body.Listabloques || "null" ;
     var NAula = req.body.ListaAulas;
+    var tiempo = req.body.ListaTiempo
+    var idsub = req.body.idsub; 
+    var idprof = req.body.idprof;
     console.log(">> Día solicitado: " + Día);
     console.log(">> Bloque solicitado: " + Bloque);
     console.log(">> Aula solicitada: "+ NAula);
-    Solicitaraula(Día,Bloque,res,NAula);
+    Solicitaraula(Día,Bloque,res,NAula,tiempo,idsub,idprof);
+    res.redirect('/solicitudesProf');
 });
 
 router.post('/solicitudesAdm',function(req,res){
-  //cargaSolicitudes(res);
+    //cargaSolicitudes(res);
     //res.send(ListaNombredeaulas);
-
-    rta = req.body.action;
-    console.log(rta);
+    rta = req.body.accion;
+    console.log(">> " + rta);
     RtaAdm(req);
 });
 
-/*router.post('/cierreSesion',function(response){
-  //  response.redirect('/login');
-});*/
+router.post('/cierreSesion',function(response){
+    response.redirect('/login');
+});
 
 router.post('/asignarMateria', function(req, res, next){
     var profesor = req.body.profesor;
@@ -111,11 +117,16 @@ router.get('/listadomaterias', function(req, res){
     });
 });
 
+router.get('/solicitud',function(req,res){
+    res.send(ListaNombredeaulas);
+})
+
 router.get('/VentanaAdmin', function (req, res){
     res.sendFile(path.join(__dirname, '../views/ventanaAdmin.html'));
     console.log("una computadora se ha conectado a la pagina /ventanaAdmin ")
     
 });
+
 
 module.exports = router;
 
@@ -183,13 +194,13 @@ function ValidarUsuario(dni, password, response){
         }
     });
 } 
-function Solicitaraula(Día,Bloque,response,AULA,repeticion){
+function Solicitaraula(Día,Bloque,response,AULA,repeticion,idsub,idprof){
     ok = false;
     var bloquefinal; 
-    var IDPROf; 
-    var IDSUb; 
-    var nombreAula =AULA;  
-    var repeticionaula= repeticion; 
+    var IDPROf = idprof; 
+    var IDSUb = idsub; 
+    var nombreAula = AULA;  
+    var repeticionaula = repeticion; 
         
     if (Bloque === "1 Bloque" && Día === "Lunes" ){
         bloquefinal = 1;
@@ -236,14 +247,18 @@ function Solicitaraula(Día,Bloque,response,AULA,repeticion){
     else if (Bloque === "3 Bloque" && Día === "Viernes" ){
         bloquefinal = 15;
     }
-    if(repeticion === "semanalmene"){
+    if(repeticion == "semanal"){
         repeticionaula = 3;
-    }else if (repeticion === "mensualmente"){
+    }else if (repeticion == "mensual"){
         repeticionaula = 2;
-    }else if(repeticionaula === "anualmente"){
+    }else if(repeticionaula == "anual"){
         repeticion = 1;
     }
     console.log(">> bloque final: " + bloquefinal);
+    console.log(">> Repeticion: " + repeticionaula);
+    console.log(">> IDSUb: " + IDSUb);
+    console.log(">> IDPROF: " + IDPROf);
+    console.log(">> AULA: " + nombreAula);
 try{ 
     
     connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "name" + `= "` + nombreAula +`"`, function (error, result, fields){
@@ -254,18 +269,21 @@ try{
         var IdAula;
         var string1 = JSON.stringify(result);
         var json1 =  JSON.parse(string1); 
+        if(json1 != ""){
         IdAula = json1[0].id; 
         console.log(">> room.id: " + IdAula);
         console.log(">> Shoudle.block: "+ bloquefinal);
-            connection.query('INSERT INTO `schedule`(`idusers`, `idsubject`, `idroom`, `block`, `repeat`, `status`) VALUES (2,1,'+IdAula+',' +bloquefinal+','+repeticionaula+',1)',function (error, results, fields) {
+            connection.query('INSERT INTO `schedule`(`idusers`, `idsubject`, `idroom`, `block`, `repeat`, `status`) VALUES ('+IDPROf+','+IDSUb+','+IdAula+',' +bloquefinal+','+repeticionaula+',1)',function (error, results, fields) {
                     if(error){
                         throw error;  
                     }else{
                          ok = true;
                     }
                 });
-                }
-            });
+                
+            }
+        } 
+    });
     }catch(err){
         
         }
@@ -288,7 +306,6 @@ try{
                         }else{                            
                             for (let i = 0; i  < results.length; i++) {
                                 const element = results[i].idroom;   
-                                console.log(">> A `for` request to the table `rooms` is running out");
                                     if(json != [] || json != null || json != "null" || json != ""){
                                         
                                     connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "id" + `=` + results[i].idroom +``, function (error, result, fields){
@@ -298,8 +315,8 @@ try{
                                             var string1 = JSON.stringify(result);
                                             var json1 =  JSON.parse(string1); 
                                             nombreAula = json1[0].name;
-                                            console.log(nombreAula);
                                             ListaNombredeaulas.push(nombreAula);
+                                            console.log(ListaNombredeaulas);
                                     }
                             });
                         }
@@ -319,16 +336,19 @@ try{
 
 
          function RtaAdm(req){
-            var rsta = req.body.action
-            if(rsta === 'aprobar'){
+
+            var rsta = req.body.accion
+            console.log(">> rsta: "+rsta)
+
+            if(rsta =='aprobar'){
                 msg = req.body.aula;
-             connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "id" + `=` + msg +``, function (error, result, fields){
+             connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "name" + `= "`+msg+`"`, function (error, resulta, fields){
                     if(error){
                         throw err;
                     }else{
-                        var string1 = JSON.stringify(result);
-                        var json1 =  JSON.parse(string1); 
-                        var idaula = json1[0].id;
+                        var stringa = JSON.stringify(resulta);
+                        var jsona =  JSON.parse(stringa); 
+                        var idaula = jsona[0].id;
                         console.log(">> id aula: " + idaula);
                 connection.query(`UPDATE `+"schedule"+` SET `+"status"+`= 2 WHERE `+"status"+` = 1 AND `+"idroom"+` =`+ idaula+``, function (error, results, fields) {
                     if(error){
@@ -341,15 +361,20 @@ try{
             }
                
         });
-    }else if(rsta === 'rechazar'){
+    }else{
+        console.log(">> rsta != aprobar")
+    }
+    if(rsta == 'rechazar'){
         msg = req.body.aula;
-        connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "id" + `=` + msg +``, function (error, result, fields){
+        console.log(msg);
+        connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "name" + `="`+msg+`"`, function (error, result, fields){
             if(error){
                 throw err;
             }else{
                 var string1 = JSON.stringify(result);
                 var json1 =  JSON.parse(string1); 
                 var idaula = json1[0].id;
+                console.log(">> id aula: " + idaula);
         connection.query(`UPDATE `+"schedule"+` SET `+"status"+`= 0 WHERE `+"status"+` = 1 AND `+"idroom"+` =`+ idaula+``, function (error, results, fields) {
             if(error){
             }
@@ -360,6 +385,6 @@ try{
             }
         });
     }else{
-    console.log("El posteo que se envio es indefinido")
-} 
+        console.log(">> rsta != rechazar");
+    }
 }

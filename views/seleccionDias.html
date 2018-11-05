@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<title>Ocupar Aulas</title>
-    <link rel="stylesheet" type="text/css" href="./styles/SeleccionDias.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">  
+	<link rel="stylesheet" type="text/css" href="styles/SeleccionDias.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">    
 	<link rel="icon" type="text/css" href="../images/logo.png">
 </head>
 
@@ -14,7 +14,7 @@
 <main>
   <div class="container">
 
-      <form method="POST" action="/solicitudesProf" id="signup">
+      <form method="POST" action="http://localhost:8080/solicitudesProf" id="signup">
 
         <div class="header">
         
@@ -51,7 +51,7 @@
                 <option value="anual">anual</option>
                 
             
-            <input type="submit" value="Solicitar aula" id="submit"  />
+            <input type="submit" value="Solicitar aula" id="submit" onclick="enviar()" />
         
         
         </div>
@@ -62,7 +62,7 @@
   
   <div class="container">
 
-    <form id="signup">
+    <div id="signup">
 
         <div class="header">
         
@@ -87,18 +87,42 @@
   
         </div>
 
-    </form>
+    </div>
 
 </div>
-<a href="/login"> Cerrar Sesión <i class="fa fa-sign-out-alt"></i></a>
+    <button type="button"> Cerrar Sesión <i class="fa fa-sign-out-alt"></i></button>
 </main>
 
-    
+
   
   
-  
-  <script type="text/javascript" src="../public/scripts/seeleccion diasjs.js" ></script>
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" ></script>
+  <script>
+    alert("paso 1");
+    function enviar(accion){
+        var bloques = document.getElementById("Listabloques").value;
+        var dias = document.getElementById("Listadias").value;
+        var tiempo = document.getElementById("ListaTiempo").value;
+        var aulas = document.getElementById("ListaAulas").value;
+        var id = 2;
+        var mat = 1;
+        alert('paso 2');
+        console.log (bloques, dias, tiempo, id, mat)
+        $.post('http://localhost:8080/solicitudesProf',{
+        Listabloques: bloques ,
+        Listadias: dias ,
+        ListaTiempo: tiempo ,
+        ListaAulas: aulas ,
+        idsub: mat ,
+        idprof: id
+        }, function(data) {
+            alert('Datos enviados!');
+        });
+        alert('Datos enviados!');
+        redirect('/solicitudesProf');
+    }</script>
+  <script type="text/javascript" src="../public/scripts/selecion de diasjs.js" ></script>
+  
   
 </body>
 </html>

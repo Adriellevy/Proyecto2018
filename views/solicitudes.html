@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <title>Solicitudes</title>
-    <link rel="stylesheet" type="text/css" href="./styles/solicitudes.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity= "sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="styles/solicitudes.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">  
     <link rel="icon" type="text/css" href="../Images/logo.png">
 </head>
 
@@ -12,7 +12,7 @@
 <body>
 <div class="container">
 
-    <form id="signup">
+    <form id="signup" method="POST" action="http://localhost:8080/solicitudesAdm" >
 
         <div class="header">
         
@@ -27,31 +27,63 @@
         <div class="inputs">
 
         <select name="ListaAulas" id="ListaAulas">
-                <option value="Vacio">Seleccione un Aula</option>
-                <option value="L1">LABORATORIO 1</option>
-                <option value="L2">LABORATORIO 2</option>
-                <option value="L3">LABORATORIO 3</option>
-                <option value="L208">AULA 208</option> 
-                <option value="L209">AULA 209</option> 
-                <option value="L213">AULA 213</option>
+                
           </select>
 
         
-        <input type="submit" value="Aceptar" id="submit">
-        <input type="submit" value="Rechazar" id="submit">
+        <input type="submit" value="Aceptar" id="submit" onclick="enviar('aceptar')">
+        <input type="submit" value="Rechazar" id="submit" onclick="enviar('rechazar')">
         
         </div>
 
     </form>
 
 </div>
-​<a href="/login" > Cerrar Sesión <i class="fa fa sign-out-alt"> <i> </a>
+​<button type="button"> Cerrar Sesión <i class="fa fa-sign-out-alt"></i></button>
 </body>
 
-
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" ></script>
+  <script>
+    alert('paso 1');
+    var miSelect=document.getElementById("ListaAulas");
+    // Creamos un objeto option
+    var miOption=document.createElement("option");
+    // Añadimos las propiedades value y label
+    miOption.setAttribute("value","1");
+    miOption.setAttribute("label","casa");
+    // Añadimos el option al select
+    // miSelect.appendChild(miOption);
+    var listaAulas = $('#ListaAulas');
+    function enviar(accion){
+        $.post('http://localhost:8080/solicitudesAdm',{
+            accion: "aprobar", 
+            aula: listaAulas.val()
+            	
+        }, function(data) {
+            alert('Datos enviados!');
+        });
+        alert('solicitud enviada!');
+        redirect('/solicitudesProf');
+    }
+    
+        $.get('/solicitud',function(result){
+           
+            if(result == ""){
+                alert("No hay ninguna solcisitud pendiente, espere y lugo recarge la pagina"); 
+            }else
+            { 
+            alert(result);
+            for(var i = 0; i<result.length; i++){
+             $('#ListaAulas').append('<option id=”opcion1″ value='+result[i]+'>'+result[i]+'</option>');
+            }
+        }
+        });
+        
+        
+     </script>
   <script type="text/javascript" src="../public/scripts/solicitud.js"></script>
 
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" ></script>
+  
 
 </body>
 </html>
