@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>Ocupar Aulas</title>
-	<link rel="stylesheet" type="text/css" href="styles/SeleccionDias.css">
+	<link rel="stylesheet" type="text/css" href="../public/styles/SeleccionDias.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">    
 	<link rel="icon" type="text/css" href="../images/logo.png">
 </head>
@@ -28,7 +28,7 @@
 
         <div class="inputs">
         
-            <select name="Listadias" id="Listadias">
+            <select required name="Listadias" id="Listadias">
               <option value="Vacio">Seleccione un dia</option>
               <option value="Lunes">Lunes</option>
               <option value="Martes">Martes</option>
@@ -37,14 +37,14 @@
               <option value="Viernes">Viernes</option>
             </select>
 
-            <select name="Listabloques" id="Listabloques">
+            <select required name="Listabloques" id="Listabloques">
               <option value="Vacio">Seleccione un bloque</option>
               <option value="1 Bloque">1 Bloque</option>
               <option value="2 Bloque">2 Bloque</option>
               <option value="3 Bloque">3 bloque</option>
             </select>
 
-            <select name="ListaTiempo" id="ListaTiempo">
+            <select required name="ListaTiempo" id="ListaTiempo">
                 <option value="Vacio">Seleccione un tipo de tiempo</option>
                 <option value="semanal">semanal</option>
                 <option value="mensual">mensual</option>
@@ -74,7 +74,7 @@
 
         <div class="inputs">
 
-            <select name="ListaAulas" id="ListaAulas">
+            <select required name="ListaAulas" id="ListaAulas">
                 <option value="Vacio">Seleccione un bloque</option>
                 <option value="L1">LABORATORIO 1</option>
                 <option value="L2">LABORATORIO 2</option>
@@ -90,7 +90,7 @@
     </div>
 
 </div>
-    <button type="button"> Cerrar Sesión <i class="fa fa-sign-out-alt"></i></button>
+   <a id="Cerramos" href="/login">Cerrar sesion</a>
 </main>
 
 
