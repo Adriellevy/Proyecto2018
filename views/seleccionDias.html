@@ -88,8 +88,11 @@
         </div>
 
     </div>
+  <input type="submit" value="Ver estado de la solicitud" id="submito" />
 
 </div>
+
+
    <a id="Cerramos" href="/login">Cerrar sesion</a>
 </main>
 
@@ -115,12 +118,53 @@
         ListaAulas: aulas ,
         idsub: mat ,
         idprof: id
-        }, function(data) {
+        }, function(data){
             alert('Datos enviados!');
         });
         alert('Datos enviados!');
-        redirect('/solicitudesProf');
-    }</script>
+        EnEspera();
+    }
+    function EnEspera(){
+        var bloques = document.getElementById("Listabloques").value;
+        var dias = document.getElementById("Listadias").value;
+        var tiempo = document.getElementById("ListaTiempo").value;
+        var aulas = document.getElementById("ListaAulas").value;
+        var id = 2;
+        var mat = 1;
+        console.log (bloques, dias, tiempo, id, mat)
+        alert('Espere la confirmacion del admin');
+        $.post('http://localhost:8080/RespuestaAula',{
+            Listabloques: bloques ,
+            Listadias: dias ,
+            ListaTiempo: tiempo ,
+            ListaAulas: aulas ,
+            idsub: mat ,
+            idprof: id
+         },function(response){
+             console.log(response)
+         });
+         /*
+        for(var i; i!="" ;i=i){
+        $.get('http://localhost:8080/RespuestaAula',function(result){
+           if(result == ""){
+               alert("El aula, "+aulas+" no ha sido solicitada"); 
+           }else{ 
+            var string1 = JSON.stringify(result);
+            var json1 =  JSON.parse(string1); 
+            var estado = json1[0].status;
+        if(estado == 2){
+            i=a;
+            alert("El aula, "+aulas+" ha sido aceptada");
+        }else if(estado == 0){
+            i=a;
+            alert("El aula, "+aulas+" ha sido recahzada");
+        }
+            }
+                });
+                    }*/
+                        }
+        </script>
+
   <script type="text/javascript" src="../public/scripts/selecion de diasjs.js" ></script>
   
   
