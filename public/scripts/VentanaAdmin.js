@@ -18,7 +18,7 @@ messageListRef.set({
  // no usar esta funcion
 });
 
-function cerrarSesion(){
+//function cerrarSesion(){
 
   $.post('/cierreSesion', function(data){
     console.log(data);

@@ -3,13 +3,19 @@
 <head>
 	<meta charset="utf-8">
 	<title>Agregar usuarios</title>
-	<link rel="stylesheet" type="text/css" href="../styles/AgregarUsuarios.css">
+    <link rel="stylesheet" type="text/css" href="../styles/AgregarUsuarios.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">  
 	<link rel="icon" type="text/css" href="../images/logo.png">
 </head>
 
 
 <body>
 <div class="container">
+
+    <div>
+        <a href="/login"></a>
+    </div>
+
 
     <form method="POST" action="/agregarUsuarios" id="signup">
 
@@ -21,6 +27,7 @@
             
         </div>
         
+
         <div class="sep"></div>
 
         <div class="inputs">
@@ -38,7 +45,8 @@
             <input type="submit" value="Agregar Usuario" id="submit">
         
         </div>
-
+        <button type="button"> Cerrar Sesión <i class="fa fa-sign-out-alt"></i></button>
+        
     </form>
 
 </div>

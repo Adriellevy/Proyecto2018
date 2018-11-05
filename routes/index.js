@@ -84,9 +84,9 @@ router.post('/solicitudesAdm',function(req,res){
     RtaAdm(req);
 });
 
-router.post('/cierreSesion',function(response){
-    response.redirect('/login');
-});
+/*router.post('/cierreSesion',function(response){
+  //  response.redirect('/login');
+});*/
 
 router.post('/asignarMateria', function(req, res, next){
     var profesor = req.body.profesor;
@@ -183,7 +183,7 @@ function ValidarUsuario(dni, password, response){
         }
     });
 } 
-unction Solicitaraula(Día,Bloque,response,AULA,repeticion){
+function Solicitaraula(Día,Bloque,response,AULA,repeticion){
     ok = false;
     var bloquefinal; 
     var IDPROf; 
