@@ -51,7 +51,7 @@ router.post('/agregarUsuarios', function (req, res) {
     AgregarUsuario(dni, nombre, apellido, password, 'teacher', res);
 }); 
 
-rrouter.post('/agregarMateria',function (req, res){
+router.post('/agregarMateria',function (req, res){
 
     var materia = req.body.materia;
     agregarMateria(materia, res);
