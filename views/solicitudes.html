@@ -44,7 +44,7 @@
 
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" ></script>
   <script>
-    alert('paso 1');
+    
     var miSelect=document.getElementById("ListaAulas");
     // Creamos un objeto option
     var miOption=document.createElement("option");
@@ -67,7 +67,6 @@
     }
     
         $.get('/solicitud',function(result){
-           
             if(result == ""){
                 alert("No hay ninguna solcisitud pendiente, espere y lugo recarge la pagina"); 
             }else
