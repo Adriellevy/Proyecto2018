@@ -8,7 +8,14 @@ const { window } = new JSDOM();
 const { document } = (new JSDOM('')).window;
 global.document = document;
 var ListaNombredeaulas = [];
-var idaula;
+var idaulaglobal;
+var Estadoaulaglobal;
+var Díaglobal  
+var Bloqueglobal 
+var NAulaglobal 
+var tiempoglobal 
+var idsubglobal 
+var idprofglobal 
 var ok;
 var script = document.createElement('script');
 script.src = '//code.jquery.com/jquery-1.11.0.min.js';
@@ -37,6 +44,7 @@ router.get('/VentanaAdmin', function (req, res){
     console.log("una computadora se ha conectado a la pagina /ventanaAdmin ")
     
 });
+
 
 router.get('/agregarUsuarios', function (req, res){
     res.sendFile(path.join(__dirname, '../views/agregarUsuarios.html'));
@@ -76,8 +84,23 @@ router.post('/solicitudesProf',function(req,res){
     console.log(">> Día solicitado: " + Día);
     console.log(">> Bloque solicitado: " + Bloque);
     console.log(">> Aula solicitada: "+ NAula);
+    console.log(">> tiempo solicitado: "+ tiempo);
+    console.log(">> ")
     Solicitaraula(Día,Bloque,res,NAula,tiempo,idsub,idprof);
-    res.redirect('/solicitudesProf');
+});
+
+router.post('/RespuestaAula',function(req,res){
+     Díaglobal = req.body.Listadias  
+     Bloqueglobal = req.body.Listabloques 
+     NAulaglobal = req.body.ListaAulas;
+     tiempoglobal = req.body.ListaTiempo
+     idsubglobal = req.body.idsub; 
+     idprofglobal = req.body.idprof;
+     Estadoaula(Díaglobal,Bloqueglobal,res,NAulaglobal,tiempoglobal,idsubglobal,idprofglobal);
+     res.send(Estadoaulaglobal);
+}); 
+
+router.get('/RespuestaAula',function(req,res){
 });
 
 router.post('/solicitudesAdm',function(req,res){
@@ -117,7 +140,7 @@ router.get('/listadomaterias', function(req, res){
 
 router.get('/solicitud',function(req,res){
     res.send(ListaNombredeaulas);
-})
+});
 
 router.get('/VentanaAdmin', function (req, res){
     res.sendFile(path.join(__dirname, '../views/ventanaAdmin.html'));
@@ -252,7 +275,7 @@ function Solicitaraula(Día,Bloque,response,AULA,repeticion,idsub,idprof){
     }else if (repeticion == "mensual"){
         repeticionaula = 2;
     }else if(repeticionaula == "anual"){
-        repeticion = 1;
+        repeticionaula = 1;
     }
     console.log(">> bloque final: " + bloquefinal);
     console.log(">> Repeticion: " + repeticionaula);
@@ -271,6 +294,7 @@ try{
         var json1 =  JSON.parse(string1); 
         if(json1 != ""){
         IdAula = json1[0].id; 
+        idaulaglobal = IdAula;
         console.log(">> room.id: " + IdAula);
         console.log(">> Shoudle.block: "+ bloquefinal);
             connection.query('INSERT INTO `schedule`(`idusers`, `idsubject`, `idroom`, `block`, `repeat`, `status`) VALUES ('+IDPROf+','+IDSUb+','+IdAula+',' +bloquefinal+','+repeticionaula+',1)',function (error, results, fields) {
@@ -326,20 +350,9 @@ try{
              }    
         });
     }
-
-
-
-
-
-
-
-
-
-         function RtaAdm(req){
-
+function RtaAdm(req){
             var rsta = req.body.accion
             console.log(">> rsta: "+rsta)
-
             if(rsta =='aprobar'){
                 msg = req.body.aula;
              connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "name" + `= "`+msg+`"`, function (error, resulta, fields){
@@ -387,4 +400,77 @@ try{
     }else{
         console.log(">> rsta != rechazar");
     }
+}
+
+function Estadoaula(Día,Bloque,response,AULA,repeticion,idsub,idprof){
+    ok = false;
+    var bloquefinal; 
+    var IDPROf = idprof; 
+    var IDSUb = idsub; 
+    var nombreAula = AULA;  
+    var repeticionaula = repeticion; 
+
+    if (Bloque === "1 Bloque" && Día === "Lunes" ){
+        bloquefinal = 1;
+    }
+    else if (Bloque === "2 Bloque" && Día === "Lunes" ){
+        bloquefinal = 2;
+    }
+    else if (Bloque === "3 Bloque" && Día === "Lunes" ){
+        bloquefinal = 3;
+    }
+    else if (Bloque === "1 Bloque" && Día === "Martes" ){
+        bloquefinal = 4;
+    }
+    else if (Bloque === "2 Bloque" && Día === "Martes" ){
+        bloquefinal = 5;
+    }
+    else if (Bloque === "3 Bloque" && Día === "Martes" ){
+        bloquefinal = 6;
+    }
+    else if (Bloque === "1 Bloque" && Día === "Miercoles" ){
+        bloquefinal = 7;
+    } 
+    else if (Bloque === "2 Bloque" && Día === "Miercoles" ){
+        bloquefinal = 8;
+    }
+    else if (Bloque === "3 Bloque" && Día === "Miercoles" ){
+        bloquefinal = 9;
+    }
+    else if (Bloque === "1 Bloque" && Día === "Jueves" ){
+        bloquefinal = 10;
+    }
+    else if (Bloque === "2 Bloque" && Día === "Jueves" ){
+        bloquefinal = 11;
+    }
+    else if (Bloque === "3 Bloque" && Día === "Jueves" ){
+        bloquefinal = 12;
+    }
+    else if (Bloque === "1 Bloque" && Día === "Viernes" ){
+        bloquefinal = 13;
+    }
+    else if (Bloque === "2 Bloque" && Día === "Viernes" ){
+        bloquefinal = 14;
+    }
+    else if (Bloque === "3 Bloque" && Día === "Viernes" ){
+        bloquefinal = 15;
+    }
+    if(repeticion == "semanal"){
+        repeticionaula = 3;
+    }else if (repeticion == "mensual"){
+        repeticionaula = 2;
+    }else if(repeticionaula == "anual"){
+        repeticionaula = 1;
+    }
+    console.log(">> antes del query")
+    connection.query("SELECT * FROM `schedule` WHERE `idusers` = "+IDPROf+" AND `idsubject` = "+IDSUb+" AND `idroom` = "+idaulaglobal+" AND `block` = "+bloquefinal+" AND `repeat`= "+repeticionaula+"", function (error, results, fields){
+        if(error){
+            throw err;
+        }else{
+            var string1 = JSON.stringify(results);
+            var json1 =  JSON.parse(string1); 
+            console.log(">>Reslut: " + String(json1[0].status));
+            Estadoaulaglobal = String(json1[0].status); 
+        }
+    });
 }

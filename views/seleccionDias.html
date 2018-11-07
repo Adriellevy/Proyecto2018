@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>Ocupar Aulas</title>
-	<link rel="stylesheet" type="text/css" href="../public/styles/SeleccionDias.css">
+	<link rel="stylesheet" type="text/css" href="/styles/SeleccionDias.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">    
 	<link rel="icon" type="text/css" href="../images/logo.png">
 </head>
@@ -75,7 +75,7 @@
         <div class="inputs">
 
             <select required name="ListaAulas" id="ListaAulas">
-                <option value="Vacio">Seleccione un bloque</option>
+                <option value="Vacio">Seleccione un aula</option>
                 <option value="L1">LABORATORIO 1</option>
                 <option value="L2">LABORATORIO 2</option>
                 <option value="L3">LABORATORIO 3</option>
@@ -88,8 +88,11 @@
         </div>
 
     </div>
+  <input type="submit" value="Ver estado de la solicitud" id="submito" onclick="EnEspera()"/>
 
 </div>
+
+
    <a id="Cerramos" href="/login">Cerrar sesion</a>
 </main>
 
@@ -98,7 +101,6 @@
   
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" ></script>
   <script>
-    alert("paso 1");
     function enviar(accion){
         var bloques = document.getElementById("Listabloques").value;
         var dias = document.getElementById("Listadias").value;
@@ -106,7 +108,6 @@
         var aulas = document.getElementById("ListaAulas").value;
         var id = 2;
         var mat = 1;
-        alert('paso 2');
         console.log (bloques, dias, tiempo, id, mat)
         $.post('http://localhost:8080/solicitudesProf',{
         Listabloques: bloques ,
@@ -115,12 +116,60 @@
         ListaAulas: aulas ,
         idsub: mat ,
         idprof: id
-        }, function(data) {
+        }, function(data){
             alert('Datos enviados!');
         });
         alert('Datos enviados!');
-        redirect('/solicitudesProf');
-    }</script>
+        EnEspera();
+    }
+    function EnEspera(){
+        var bloques = document.getElementById("Listabloques").value;
+        var dias = document.getElementById("Listadias").value;
+        var tiempo = document.getElementById("ListaTiempo").value;
+        var aulas = document.getElementById("ListaAulas").value;
+        var id = 2;
+        var mat = 1;
+        console.log (bloques, dias, tiempo, id, mat)
+        alert('Espere la confirmacion del admin');
+        $.post('http://localhost:8080/RespuestaAula',{
+            Listabloques: bloques ,
+            Listadias: dias ,
+            ListaTiempo: tiempo ,
+            ListaAulas: aulas ,
+            idsub: mat ,
+            idprof: id
+         },function(response){
+             console.log(response)
+             if(response == 2){
+                 alert("se a haceptado la solicitud");
+             }else if (response == 0){
+                 alert("Se a negado la soliciptud");
+             }else if( response == 1){
+                alert("sigue pendiente su solicitud");
+             }
+         });
+         /*
+        for(var i; i!="" ;i=i){
+        $.get('http://localhost:8080/RespuestaAula',function(result){
+           if(result == ""){
+               alert("El aula, "+aulas+" no ha sido solicitada"); 
+           }else{ 
+            var string1 = JSON.stringify(result);
+            var json1 =  JSON.parse(string1); 
+            var estado = json1[0].status;
+        if(estado == 2){
+            i=a;
+            alert("El aula, "+aulas+" ha sido aceptada");
+        }else if(estado == 0){
+            i=a;
+            alert("El aula, "+aulas+" ha sido recahzada");
+        }
+            }
+                });
+                    }*/
+                        }
+        </script>
+
   <script type="text/javascript" src="../public/scripts/selecion de diasjs.js" ></script>
   
   

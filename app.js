@@ -1,6 +1,9 @@
 const express = require('express');
 const app = express(); 
+var http = require('http');
 var path = require('path');
+var port = 8080;
+var server = http.createServer(app);
 var indexRouter = require('./routes/index');
 const bodyParser = require('body-parser');
 
@@ -12,13 +15,15 @@ const { window } = new JSDOM();
 const { document } = (new JSDOM('')).window;
 global.document = document;
 
+app.set('port', port);
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json()); 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/', indexRouter);
 
-module.exports = app;
+server.listen(port);
+console.log('Server on port '+port+'...');
 
 /*
 function AgregarUsuariosFuncion(){
