@@ -14,21 +14,22 @@
 <main>
   <div class="container">
 
-      <form method="POST" action="/agregarMateria" id="signup" onload= "sub()">
+      <form method="POST" action="/agregarMateria" id="signup">
 
         <div class="header">
         
             <h3>Materias</h3>
             
         </div>
-        
+              
         <div class="sep"></div>
 
         <div class="inputs">
-        
-                <input name="Mate" type="text" placeholder="Ingrese una materia..." maxlength="30" autofocus />
+                
+            
+                <input name="materia" type="text" placeholder="Ingrese una materia..." maxlength="30" autofocus required />
 
-                  <input type="Agregamiento" value="Agregar" id="Agregamiento" >
+                <input type="submit" value="Agregar Materia" id="submit" >
 
                 <ul id="materias">
         

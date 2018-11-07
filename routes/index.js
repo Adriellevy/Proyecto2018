@@ -52,10 +52,9 @@ router.post('/agregarUsuarios', function (req, res) {
 }); 
 
 router.post('/agregarMateria',function (req, res){
-
     var materia = req.body.materia;
+    console.log(materia);
     agregarMateria(materia, res);
-
 });
 
 router.post('/login', function (req, res){
@@ -89,9 +88,9 @@ router.post('/solicitudesAdm',function(req,res){
     RtaAdm(req);
 });
 
-router.post('/cierreSesion',function(response){
+/*router.post('/cierreSesion',function(response){
     response.redirect('/login');
-});
+});*/
 
 router.post('/asignarMateria', function(req, res, next){
     var profesor = req.body.profesor;
@@ -149,13 +148,15 @@ function AgregarUsuario(dni, nombre, apellido, password, rol, response){
 
 
 function agregarMateria(materia, response){
+    var sql = "SELECT * FROM subjects WHERE name = '"+materia+"'";
     connection.query(sql, function (err, result) {
         if (err) throw err;
         if (result.length > 0){
             console.log('Materia ya existe');
             console.log(result);
+            alert("materia ya existe");
         }else{
-            sql = "INSERT INTO subjects (materia) VALUE ("+materia+")";
+            sql = "INSERT INTO subjects (name) VALUES ('"+materia+"')";
             connection.query(sql, function (err, result) {
                 if (err) throw err;
                 console.log("1 record inserted");
