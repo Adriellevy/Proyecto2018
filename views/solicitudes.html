@@ -58,15 +58,13 @@
         $.post('http://localhost:8080/solicitudesAdm',{
             accion: "aprobar", 
             aula: listaAulas.val()
-            	
-        }, function(data) {
+        }, function(data){
             alert('Datos enviados!');
         });
         alert('solicitud enviada!');
         redirect('/solicitudesProf');
     }
-    
-        $.get('/solicitud',function(result){
+        $.get('/solicitudnom',function(result){
             if(result == ""){
                 alert("No hay ninguna solcisitud pendiente, espere y lugo recarge la pagina"); 
             }else
@@ -77,8 +75,6 @@
             }
         }
         });
-        
-        
      </script>
   <script type="text/javascript" src="../public/scripts/solicitud.js"></script>
 

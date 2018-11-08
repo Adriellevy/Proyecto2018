@@ -216,9 +216,7 @@ function ValidarUsuario(dni, password, response){
             }
         }
     });
-} 
-function Solicitaraula(Día,Bloque,response,AULA,repeticion,idsub,idprof){
-    ok = false;
+} function Solicitaraula(Día,Bloque,response,AULA,repeticion,idsub,idprof){
     var bloquefinal; 
     var IDPROf = idprof; 
     var IDSUb = idsub; 
@@ -282,8 +280,6 @@ function Solicitaraula(Día,Bloque,response,AULA,repeticion,idsub,idprof){
     console.log(">> IDSUb: " + IDSUb);
     console.log(">> IDPROF: " + IDPROf);
     console.log(">> AULA: " + nombreAula);
-try{ 
-    
     connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "name" + `= "` + nombreAula +`"`, function (error, result, fields){
     if(error){
         throw error;
@@ -297,21 +293,27 @@ try{
         idaulaglobal = IdAula;
         console.log(">> room.id: " + IdAula);
         console.log(">> Shoudle.block: "+ bloquefinal);
+        connection.query('SELECT * FROM `schedule` WHERE `idroom` = '+idaulaglobal+' AND `block` = '+bloquefinal+' AND `status` = 2',function (error, results, fields){
+            if(error){
+                throw error;  
+            }else{
+                 if(result.length != undefined){
             connection.query('INSERT INTO `schedule`(`idusers`, `idsubject`, `idroom`, `block`, `repeat`, `status`) VALUES ('+IDPROf+','+IDSUb+','+IdAula+',' +bloquefinal+','+repeticionaula+',1)',function (error, results, fields) {
                     if(error){
+                        console.log("a");
                         throw error;  
                     }else{
-                         ok = true;
+                        console.log("ave")
                     }
-                });
-                
-            }
+                });   
+            } 
         } 
-    });
-    }catch(err){
-        
-        }
-    }
+    }); 
+}
+}
+});
+};
+
         
         function cargaSolicitudes(response){
             ListaNombredeaulas = [];

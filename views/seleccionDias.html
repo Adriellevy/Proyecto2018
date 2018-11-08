@@ -120,7 +120,6 @@
             alert('Datos enviados!');
         });
         alert('Datos enviados!');
-        EnEspera();
     }
     function EnEspera(){
         var bloques = document.getElementById("Listabloques").value;
@@ -148,26 +147,8 @@
                 alert("sigue pendiente su solicitud");
              }
          });
-         /*
-        for(var i; i!="" ;i=i){
-        $.get('http://localhost:8080/RespuestaAula',function(result){
-           if(result == ""){
-               alert("El aula, "+aulas+" no ha sido solicitada"); 
-           }else{ 
-            var string1 = JSON.stringify(result);
-            var json1 =  JSON.parse(string1); 
-            var estado = json1[0].status;
-        if(estado == 2){
-            i=a;
-            alert("El aula, "+aulas+" ha sido aceptada");
-        }else if(estado == 0){
-            i=a;
-            alert("El aula, "+aulas+" ha sido recahzada");
-        }
-            }
-                });
-                    }*/
-                        }
+         }
+                               
         </script>
 
   <script type="text/javascript" src="../public/scripts/selecion de diasjs.js" ></script>
