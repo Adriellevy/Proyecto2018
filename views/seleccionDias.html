@@ -14,7 +14,7 @@
 <main>
   <div class="container">
 
-      <form method="POST" action="http://localhost:8080/solicitudesProf" id="signup">
+      <form method="POST" action="/solicitudesProf" id="signup">
 
         <div class="header">
         
@@ -109,7 +109,7 @@
         var id = 2;
         var mat = 1;
         console.log (bloques, dias, tiempo, id, mat)
-        $.post('http://localhost:8080/solicitudesProf',{
+        $.post('/solicitudesProf',{
         Listabloques: bloques ,
         Listadias: dias ,
         ListaTiempo: tiempo ,
@@ -119,7 +119,7 @@
         }, function(data){
             alert('Datos enviados!');
         });
-        alert('Datos enviados!');
+        alert('Espere la confirmacion del admin');
     }
     function EnEspera(){
         var bloques = document.getElementById("Listabloques").value;
@@ -129,8 +129,8 @@
         var id = 2;
         var mat = 1;
         console.log (bloques, dias, tiempo, id, mat)
-        alert('Espere la confirmacion del admin');
-        $.post('http://localhost:8080/RespuestaAula',{
+        
+        $.post('/RespuestaAula',{
             Listabloques: bloques ,
             Listadias: dias ,
             ListaTiempo: tiempo ,

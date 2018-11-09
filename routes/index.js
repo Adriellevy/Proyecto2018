@@ -97,7 +97,9 @@ router.post('/RespuestaAula',function(req,res){
      idsubglobal = req.body.idsub; 
      idprofglobal = req.body.idprof;
      Estadoaula(Díaglobal,Bloqueglobal,res,NAulaglobal,tiempoglobal,idsubglobal,idprofglobal);
-     res.send(Estadoaulaglobal);
+     console.log(Estadoaulaglobal)
+     //res.send(Estadoaulaglobal);
+     res.status(200).send(Estadoaulaglobal.toString());
 }); 
 
 router.get('/RespuestaAula',function(req,res){
@@ -217,6 +219,7 @@ function ValidarUsuario(dni, password, response){
         }
     });
 } function Solicitaraula(Día,Bloque,response,AULA,repeticion,idsub,idprof){
+    Estadoaulaglobal = 1;
     var bloquefinal; 
     var IDPROf = idprof; 
     var IDSUb = idsub; 
@@ -284,7 +287,7 @@ function ValidarUsuario(dni, password, response){
     if(error){
         throw error;
     }
-    else if (result != undefined){
+    else if (result.length != undefined){
         var IdAula;
         var string1 = JSON.stringify(result);
         var json1 =  JSON.parse(string1); 
@@ -293,12 +296,12 @@ function ValidarUsuario(dni, password, response){
         idaulaglobal = IdAula;
         console.log(">> room.id: " + IdAula);
         console.log(">> Shoudle.block: "+ bloquefinal);
-        connection.query('SELECT * FROM `schedule` WHERE `idroom` = '+idaulaglobal+' AND `block` = '+bloquefinal+' AND `status` = 2',function (error, results, fields){
+        connection.query('SELECT * FROM `schedule` WHERE `idroom` = '+idaulaglobal+' AND `block` = '+bloquefinal+' AND `status` = 2',function (error, result, fields){
             if(error){
                 throw error;  
             }else{
                  if(result.length != undefined){
-            connection.query('INSERT INTO `schedule`(`idusers`, `idsubject`, `idroom`, `block`, `repeat`, `status`) VALUES ('+IDPROf+','+IDSUb+','+IdAula+',' +bloquefinal+','+repeticionaula+',1)',function (error, results, fields) {
+            connection.query('INSERT INTO `schedule`(`idusers`, `idsubject`, `idroom`, `block`, `repeat`, `status`) VALUES ('+IDPROf+','+IDSUb+','+IdAula+',' +bloquefinal+','+repeticionaula+',1)',function (error, result, fields) {
                     if(error){
                         console.log("a");
                         throw error;  
@@ -316,25 +319,26 @@ function ValidarUsuario(dni, password, response){
 
         
         function cargaSolicitudes(response){
+            Estadoaulaglobal = 1;
             ListaNombredeaulas = [];
-            connection.query(`SELECT * FROM `+"schedule" +` WHERE `+"status"+` = 1`, function (error, results, fields) {
+            connection.query(`SELECT * FROM `+"schedule" +` WHERE `+"status"+` = 1`, function (error, result, fields) {
                 if(error){
                    console.log(">> There is not a request for a schedule");
                    throw error;  
                 }
                 else{
-                            var string = JSON.stringify(results);
+                            var string = JSON.stringify(result);
                             var json =  JSON.parse(string); 
                             console.log(">> The json is saved the next step: search in rooms");
                         if (json === [] || json === null || json === "null" || json === ""){
                                 console.log(">> The Json is empty")
                                 exports.json = json;
                         }else{                            
-                            for (let i = 0; i  < results.length; i++) {
-                                const element = results[i].idroom;   
+                            for (let i = 0; i  < result.length; i++) {
+                                const element = result[i].idroom;   
                                     if(json != [] || json != null || json != "null" || json != ""){
                                         
-                                    connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "id" + `=` + results[i].idroom +``, function (error, result, fields){
+                                    connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "id" + `=` + result[i].idroom +``, function (error, result, fields){
                                         if(error){
                                             throw err;
                                         }else{
@@ -353,6 +357,7 @@ function ValidarUsuario(dni, password, response){
         });
     }
 function RtaAdm(req){
+    Estadoaulaglobal = 1;
             var rsta = req.body.accion
             console.log(">> rsta: "+rsta)
             if(rsta =='aprobar'){
@@ -365,7 +370,7 @@ function RtaAdm(req){
                         var jsona =  JSON.parse(stringa); 
                         var idaula = jsona[0].id;
                         console.log(">> id aula: " + idaula);
-                connection.query(`UPDATE `+"schedule"+` SET `+"status"+`= 2 WHERE `+"status"+` = 1 AND `+"idroom"+` =`+ idaula+``, function (error, results, fields) {
+                connection.query(`UPDATE `+"schedule"+` SET `+"status"+`= 2 WHERE `+"status"+` = 1 AND `+"idroom"+` =`+ idaula+``, function (error, result, fields) {
                     if(error){
                     }
                     else{
@@ -390,7 +395,7 @@ function RtaAdm(req){
                 var json1 =  JSON.parse(string1); 
                 var idaula = json1[0].id;
                 console.log(">> id aula: " + idaula);
-        connection.query(`UPDATE `+"schedule"+` SET `+"status"+`= 0 WHERE `+"status"+` = 1 AND `+"idroom"+` =`+ idaula+``, function (error, results, fields) {
+        connection.query(`UPDATE `+"schedule"+` SET `+"status"+`= 0 WHERE `+"status"+` = 1 AND `+"idroom"+` =`+ idaula+``, function (error, result, fields) {
             if(error){
             }
             else{
@@ -465,14 +470,17 @@ function Estadoaula(Día,Bloque,response,AULA,repeticion,idsub,idprof){
         repeticionaula = 1;
     }
     console.log(">> antes del query")
-    connection.query("SELECT * FROM `schedule` WHERE `idusers` = "+IDPROf+" AND `idsubject` = "+IDSUb+" AND `idroom` = "+idaulaglobal+" AND `block` = "+bloquefinal+" AND `repeat`= "+repeticionaula+"", function (error, results, fields){
+    connection.query("SELECT * FROM `schedule` WHERE `idusers` = "+IDPROf+" AND `idsubject` = "+IDSUb+" AND `idroom` = "+idaulaglobal+" AND `block` = "+bloquefinal+" AND `repeat`= "+repeticionaula+"", function (error, result, fields){
         if(error){
             throw err;
         }else{
-            var string1 = JSON.stringify(results);
+            if(result.length != undefined)
+            var string1 = JSON.stringify(result);
             var json1 =  JSON.parse(string1); 
-            console.log(">>Reslut: " + String(json1[0].status));
-            Estadoaulaglobal = String(json1[0].status); 
+            var a = String(json1[0].status);
+            console.log(">> Reslut: " + a);
+            Estadoaulaglobal = a; 
+            console.log(">> estado: "+ Estadoaulaglobal);
         }
     });
 }
