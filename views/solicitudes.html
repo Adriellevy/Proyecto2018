@@ -12,7 +12,7 @@
 <body>
 <div class="container">
 
-    <form id="signup" method="POST" action="http://localhost:8080/solicitudesAdm" >
+    <form id="signup" method="POST" action="/solicitudesAdm" >
 
         <div class="header">
         
@@ -26,10 +26,8 @@
 
         <div class="inputs">
 
-        <select name="ListaAulas" id="ListaAulas">
-                
-          </select>
-
+        <select name="ListaAulas" id="ListaAulas"></select>
+        <label id=""></label> 
         
         <input type="submit" value="Aceptar" id="submit" onclick="enviar('aceptar')">
         <input type="submit" value="Rechazar" id="submit" onclick="enviar('rechazar')">
@@ -44,7 +42,6 @@
 
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" ></script>
   <script>
-    
     var miSelect=document.getElementById("ListaAulas");
     // Creamos un objeto option
     var miOption=document.createElement("option");
@@ -55,17 +52,15 @@
     // miSelect.appendChild(miOption);
     var listaAulas = $('#ListaAulas');
     function enviar(accion){
-        $.post('http://localhost:8080/solicitudesAdm',{
+        $.post('/solicitudesAdm',{
             accion: "aprobar", 
             aula: listaAulas.val()
-            	
-        }, function(data) {
+        }, function(data){
             alert('Datos enviados!');
         });
         alert('solicitud enviada!');
         redirect('/solicitudesProf');
     }
-    
         $.get('/solicitud',function(result){
             if(result == ""){
                 alert("No hay ninguna solcisitud pendiente, espere y lugo recarge la pagina"); 
@@ -76,9 +71,7 @@
              $('#ListaAulas').append('<option id=”opcion1″ value='+result[i]+'>'+result[i]+'</option>');
             }
         }
-        });
-        
-        
+    });
      </script>
   <script type="text/javascript" src="../public/scripts/solicitud.js"></script>
 
