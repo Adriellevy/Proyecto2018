@@ -199,21 +199,52 @@ function asignarMateria (profesor, materia, response){
 }
 
 function ValidarUsuario(dni, password, response){
-    var sql = "SELECT name, lastName, role FROM users WHERE dni = "+dni+" AND password = '"+password+"'";
-    connection.query(sql, function(error, result){
+    var sql = "SELECT name, lastName, role, id FROM users WHERE dni = "+dni+" AND password = '"+password+"'";
+    connection.query(sql, function(error, profesores, request){
         if (error) throw error;
-        if (result.length === 0){
+        if (profesores.length === 0){
             console.log('No existe el usuario');
             // PASAR LOS ERRORES ACA (NO SE COMO)
             response.redirect('/login');
         }else{
-            var role = result[0].role;
-            if(role === "teacher"){
-                response.redirect('/solicitudesProf');
-                return true;
-            }else{
-                response.redirect('/VentanaAdmin');
-            }
+            sql = "SELECT * FROM users_subject WHERE idusers ="+profesores[0].id;
+            connection.query(sql, function(error, result, request){
+                if (result){
+                    sql = "SELECT name FROM subjects WHERE";
+                    for (let i = 0; i < result.length; i++) {
+                        var id = result[i].idsubject;
+                        if (i !== 0)
+                            sql+=" OR";
+                        sql+=" id = "+id;
+                    }
+                    connection.query(sql, function(error, materias, request){
+                        if (materias){
+                            var role = profesores[0].role;
+                            var materiasProf = [];
+                            for (let i = 0; i < materias.length; i++) {
+                                materiasProf.push(materias[i].name);
+                            }
+                            if(role === "teacher"){
+                                request.teacher = {
+                                    nombre: profesores[0].name,
+                                    apellido: profesores[0].lastName,
+                                    materias: materiasProf
+                                }
+                                console.log(request.teacher);
+                                response.redirect('/solicitudesProf');
+                                return true;
+                            }else{
+                                response.redirect('/VentanaAdmin');
+                            }
+                        }else{
+                            console.log('El profesor no tiene materias.');
+                        }
+                    });
+                }else{
+                    console.log('El profesor no tiene materias.');
+                    response.redirect('/solicitudesProf');
+                }
+            });
         }
     });
 } 
@@ -463,7 +494,7 @@ function Estadoaula(Día,Bloque,response,AULA,repeticion,idsub,idprof){
         repeticionaula = 1;
     }
     console.log(">> antes del query")
-    connection.query("SELECT * FROM `schedule` WHERE `idusers` = "+IDPROf+" AND `idsubject` = "+IDSUb+" AND `idroom` = "+idaulaglobal+" AND `block` = "+bloquefinal+" AND `repeat`= "+repeticionaula+"", function (error, results, fields){
+    /*connection.query("SELECT * FROM `schedule` WHERE `idusers` = "+IDPROf+" AND `idsubject` = "+IDSUb+" AND `idroom` = "+idaulaglobal+" AND `block` = "+bloquefinal+" AND `repeat`= "+repeticionaula+"", function (error, results, fields){
         if(error){
             throw err;
         }else{
@@ -472,5 +503,5 @@ function Estadoaula(Día,Bloque,response,AULA,repeticion,idsub,idprof){
             console.log(">>Reslut: " + String(json1[0].status));
             Estadoaulaglobal = String(json1[0].status); 
         }
-    });
+    });*/
 }
