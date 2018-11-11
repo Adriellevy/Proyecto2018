@@ -29,8 +29,8 @@
         <select name="ListaAulas" id="ListaAulas"></select>
         <label id=""></label> 
         
-        <input type="submit" value="Aceptar" id="submit" onclick="enviar('aceptar')">
-        <input type="submit" value="Rechazar" id="submit" onclick="enviar('rechazar')">
+        <input type="submit" value="Aceptar" id="submit" onclick="enviar('aceptar');refresh()">
+        <input type="submit" value="Rechazar" id="submit" onclick="enviar('rechazar');refresh()">
         
         </div>
 
@@ -51,15 +51,13 @@
     // Añadimos el option al select
     // miSelect.appendChild(miOption);
     var listaAulas = $('#ListaAulas');
-    function enviar(accion){
+    function enviar(action){
         $.post('/solicitudesAdm',{
-            accion: "aprobar", 
+            accion: action, 
             aula: listaAulas.val()
-        }, function(data){
-            alert('Datos enviados!');
         });
-        alert('solicitud enviada!');
-        redirect('/solicitudesProf');
+        alert("solcitud enviada");
+        console.log("a");
     }
         $.get('/solicitud',function(result){
             if(result == ""){
@@ -72,6 +70,13 @@
             }
         }
     });
+    var int=self.setInterval("refresh()",60000);
+	function refresh()
+	{
+        alert('Precione aceptar para que se recarge la pagina');
+        window.location.replace('/solicitudesAdm');
+        alert('se recargo');
+	}
      </script>
   <script type="text/javascript" src="../public/scripts/solicitud.js"></script>
 

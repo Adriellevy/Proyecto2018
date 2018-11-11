@@ -45,7 +45,7 @@
             </select>
 
             <select required name="ListaTiempo" id="ListaTiempo">
-                <option value="Vacio">Seleccione un tipo de tiempo</option>
+                <option value="Vacio">Seleccione un tipo de tiempo de repeticion</option>
                 <option value="semanal">semanal</option>
                 <option value="mensual">mensual</option>
                 <option value="anual">anual</option>
@@ -141,8 +141,10 @@
              console.log(response)
              if(response == 2){
                  alert("se a haceptado la solicitud");
+                 window.location.replace('/solicitudesProf');
              }else if (response == 0){
-                 alert("Se a negado la soliciptud");
+                 alert("Se a negado la solicitud");
+                 window.location.replace('/solicitudesProf');
              }else if( response == 1){
                 alert("sigue pendiente su solicitud");
              }

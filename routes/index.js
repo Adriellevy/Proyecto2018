@@ -81,11 +81,8 @@ router.post('/solicitudesProf',function(req,res){
     var tiempo = req.body.ListaTiempo
     var idsub = req.body.idsub; 
     var idprof = req.body.idprof;
-    console.log(">> Día solicitado: " + Día);
-    console.log(">> Bloque solicitado: " + Bloque);
-    console.log(">> Aula solicitada: "+ NAula);
-    console.log(">> tiempo solicitado: "+ tiempo);
-    console.log(">> ")
+    //parece que las funciones son asincronicas serio problema
+    console.log(">> ");
     Solicitaraula(Día,Bloque,res,NAula,tiempo,idsub,idprof);
 });
 
@@ -97,8 +94,7 @@ router.post('/RespuestaAula',function(req,res){
      idsubglobal = req.body.idsub; 
      idprofglobal = req.body.idprof;
      Estadoaula(Díaglobal,Bloqueglobal,res,NAulaglobal,tiempoglobal,idsubglobal,idprofglobal);
-     console.log(Estadoaulaglobal)
-     //res.send(Estadoaulaglobal);
+     console.log(Estadoaulaglobal);
      res.status(200).send(Estadoaulaglobal.toString());
 }); 
 
@@ -343,6 +339,8 @@ function ValidarUsuario(dni, password, response){
             } 
         } 
     }); 
+}else{
+    console.log(">> json vacio hermano")
 }
 }
 });
@@ -361,14 +359,12 @@ function ValidarUsuario(dni, password, response){
                             var string = JSON.stringify(result);
                             var json =  JSON.parse(string); 
                             console.log(">> The json is saved the next step: search in rooms");
-                        if (json === [] || json === null || json === "null" || json === ""){
+                        if (json === [] || json === null || json === "null" || json === "" || json === undefined){
                                 console.log(">> The Json is empty")
-                                exports.json = json;
                         }else{                            
                             for (let i = 0; i  < result.length; i++) {
                                 const element = result[i].idroom;   
                                     if(json != [] || json != null || json != "null" || json != ""){
-                                        
                                     connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "id" + `=` + result[i].idroom +``, function (error, result, fields){
                                         if(error){
                                             throw err;
@@ -380,6 +376,8 @@ function ValidarUsuario(dni, password, response){
                                             console.log(ListaNombredeaulas);
                                     }
                             });
+                        }else{
+                            console.log(">> The Json is empty")
                         }
                         
                     }
@@ -391,7 +389,7 @@ function RtaAdm(req){
     Estadoaulaglobal = 1;
             var rsta = req.body.accion
             console.log(">> rsta: "+rsta)
-            if(rsta =='aprobar'){
+            if(rsta =='aceptar'){
                 msg = req.body.aula;
              connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "name" + `= "`+msg+`"`, function (error, resulta, fields){
                     if(error){
@@ -440,7 +438,8 @@ function RtaAdm(req){
     }
 }
 
-function Estadoaula(Día,Bloque,response,AULA,repeticion,idsub,idprof){
+function Estadoaula(Día,Bloque,response,AULA,repeticion,idsub,idprof){ 
+
     ok = false;
     var bloquefinal; 
     var IDPROf = idprof; 
@@ -501,7 +500,7 @@ function Estadoaula(Día,Bloque,response,AULA,repeticion,idsub,idprof){
         repeticionaula = 1;
     }
     console.log(">> antes del query")
-    connection.query("SELECT * FROM `schedule` WHERE `idusers` = "+IDPROf+" AND `idsubject` = "+IDSUb+" AND `idroom` = "+idaulaglobal+" AND `block` = "+bloquefinal+" AND `repeat`= "+repeticionaula+"", function (error, result, fields){
+    connection.query("SELECT * FROM `schedule` WHERE `idusers` = "+IDPROf+" AND `idsubject` = "+IDSUb+" AND `idroom` = "+idaulaglobal+" AND `block` = "+bloquefinal+" AND `repeat` = "+repeticionaula+"", function (error, result, fields){
         if(error){
             throw err;
         }else{
