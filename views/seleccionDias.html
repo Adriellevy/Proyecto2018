@@ -37,7 +37,7 @@
               <option value="Viernes">Viernes</option>
             </select>
 
-            <select required name="Listabloques" id="Listabloques">
+            <select onchange="cargarmapa()" required name="Listabloques" id="Listabloques">
               <option value="Vacio">Seleccione un bloque</option>
               <option value="1 Bloque">1 Bloque</option>
               <option value="2 Bloque">2 Bloque</option>
@@ -94,13 +94,18 @@
 
 
    <a id="Cerramos" href="/login">Cerrar sesion</a>
+   <nav class ="large-paddign black white-text">
+       <ul>
+           <li>imagenes</li>
+           <li>imagenes</li> 
+           <li>mi inicio</li>
+           <li><a href="/images"></a></li>
+       </ul>
+   </nav>
 </main>
-
-
-  
-  
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" ></script>
+ <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" ></script>
   <script>
+
     function enviar(accion){
         var bloques = document.getElementById("Listabloques").value;
         var dias = document.getElementById("Listadias").value;
@@ -150,7 +155,17 @@
              }
          });
          }
-                               
+        
+        function cargarmapa(){
+            var bloques = document.getElementById("Listabloques").value;
+            var dias = document.getElementById("Listadias").value;
+            $.post('/cargamapa',{
+            Listabloques: bloques ,
+            Listadias: dias
+            },function(response){
+                img = response; 
+            })
+        }                
         </script>
 
   <script type="text/javascript" src="../public/scripts/selecion de diasjs.js" ></script>

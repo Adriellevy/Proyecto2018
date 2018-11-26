@@ -41,8 +41,7 @@ router.get('/solicitudesAdm',function(req,res){
 
 router.get('/VentanaAdmin', function (req, res){
     res.sendFile(path.join(__dirname, '../views/ventanaAdmin.html'));
-    console.log("una computadora se ha conectado a la pagina /ventanaAdmin ")
-    
+    console.log(">> UN ADMIN SE A CONECTADO ") 
 });
 
 
@@ -146,8 +145,20 @@ router.get('/VentanaAdmin', function (req, res){
     
 });
 
+router.post('/cargamapa',function(req,res){
+    Díaglobal = req.body.Listadias  
+    Bloqueglobal = req.body.Listabloques 
+    buscadaimagenes(Bloqueglobal,Díaglobal,res);
+})
+
 
 module.exports = router;
+
+
+
+
+
+
 
 function AgregarUsuario(dni, nombre, apellido, password, rol, response){
     var sql = "SELECT * FROM users WHERE dni = "+dni;
@@ -236,11 +247,12 @@ function ValidarUsuario(dni, password, response){
                             }
                         }else{
                             console.log('El profesor no tiene materias.');
+                            response.redirect('/VentanaAdmin');
                         }
                     });
                 }else{
                     console.log('El profesor no tiene materias.');
-                    response.redirect('/solicitudesProf');
+                    response.redirect('/VentanaAdmin');
                 }
             });
         }
@@ -513,4 +525,83 @@ function Estadoaula(Día,Bloque,response,AULA,repeticion,idsub,idprof){
             console.log(">> estado: "+ Estadoaulaglobal);
         }
     });
+}
+
+function buscadaimagenes(Bloque,Día,respuesta){
+    var bloquefinal;   
+    if (Bloque === "1 Bloque" && Día === "Lunes"){
+        bloquefinal = 1;
+    }
+    else if (Bloque === "2 Bloque" && Día === "Lunes" ){
+        bloquefinal = 2;
+    }
+    else if (Bloque === "3 Bloque" && Día === "Lunes" ){
+        bloquefinal = 3;
+    }
+    else if (Bloque === "1 Bloque" && Día === "Martes" ){
+        bloquefinal = 4;
+    }
+    else if (Bloque === "2 Bloque" && Día === "Martes" ){
+        bloquefinal = 5;
+    }
+    else if (Bloque === "3 Bloque" && Día === "Martes" ){
+        bloquefinal = 6;
+    }
+    else if (Bloque === "1 Bloque" && Día === "Miercoles" ){
+        bloquefinal = 7;
+    } 
+    else if (Bloque === "2 Bloque" && Día === "Miercoles" ){
+        bloquefinal = 8;
+    }
+    else if (Bloque === "3 Bloque" && Día === "Miercoles" ){
+        bloquefinal = 9;
+    }
+    else if (Bloque === "1 Bloque" && Día === "Jueves" ){
+        bloquefinal = 10;
+    }
+    else if (Bloque === "2 Bloque" && Día === "Jueves" ){
+        bloquefinal = 11;
+    }
+    else if (Bloque === "3 Bloque" && Día === "Jueves" ){
+        bloquefinal = 12;
+    }
+    else if (Bloque === "1 Bloque" && Día === "Viernes" ){
+        bloquefinal = 13;
+    }
+    else if (Bloque === "2 Bloque" && Día === "Viernes" ){
+        bloquefinal = 14;
+    }
+    else if (Bloque === "3 Bloque" && Día === "Viernes" ){
+        bloquefinal = 15;
+    }
+    console.log(">> bloquefinal: "+bloquefinal); 
+    var sql = "SELECT * FROM  schedule WHERE block = "+bloquefinal+" AND status = 2 ORDER BY idroom"
+    var NombreDeAulasOcupadas
+    connection.query(sql, function(error, results){
+        if(results){
+        for(var i = 0; i<results.length; i++){ 
+            console.log(i);
+            var string = JSON.stringify(results);
+            var json =  JSON.parse(string); 
+            var nombre = json[i].id;
+                var sql = "SELECT * FROM `rooms` WHERE id = "+nombre+" ORDER BY name"
+                connection.query(sql, function(error, result){
+                    //buscar en internet de como hacer requests de mysql a traves de un for
+                if(result){
+                console.log(result);
+                var string1 = JSON.stringify(result);
+                var json1 =  JSON.parse(string1); 
+                var nombre1 = json1[i].name;
+                console.log(nombre1);
+                NombreDeAulasOcupadas = NombreDeAulasOcupadas + nombre1
+                }else{
+
+                }
+        })
+    }
+    console.log(NombreDeAulasOcupadas)
+}else{
+        console.log("Todas las aulas estan libres : "+results); 
+    }
+});
 }
