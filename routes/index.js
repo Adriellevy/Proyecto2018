@@ -80,8 +80,11 @@ router.post('/solicitudesProf',function(req,res){
     var tiempo = req.body.ListaTiempo
     var idsub = req.body.idsub; 
     var idprof = req.body.idprof;
-    //parece que las funciones son asincronicas serio problema
-    console.log(">> ");
+    console.log(">> Día solicitado: " + Día);
+    console.log(">> Bloque solicitado: " + Bloque);
+    console.log(">> Aula solicitada: "+ NAula);
+    console.log(">> tiempo solicitado: "+ tiempo);
+    console.log(">> ")
     Solicitaraula(Día,Bloque,res,NAula,tiempo,idsub,idprof);
 });
 
@@ -93,8 +96,10 @@ router.post('/RespuestaAula',function(req,res){
      idsubglobal = req.body.idsub; 
      idprofglobal = req.body.idprof;
      Estadoaula(Díaglobal,Bloqueglobal,res,NAulaglobal,tiempoglobal,idsubglobal,idprofglobal);
-     console.log(Estadoaulaglobal);
+     console.log(Estadoaulaglobal)
+     //res.send(Estadoaulaglobal);
      res.status(200).send(Estadoaulaglobal.toString());
+     
 }); 
 
 router.get('/RespuestaAula',function(req,res){
@@ -172,7 +177,7 @@ function AgregarUsuario(dni, nombre, apellido, password, rol, response){
             connection.query(sql, function (err, result) {
                 if (err) throw err;
                 console.log("1 record inserted");
-                response.redirect('/VentanaAdmin');
+                response.redirect('/Materias');
             });
         }
     });
@@ -186,7 +191,7 @@ function agregarMateria(materia, response){
         if (result.length > 0){
             console.log('Materia ya existe');
             console.log(result);
-            alert("materia ya existe");
+            
         }else{
             sql = "INSERT INTO subjects (name) VALUES ('"+materia+"')";
             connection.query(sql, function (err, result) {
@@ -203,7 +208,8 @@ function agregarMateria(materia, response){
 function asignarMateria (profesor, materia, response){
     var sql = "INSERT INTO users_subject (idusers, idsubject) VALUES ("+profesor+", "+materia+")";
     connection.query(sql, function(error, result){
-        response.send('Se agrego la materia.');
+        response.send('Se asigno la materia.');
+        
     });
 }
 
@@ -348,11 +354,11 @@ function ValidarUsuario(dni, password, response){
                         console.log("ave")
                     }
                 });   
+            }else{
+                console.log(">>>>>>>>>>>>>>>>>");
             } 
         } 
     }); 
-}else{
-    console.log(">> json vacio hermano")
 }
 }
 });
@@ -360,7 +366,7 @@ function ValidarUsuario(dni, password, response){
 
         
         function cargaSolicitudes(response){
-            Estadoaulaglobal = 1;
+            
             ListaNombredeaulas = [];
             connection.query(`SELECT * FROM `+"schedule" +` WHERE `+"status"+` = 1`, function (error, result, fields) {
                 if(error){
@@ -371,12 +377,14 @@ function ValidarUsuario(dni, password, response){
                             var string = JSON.stringify(result);
                             var json =  JSON.parse(string); 
                             console.log(">> The json is saved the next step: search in rooms");
-                        if (json === [] || json === null || json === "null" || json === "" || json === undefined){
+                        if (json === [] || json === null || json === "null" || json === ""){
                                 console.log(">> The Json is empty")
+                                exports.json = json;
                         }else{                            
                             for (let i = 0; i  < result.length; i++) {
                                 const element = result[i].idroom;   
                                     if(json != [] || json != null || json != "null" || json != ""){
+                                        
                                     connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "id" + `=` + result[i].idroom +``, function (error, result, fields){
                                         if(error){
                                             throw err;
@@ -388,8 +396,6 @@ function ValidarUsuario(dni, password, response){
                                             console.log(ListaNombredeaulas);
                                     }
                             });
-                        }else{
-                            console.log(">> The Json is empty")
                         }
                         
                     }
@@ -398,7 +404,6 @@ function ValidarUsuario(dni, password, response){
         });
     }
 function RtaAdm(req){
-    Estadoaulaglobal = 1;
             var rsta = req.body.accion
             console.log(">> rsta: "+rsta)
             if(rsta =='aceptar'){
@@ -450,8 +455,7 @@ function RtaAdm(req){
     }
 }
 
-function Estadoaula(Día,Bloque,response,AULA,repeticion,idsub,idprof){ 
-
+function Estadoaula(Día,Bloque,response,AULA,repeticion,idsub,idprof){
     ok = false;
     var bloquefinal; 
     var IDPROf = idprof; 
@@ -512,7 +516,7 @@ function Estadoaula(Día,Bloque,response,AULA,repeticion,idsub,idprof){
         repeticionaula = 1;
     }
     console.log(">> antes del query")
-    connection.query("SELECT * FROM `schedule` WHERE `idusers` = "+IDPROf+" AND `idsubject` = "+IDSUb+" AND `idroom` = "+idaulaglobal+" AND `block` = "+bloquefinal+" AND `repeat` = "+repeticionaula+"", function (error, result, fields){
+    connection.query("SELECT * FROM `schedule` WHERE `idusers` = "+IDPROf+" AND `idsubject` = "+IDSUb+" AND `idroom` = "+idaulaglobal+" AND `block` = "+bloquefinal+" AND `repeat`= "+repeticionaula+"", function (error, result, fields){
         if(error){
             throw err;
         }else{
@@ -523,6 +527,7 @@ function Estadoaula(Día,Bloque,response,AULA,repeticion,idsub,idprof){
             console.log(">> Reslut: " + a);
             Estadoaulaglobal = a; 
             console.log(">> estado: "+ Estadoaulaglobal);
+            
         }
     });
 }

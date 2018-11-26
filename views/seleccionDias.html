@@ -1,30 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<title>Ocupar Aulas</title>
-	<link rel="stylesheet" type="text/css" href="/styles/SeleccionDias.css">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">    
-	<link rel="icon" type="text/css" href="../images/logo.png">
+    <meta charset="utf-8">
+    <title>Solicitudes</title>
+    <link rel="stylesheet" type="text/css" href="/styles/solicitudes.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">  
+    <link rel="icon" type="text/css" href="../Images/logo.png">
 </head>
 
 
 <body>
+<div class="container">
 
-<main>
-  <div class="container">
-
-      <form method="POST" action="/solicitudesProf" id="signup">
+    <form id="signup" method="POST" action="/solicitudesAdm" >
 
         <div class="header">
         
-            <h3>Ocupar un aula</h3>
-            
-            <p>Por favor complete los datos</p>
-            
-        </div>
-        
-        <div class="sep"></div>
+            <h3>Solicitudes</h3>
 
         <div class="inputs">
         
@@ -74,23 +66,19 @@
 
         <div class="inputs">
 
-            <select required name="ListaAulas" id="ListaAulas">
-                <option value="Vacio">Seleccione un aula</option>
-                <option value="L1">LABORATORIO 1</option>
-                <option value="L2">LABORATORIO 2</option>
-                <option value="L3">LABORATORIO 3</option>
-                <option value="L208">AULA 208</option> 
-                <option value="L209">AULA 209</option> 
-                <option value="L213">AULA 213</option>
-          </select>
-
-  
+        <select name="ListaAulas" id="ListaAulas"></select>
+        <label id=""></label> 
+        
+        <input type="submit" value="Aceptar" id="submit" onclick="enviar('aceptar');refresh()">
+        <input type="submit" value="Rechazar" id="submit" onclick="enviar('rechazar');refresh()">
+        
         </div>
 
-    </div>
-  <input type="submit" value="Ver estado de la solicitud" id="submito" onclick="EnEspera()"/>
+    </form>
 
 </div>
+​<a id="Cerramos" href="/login">Cerrar sesion</a>
+</body>
 
 
    <a id="Cerramos" href="/login">Cerrar sesion</a>
@@ -124,7 +112,8 @@
         }, function(data){
             alert('Datos enviados!');
         });
-        alert('Espere la confirmacion del admin');
+        alert("solcitud enviada");
+        console.log("a");
     }
     function EnEspera(){
         var bloques = document.getElementById("Listabloques").value;
@@ -168,8 +157,7 @@
         }                
         </script>
 
-  <script type="text/javascript" src="../public/scripts/selecion de diasjs.js" ></script>
   
-  
+
 </body>
 </html>
