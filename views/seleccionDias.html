@@ -1,160 +1,85 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<title>Ocupar Aulas</title>
-	<link rel="stylesheet" type="text/css" href="/styles/SeleccionDias.css">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">    
-	<link rel="icon" type="text/css" href="../images/logo.png">
+    <meta charset="utf-8">
+    <title>Solicitudes</title>
+    <link rel="stylesheet" type="text/css" href="/styles/solicitudes.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">  
+    <link rel="icon" type="text/css" href="../Images/logo.png">
 </head>
 
 
 <body>
+<div class="container">
 
-<main>
-  <div class="container">
-
-      <form method="POST" action="/solicitudesProf" id="signup">
+    <form id="signup" method="POST" action="/solicitudesAdm" >
 
         <div class="header">
         
-            <h3>Ocupar un aula</h3>
-            
-            <p>Por favor complete los datos</p>
-            
+            <h3>Solicitudes</h3>
+
+            <p>Por favor seleccione el aula con la que desea interactuar</p>
+                
         </div>
         
         <div class="sep"></div>
 
         <div class="inputs">
-        
-            <select required name="Listadias" id="Listadias">
-              <option value="Vacio">Seleccione un dia</option>
-              <option value="Lunes">Lunes</option>
-              <option value="Martes">Martes</option>
-              <option value="Miercoles">Miercoles</option>
-              <option value="Jueves">Jueves</option>
-              <option value="Viernes">Viernes</option>
-            </select>
 
-            <select required name="Listabloques" id="Listabloques">
-              <option value="Vacio">Seleccione un bloque</option>
-              <option value="1 Bloque">1 Bloque</option>
-              <option value="2 Bloque">2 Bloque</option>
-              <option value="3 Bloque">3 bloque</option>
-            </select>
-
-            <select required name="ListaTiempo" id="ListaTiempo">
-                <option value="Vacio">Seleccione un tipo de tiempo de repeticion</option>
-                <option value="semanal">semanal</option>
-                <option value="mensual">mensual</option>
-                <option value="anual">anual</option>
-                
-            
-            <input type="submit" value="Solicitar aula" id="submit" onclick="enviar()" />
+        <select name="ListaAulas" id="ListaAulas"></select>
+        <label id=""></label> 
         
+        <input type="submit" value="Aceptar" id="submit" onclick="enviar('aceptar');refresh()">
+        <input type="submit" value="Rechazar" id="submit" onclick="enviar('rechazar');refresh()">
         
         </div>
-    
+
     </form>
-  
-  </div>
-  
-  <div class="container">
-
-    <div id="signup">
-
-        <div class="header">
-        
-            <h3>Aulas  disponibles</h3>
-                
-        </div>
-        
-        <div class="sep"></div>
-
-        <div class="inputs">
-
-            <select required name="ListaAulas" id="ListaAulas">
-                <option value="Vacio">Seleccione un aula</option>
-                <option value="L1">LABORATORIO 1</option>
-                <option value="L2">LABORATORIO 2</option>
-                <option value="L3">LABORATORIO 3</option>
-                <option value="L208">AULA 208</option> 
-                <option value="L209">AULA 209</option> 
-                <option value="L213">AULA 213</option>
-          </select>
-
-  
-        </div>
-
-    </div>
-  <input type="submit" value="Ver estado de la solicitud" id="submito" onclick="EnEspera()"/>
 
 </div>
+​<a id="Cerramos" href="/login">Cerrar sesion</a>
+</body>
 
-
-   <a id="Cerramos" href="/login">Cerrar sesion</a>
-</main>
-
-
-  
-  
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" ></script>
   <script>
-    function enviar(accion){
-        var bloques = document.getElementById("Listabloques").value;
-        var dias = document.getElementById("Listadias").value;
-        var tiempo = document.getElementById("ListaTiempo").value;
-        var aulas = document.getElementById("ListaAulas").value;
-        var id = 2;
-        var mat = 1;
-        console.log (bloques, dias, tiempo, id, mat)
-        $.post('/solicitudesProf',{
-        Listabloques: bloques ,
-        Listadias: dias ,
-        ListaTiempo: tiempo ,
-        ListaAulas: aulas ,
-        idsub: mat ,
-        idprof: id
-        }, function(data){
-            alert('Datos enviados!');
+    var miSelect=document.getElementById("ListaAulas");
+    // Creamos un objeto option
+    var miOption=document.createElement("option");
+    // Añadimos las propiedades value y label
+    miOption.setAttribute("value","1");
+    miOption.setAttribute("label","casa");
+    // Añadimos el option al select
+    // miSelect.appendChild(miOption);
+    var listaAulas = $('#ListaAulas');
+    function enviar(action){
+        $.post('/solicitudesAdm',{
+            accion: action, 
+            aula: listaAulas.val()
         });
-        alert('Espere la confirmacion del admin');
+        alert("solcitud enviada");
+        console.log("a");
     }
-    function EnEspera(){
-        var bloques = document.getElementById("Listabloques").value;
-        var dias = document.getElementById("Listadias").value;
-        var tiempo = document.getElementById("ListaTiempo").value;
-        var aulas = document.getElementById("ListaAulas").value;
-        var id = 2;
-        var mat = 1;
-        console.log (bloques, dias, tiempo, id, mat)
-        
-        $.post('/RespuestaAula',{
-            Listabloques: bloques ,
-            Listadias: dias ,
-            ListaTiempo: tiempo ,
-            ListaAulas: aulas ,
-            idsub: mat ,
-            idprof: id
-         },function(response){
-             console.log(response)
-             if(response == 2){
-                 alert("se a haceptado la solicitud");
-                 window.location.replace('/solicitudesProf');
-             }else if (response == 0){
-                 alert("Se a negado la solicitud");
-                 window.location.replace('/solicitudesProf');
-             }else if( response == 1){
-                alert("sigue pendiente su solicitud");
-             }
-         });
-         }
-                               
-        </script>
+        $.get('/solicitud',function(result){
+            if(result == ""){
+                alert("No hay ninguna solcisitud pendiente, espere y lugo recarge la pagina"); 
+            }else
+            { 
+            alert(result);
+            for(var i = 0; i<result.length; i++){
+             $('#ListaAulas').append('<option id=”opcion1″ value='+result[i]+'>'+result[i]+'</option>');
+            }
+        }
+    });
+    var int=self.setInterval("refresh()",60000);
+	function refresh()
+	{
+        alert('Precione aceptar para que se recarge la pagina');
+        window.location.replace('/solicitudesAdm');
+	}
+     </script>
+  <script type="text/javascript" src="../public/scripts/solicitud.js"></script>
 
-  <script type="text/javascript" src="../public/scripts/selecion de diasjs.js" ></script>
   
-  
+
 </body>
 </html>
