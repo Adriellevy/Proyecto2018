@@ -160,6 +160,7 @@
             })
             $.get('/pedirmapa',function(result){
                 console.log(result);
+                
                 if(result == "L1"){
                     $("#img1").attr("src","images/L1 Disponible.jpg");
                 }else if(result == "L2"){
@@ -173,11 +174,12 @@
                 }else if(result == "L213"){
                     $("#img1").attr("src","images/L213 Disponible.jpg");
                 }else{
-                    $("#img1").attr("src","images/"+result+".jpg");
+                    $("#img1").attr("src","images/"+result[i]+".jpg");
                     $("#img1").attr("src","images/Todas Disponibles.jpg");  
                 }
                 
-        })
+        
+    })
                
     }     
      }   </script>

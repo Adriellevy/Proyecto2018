@@ -587,8 +587,7 @@ function buscadaimagenes(Bloque,Día,respuesta){
     var sql = "SELECT * FROM  schedule WHERE block = "+bloquefinal+" AND status = 2 ORDER BY idroom"
    
     var nombre
-    var Nombreviejo ;
-  
+    var Nombreviejo;
     connection.query(sql, function(error, results){
         if(results){
         for(var i = 0; i<results.length; i++){ 
