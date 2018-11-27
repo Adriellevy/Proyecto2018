@@ -26,7 +26,7 @@
   
           <div class="inputs">
           
-              <select required name="Listadias" id="Listadias">
+              <select onchange="cargarmapa()" required name="Listadias" id="Listadias">
                 <option value="Vacio">Seleccione un dia</option>
                 <option value="Lunes">Lunes</option>
                 <option value="Martes">Martes</option>
@@ -87,7 +87,7 @@
   
       </div>
     <input type="submit" value="Ver estado de la solicitud" id="submito" onclick="EnEspera()"/>
-  
+    <img id="img1" src="/images/Planos-Bloqueado.jpg" width="406 px" height="250 px" flex-wrap="wrap">
   </div>
   
      <a id="Cerramos" href="/login">Cerrar sesion</a>
@@ -148,6 +148,8 @@
         function cargarmapa(){
             var bloques = document.getElementById("Listabloques").value;
             var dias = document.getElementById("Listadias").value;
+            if(bloques === "Vacio" || dias === "Vacio"){
+            }else{
             $.post('/cargamapa',{
             Listabloques: bloques ,
             Listadias: dias
@@ -157,12 +159,28 @@
             }
             })
             $.get('/pedirmapa',function(result){
-                if(result != ""){
                 console.log(result);
-            }
+                if(result == "L1"){
+                    $("#img1").attr("src","images/L1 Disponible.jpg");
+                }else if(result == "L2"){
+                    $("#img1").attr("src","images/L2 Disponible.jpg");
+                }else if(result == "L3"){
+                    $("#img1").attr("src","images/L3 Disponible.jpg");
+                }else if(result == "L208"){
+                    $("#img1").attr("src","images/L208 Disponible.jpg");
+                }else if(result == "L09"){
+                    $("#img1").attr("src","images/L209 Disponible.jpg");
+                }else if(result == "L213"){
+                    $("#img1").attr("src","images/L213 Disponible.jpg");
+                }else{
+                    $("#img1").attr("src","images/"+result+".jpg");
+                    $("#img1").attr("src","images/Todas Disponibles.jpg");  
+                }
+                
         })
-    }                
-        </script>
+               
+    }     
+     }   </script>
 
   
 

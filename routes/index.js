@@ -588,6 +588,7 @@ function buscadaimagenes(Bloque,Día,respuesta){
    
     var nombre
     var Nombreviejo ;
+  
     connection.query(sql, function(error, results){
         if(results){
         for(var i = 0; i<results.length; i++){ 
@@ -613,11 +614,12 @@ function buscadaimagenes(Bloque,Día,respuesta){
                     }else{
                     Nombreviejo = nombre1;
                     NombreDeAulasOcupadas.push(nombre1); 
-                    console.log(NombreDeAulasOcupadas); 
+                    console.log(">> aulas ocupadas: "+NombreDeAulasOcupadas); 
                     }
                 }else{
                     console.log(">> no exsiste el aula solicitda, es imposible")
                     console.log(result);
+                    NombreDeAulasOcupadas = results;
                 }
         })
     }
@@ -625,7 +627,8 @@ function buscadaimagenes(Bloque,Día,respuesta){
      console.log(NombreDeAulasOcupadas)
 }else{
         console.log("Todas las aulas estan libres : "+results); 
+        NombreDeAulasOcupadas = results;
     }
 });
-
+    
 }
