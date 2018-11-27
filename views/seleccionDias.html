@@ -3,97 +3,97 @@
 <head>
     <meta charset="utf-8">
     <title>Solicitudes</title>
-    <link rel="stylesheet" type="text/css" href="/styles/solicitudes.css">
+    <link rel="stylesheet" type="text/css" href="/styles/SeleccionDias.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">  
     <link rel="icon" type="text/css" href="../Images/logo.png">
 </head>
 
 
 <body>
-<div class="container">
+    <div class="container">
 
-    <form id="signup" method="POST" action="/solicitudesAdm" >
-
-        <div class="header">
-        
-            <h3>Solicitudes</h3>
-
-        <div class="inputs">
-        
-            <select required name="Listadias" id="Listadias">
-              <option value="Vacio">Seleccione un dia</option>
-              <option value="Lunes">Lunes</option>
-              <option value="Martes">Martes</option>
-              <option value="Miercoles">Miercoles</option>
-              <option value="Jueves">Jueves</option>
-              <option value="Viernes">Viernes</option>
-            </select>
-
-            <select onchange="cargarmapa()" required name="Listabloques" id="Listabloques">
-              <option value="Vacio">Seleccione un bloque</option>
-              <option value="1 Bloque">1 Bloque</option>
-              <option value="2 Bloque">2 Bloque</option>
-              <option value="3 Bloque">3 bloque</option>
-            </select>
-
-            <select required name="ListaTiempo" id="ListaTiempo">
-                <option value="Vacio">Seleccione un tipo de tiempo de repeticion</option>
-                <option value="semanal">semanal</option>
-                <option value="mensual">mensual</option>
-                <option value="anual">anual</option>
-                
-            
-            <input type="submit" value="Solicitar aula" id="submit" onclick="enviar()" />
-        
-        
-        </div>
+        <form method="POST" action="/solicitudesProf" id="signup">
+  
+          <div class="header">
+          
+              <h3>Ocupar un aula</h3>
+              
+              <p>Por favor complete los datos</p>
+              
+          </div>
+          
+          <div class="sep"></div>
+  
+          <div class="inputs">
+          
+              <select required name="Listadias" id="Listadias">
+                <option value="Vacio">Seleccione un dia</option>
+                <option value="Lunes">Lunes</option>
+                <option value="Martes">Martes</option>
+                <option value="Miercoles">Miercoles</option>
+                <option value="Jueves">Jueves</option>
+                <option value="Viernes">Viernes</option>
+              </select>
+  
+              <select onchange="cargarmapa()" required name="Listabloques" id="Listabloques">
+                <option value="Vacio">Seleccione un bloque</option>
+                <option value="1 Bloque">1 Bloque</option>
+                <option value="2 Bloque">2 Bloque</option>
+                <option value="3 Bloque">3 bloque</option>
+              </select>
+  
+              <select required name="ListaTiempo" id="ListaTiempo">
+                  <option value="Vacio">Seleccione un tipo de tiempo de repeticion</option>
+                  <option value="semanal">semanal</option>
+                  <option value="mensual">mensual</option>
+                  <option value="anual">anual</option>
+                  
+              
+              <input type="submit" value="Solicitar aula" id="submit" onclick="enviar()" />
+          
+          
+          </div>
+      
+      </form>
     
-    </form>
+    </div>
+    
+    <div class="container">
+  
+      <div id="signup">
+  
+          <div class="header">
+          
+              <h3>Aulas  disponibles</h3>
+                  
+          </div>
+          
+          <div class="sep"></div>
+  
+          <div class="inputs">
+  
+              <select required name="ListaAulas" id="ListaAulas">
+                  <option value="Vacio">Seleccione un aula</option>
+                  <option value="L1">LABORATORIO 1</option>
+                  <option value="L2">LABORATORIO 2</option>
+                  <option value="L3">LABORATORIO 3</option>
+                  <option value="L208">AULA 208</option> 
+                  <option value="L209">AULA 209</option> 
+                  <option value="L213">AULA 213</option>
+            </select>
+  
+    
+          </div>
+  
+      </div>
+    <input type="submit" value="Ver estado de la solicitud" id="submito" onclick="EnEspera()"/>
   
   </div>
   
-  <div class="container">
-
-    <div id="signup">
-
-        <div class="header">
-        
-            <h3>Aulas  disponibles</h3>
-                
-        </div>
-        
-        <div class="sep"></div>
-
-        <div class="inputs">
-
-        <select name="ListaAulas" id="ListaAulas"></select>
-        <label id=""></label> 
-        
-        <input type="submit" value="Aceptar" id="submit" onclick="enviar('aceptar');refresh()">
-        <input type="submit" value="Rechazar" id="submit" onclick="enviar('rechazar');refresh()">
-        
-        </div>
-
-    </form>
-
-</div>
-​<a id="Cerramos" href="/login">Cerrar sesion</a>
-</body>
-
-
-   <a id="Cerramos" href="/login">Cerrar sesion</a>
-   <nav class ="large-paddign black white-text">
-       <ul>
-           <li>imagenes</li>
-           <li>imagenes</li> 
-           <li>mi inicio</li>
-           <li><a href="/images"></a></li>
-       </ul>
-   </nav>
-</main>
- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" ></script>
-  <script>
-
+     <a id="Cerramos" href="/login">Cerrar sesion</a>
+     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" ></script>
+  </main>
+<script>
     function enviar(accion){
         var bloques = document.getElementById("Listabloques").value;
         var dias = document.getElementById("Listadias").value;
@@ -152,9 +152,16 @@
             Listabloques: bloques ,
             Listadias: dias
             },function(response){
-                img = response; 
+                for(var i = 0; i<result.length; i++){
+                    console.log(response[i]);
+            }
             })
-        }                
+            $.get('/pedirmapa',function(result){
+                if(result != ""){
+                console.log(result);
+            }
+        })
+    }                
         </script>
 
   

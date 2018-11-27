@@ -17,6 +17,7 @@ var tiempoglobal
 var idsubglobal 
 var idprofglobal 
 var ok;
+var NombreDeAulasOcupadas
 var script = document.createElement('script');
 script.src = '//code.jquery.com/jquery-1.11.0.min.js';
 
@@ -155,7 +156,9 @@ router.post('/cargamapa',function(req,res){
     Bloqueglobal = req.body.Listabloques 
     buscadaimagenes(Bloqueglobal,Díaglobal,res);
 })
-
+router.get('/pedirmapa',function(req,res){
+        res.send(NombreDeAulasOcupadas);
+})
 
 module.exports = router;
 
@@ -533,6 +536,7 @@ function Estadoaula(Día,Bloque,response,AULA,repeticion,idsub,idprof){
 }
 
 function buscadaimagenes(Bloque,Día,respuesta){
+    NombreDeAulasOcupadas = [];
     var bloquefinal;   
     if (Bloque === "1 Bloque" && Día === "Lunes"){
         bloquefinal = 1;
@@ -581,32 +585,47 @@ function buscadaimagenes(Bloque,Día,respuesta){
     }
     console.log(">> bloquefinal: "+bloquefinal); 
     var sql = "SELECT * FROM  schedule WHERE block = "+bloquefinal+" AND status = 2 ORDER BY idroom"
-    var NombreDeAulasOcupadas
+   
+    var nombre
+    var Nombreviejo ;
     connection.query(sql, function(error, results){
         if(results){
         for(var i = 0; i<results.length; i++){ 
-            console.log(i);
             var string = JSON.stringify(results);
             var json =  JSON.parse(string); 
-            var nombre = json[i].id;
-                var sql = "SELECT * FROM `rooms` WHERE id = "+nombre+" ORDER BY name"
-                connection.query(sql, function(error, result){
-                    //buscar en internet de como hacer requests de mysql a traves de un for
+            nombre = json[i].idroom;
+            console.log(i);
+            console.log(nombre);  
+            var max = results.length;
+            var cnt = 0;
+            if(++cnt === max){
+                 console.log("se ha sumado: " + cnt + " cant de resultados")
+            }else{
+                    var sql = "SELECT * FROM rooms WHERE id = "+nombre+" ORDER BY name"
+                    connection.query(sql, function(error, result){
                 if(result){
-                console.log(result);
-                var string1 = JSON.stringify(result);
-                var json1 =  JSON.parse(string1); 
-                var nombre1 = json1[i].name;
-                console.log(nombre1);
-                NombreDeAulasOcupadas = NombreDeAulasOcupadas + nombre1
+                    console.log(result);
+                    var string1 = JSON.stringify(result); 
+                    var json1 =  JSON.parse(string1); 
+                    var nombre1 = json1[0].name;
+                    if(Nombreviejo == nombre1){
+                    Nombreviejo = nombre1;
+                    }else{
+                    Nombreviejo = nombre1;
+                    NombreDeAulasOcupadas.push(nombre1); 
+                    console.log(NombreDeAulasOcupadas); 
+                    }
                 }else{
-
+                    console.log(">> no exsiste el aula solicitda, es imposible")
+                    console.log(result);
                 }
         })
     }
-    console.log(NombreDeAulasOcupadas)
+}
+     console.log(NombreDeAulasOcupadas)
 }else{
         console.log("Todas las aulas estan libres : "+results); 
     }
 });
+
 }
