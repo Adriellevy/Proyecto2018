@@ -149,32 +149,34 @@
             var bloques = document.getElementById("Listabloques").value;
             var dias = document.getElementById("Listadias").value;
             if(bloques === "Vacio" || dias === "Vacio"){
+                $("#img1").attr("src","images/Planos-Bloqueado.jpg");
             }else{
             $.post('/cargamapa',{
             Listabloques: bloques ,
             Listadias: dias
             },function(response){
-                for(var i = 0; i<result.length; i++){
+            for(var i = 0; i<result.length; i++){
                     console.log(response[i]);
             }
             })
             $.get('/pedirmapa',function(result){
                 console.log(result);
-                
-                if(result == "L1"){
-                    $("#img1").attr("src","images/L1 Disponible.jpg");
-                }else if(result == "L2"){
+                if(result == "L2,L3,L206,L208,L209"){
+                    $("#img1").attr("src","images/L1Disponible.jpg");
+                }else if(result == "L1,L3,L206,L208,L209"){
                     $("#img1").attr("src","images/L2 Disponible.jpg");
                 }else if(result == "L3"){
                     $("#img1").attr("src","images/L3 Disponible.jpg");
-                }else if(result == "L208"){
+                }else if(result == "L1,L2,L206,L208,L209"){
                     $("#img1").attr("src","images/L208 Disponible.jpg");
-                }else if(result == "L09"){
+                }else if(result == "L1,L2,L3,L206,L209"){
                     $("#img1").attr("src","images/L209 Disponible.jpg");
-                }else if(result == "L213"){
+                }else if(result == "L2,L3,L206,L208,L209"){
                     $("#img1").attr("src","images/L213 Disponible.jpg");
+                }else if(result.length > 1){
+                    $("#img1").attr("src","/"+result+".jpg");
                 }else{
-                    $("#img1").attr("src","images/"+result[i]+".jpg");
+                  //$("#img1").attr("src","images/"+result+".jpg");
                     $("#img1").attr("src","images/Todas Disponibles.jpg");  
                 }
                 
