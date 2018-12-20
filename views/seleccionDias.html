@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" name="viewport" content="width=device-width">
     <title>Solicitudes</title>
     <link rel="stylesheet" type="text/css" href="/styles/SeleccionDias.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">  
@@ -10,8 +10,10 @@
 
 
 <body>
+    <div class="red">Profesor: 
+        <div id="Name"></div>
+    </div>
     <div class="container">
-
         <form method="POST" action="/solicitudesProf" id="signup">
   
           <div class="header">
@@ -93,100 +95,6 @@
      <a id="Cerramos" href="/login">Cerrar sesion</a>
      <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" ></script>
   </main>
-<script>
-    function enviar(accion){
-        var bloques = document.getElementById("Listabloques").value;
-        var dias = document.getElementById("Listadias").value;
-        var tiempo = document.getElementById("ListaTiempo").value;
-        var aulas = document.getElementById("ListaAulas").value;
-        var id = 2;
-        var mat = 1;
-        console.log (bloques, dias, tiempo, id, mat)
-        $.post('/solicitudesProf',{
-        Listabloques: bloques ,
-        Listadias: dias ,
-        ListaTiempo: tiempo ,
-        ListaAulas: aulas ,
-        idsub: mat ,
-        idprof: id
-        }, function(data){
-            alert('Datos enviados!');
-        });
-        alert("solcitud enviada");
-        console.log("a");
-    }
-    function EnEspera(){
-        var bloques = document.getElementById("Listabloques").value;
-        var dias = document.getElementById("Listadias").value;
-        var tiempo = document.getElementById("ListaTiempo").value;
-        var aulas = document.getElementById("ListaAulas").value;
-        var id = 2;
-        var mat = 1;
-        console.log (bloques, dias, tiempo, id, mat)
-        
-        $.post('/RespuestaAula',{
-            Listabloques: bloques ,
-            Listadias: dias ,
-            ListaTiempo: tiempo ,
-            ListaAulas: aulas ,
-            idsub: mat ,
-            idprof: id
-         },function(response){
-             console.log(response)
-             if(response == 2){
-                 alert("se a haceptado la solicitud");
-                 window.location.replace('/solicitudesProf');
-             }else if (response == 0){
-                 alert("Se a negado la solicitud");
-                 window.location.replace('/solicitudesProf');
-             }else if( response == 1){
-                alert("sigue pendiente su solicitud");
-             }
-         });
-         }
-        
-        function cargarmapa(){
-            var bloques = document.getElementById("Listabloques").value;
-            var dias = document.getElementById("Listadias").value;
-            if(bloques === "Vacio" || dias === "Vacio"){
-                $("#img1").attr("src","images/Planos-Bloqueado.jpg");
-            }else{
-            $.post('/cargamapa',{
-            Listabloques: bloques ,
-            Listadias: dias
-            },function(response){
-            for(var i = 0; i<result.length; i++){
-                    console.log(response[i]);
-            }
-            })
-            $.get('/pedirmapa',function(result){
-                console.log(result);
-                if(result == "L2,L3,L206,L208,L209"){
-                    $("#img1").attr("src","images/L1Disponible.jpg");
-                }else if(result == "L1,L3,L206,L208,L209"){
-                    $("#img1").attr("src","images/L2 Disponible.jpg");
-                }else if(result == "L3"){
-                    $("#img1").attr("src","images/L3 Disponible.jpg");
-                }else if(result == "L1,L2,L206,L208,L209"){
-                    $("#img1").attr("src","images/L208 Disponible.jpg");
-                }else if(result == "L1,L2,L3,L206,L209"){
-                    $("#img1").attr("src","images/L209 Disponible.jpg");
-                }else if(result == "L2,L3,L206,L208,L209"){
-                    $("#img1").attr("src","images/L213 Disponible.jpg");
-                }else if(result.length > 1){
-                    $("#img1").attr("src","/"+result+".jpg");
-                }else{
-                  //$("#img1").attr("src","images/"+result+".jpg");
-                    $("#img1").attr("src","images/Todas Disponibles.jpg");  
-                }
-                
-        
-    })
-               
-    }     
-     }   </script>
-
-  
-
+<script type="text/javascript" src="/scripts/selecion de diasjs.js"></script>
 </body>
 </html>

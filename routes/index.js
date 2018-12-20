@@ -22,8 +22,6 @@ var script = document.createElement('script');
 script.src = '//code.jquery.com/jquery-1.11.0.min.js';
 
 router.get('/login', function (req, res) {
-    //res.sendFile(__dirname + '../views/inicioSesion.html');
-    //res.render('inicioSesion');
     res.sendFile(path.join(__dirname, '../views/inicioSesion.html'));
 });
 
@@ -73,6 +71,7 @@ router.post('/login', function (req, res){
     console.log(password);
     //res.redirect('/seleccion-dias');
     ValidarUsuario(dni, password, res);
+    
   });
 router.post('/solicitudesProf',function(req,res){
     var Día = req.body.Listadias || "null" ; 
@@ -89,6 +88,7 @@ router.post('/solicitudesProf',function(req,res){
     Solicitaraula(Día,Bloque,res,NAula,tiempo,idsub,idprof);
 });
 
+
 router.post('/RespuestaAula',function(req,res){
      Díaglobal = req.body.Listadias  
      Bloqueglobal = req.body.Listabloques 
@@ -103,9 +103,6 @@ router.post('/RespuestaAula',function(req,res){
      
 }); 
 
-router.get('/RespuestaAula',function(req,res){
-});
-
 router.post('/solicitudesAdm',function(req,res){
     //cargaSolicitudes(res);
     //res.send(ListaNombredeaulas);
@@ -114,9 +111,11 @@ router.post('/solicitudesAdm',function(req,res){
     RtaAdm(req);
 });
 
-/*router.post('/cierreSesion',function(response){
-    response.redirect('/login');
-});*/
+
+router.post('/permisos',function(req,res){
+    DNI = req.body.DNI;
+    permisos(DNI,res); 
+});
 
 router.post('/asignarMateria', function(req, res, next){
     var profesor = req.body.profesor;
@@ -141,10 +140,15 @@ router.get('/listadomaterias', function(req, res){
     });
 });
 
-router.get('/solicitud',function(req,res){
+router.get('/solicitudaula',function(req,res){
     res.send(ListaNombredeaulas);
 });
-
+router.get('/solicitudprof',function(req,res){
+    res.send(ListaNombredeProfesores);
+});
+router.get('/solicitudhorario',function(req,res){
+    res.send(ListaHoriarios);
+});
 router.get('/VentanaAdmin', function (req, res){
     res.sendFile(path.join(__dirname, '../views/ventanaAdmin.html'));
     console.log("una computadora se ha conectado a la pagina /ventanaAdmin ")
@@ -156,14 +160,43 @@ router.post('/cargamapa',function(req,res){
     Bloqueglobal = req.body.Listabloques 
     buscadaimagenes(Bloqueglobal,Díaglobal,res);
 })
+
 router.get('/pedirmapa',function(req,res){
         res.send(NombreDeAulasOcupadas);
 })
 
 module.exports = router;
 
-
-
+function permisos(DNI,res){
+    if(DNI){
+   var sql1 = "SELECT * FROM users WHERE dni="+ DNI;
+    connection.query(sql1, function(error, result){
+        if (error) {throw error;
+        }else{
+            if(result){
+            rola = result[0].role; 
+            if(rola == "teacher"){
+                rola = 2;
+                res.status(200).send(rola.toString());
+            }else if(rola == "admin"){
+                rola = 3
+                res.status(200).send(rola.toString());
+            }else{
+                rola = 1;
+                res.status(200).send(rola.toString());
+            }
+        }else{
+            rola = 1
+            res.status(200).send(rola.toString());
+            }
+        }
+    });
+    
+}else{
+    rola = 1
+    res.status(200).send(rola.toString());
+}
+}
 
 
 
@@ -217,7 +250,7 @@ function asignarMateria (profesor, materia, response){
 }
 
 function ValidarUsuario(dni, password, response){
-    var sql = "SELECT name, lastName, role, id FROM users WHERE dni = "+dni+" AND password = '"+password+"'";
+    var sql = "SELECT * FROM users WHERE dni = "+dni+" AND password = '"+password+"'";
     connection.query(sql, function(error, profesores, request){
         if (error) throw error;
         if (profesores.length === 0){
@@ -225,6 +258,11 @@ function ValidarUsuario(dni, password, response){
             // PASAR LOS ERRORES ACA (NO SE COMO)
             response.redirect('/login');
         }else{
+            response.cookie('name',profesores[0].name,{ expires: new Date(Date.now() + (60*1000))});
+            response.cookie('lastName',profesores[0].lastName,{ expires: new Date(Date.now() + (60*1000))});
+            response.cookie('idp',profesores[0].id,{ expires: new Date(Date.now() + (60*1000)) })
+            response.cookie('ids',profesores[0].idsubject,{ expires: new Date(Date.now() + (60*1000))})
+            response.cookie('DNI',profesores[0].dni,{expires: new Date(Date.now() + (60*1000))});
             sql = "SELECT * FROM users_subject WHERE idusers ="+profesores[0].id;
             connection.query(sql, function(error, result, request){
                 if (result){
@@ -248,6 +286,7 @@ function ValidarUsuario(dni, password, response){
                                     apellido: profesores[0].lastName,
                                     materias: materiasProf
                                 }
+                                console.log("aqui");
                                 console.log(request.teacher);
                                 response.redirect('/solicitudesProf');
                                 return true;
@@ -266,59 +305,16 @@ function ValidarUsuario(dni, password, response){
             });
         }
     });
-} function Solicitaraula(Día,Bloque,response,AULA,repeticion,idsub,idprof){
+} 
+
+function Solicitaraula(Día,Bloque,response,AULA,repeticion,idsub,idprof){
     Estadoaulaglobal = 1;
     var bloquefinal; 
     var IDPROf = idprof; 
     var IDSUb = idsub; 
     var nombreAula = AULA;  
     var repeticionaula = repeticion; 
-        
-    if (Bloque === "1 Bloque" && Día === "Lunes" ){
-        bloquefinal = 1;
-    }
-    else if (Bloque === "2 Bloque" && Día === "Lunes" ){
-        bloquefinal = 2;
-    }
-    else if (Bloque === "3 Bloque" && Día === "Lunes" ){
-        bloquefinal = 3;
-    }
-    else if (Bloque === "1 Bloque" && Día === "Martes" ){
-        bloquefinal = 4;
-    }
-    else if (Bloque === "2 Bloque" && Día === "Martes" ){
-        bloquefinal = 5;
-    }
-    else if (Bloque === "3 Bloque" && Día === "Martes" ){
-        bloquefinal = 6;
-    }
-    else if (Bloque === "1 Bloque" && Día === "Miercoles" ){
-        bloquefinal = 7;
-    } 
-    else if (Bloque === "2 Bloque" && Día === "Miercoles" ){
-        bloquefinal = 8;
-    }
-    else if (Bloque === "3 Bloque" && Día === "Miercoles" ){
-        bloquefinal = 9;
-    }
-    else if (Bloque === "1 Bloque" && Día === "Jueves" ){
-        bloquefinal = 10;
-    }
-    else if (Bloque === "2 Bloque" && Día === "Jueves" ){
-        bloquefinal = 11;
-    }
-    else if (Bloque === "3 Bloque" && Día === "Jueves" ){
-        bloquefinal = 12;
-    }
-    else if (Bloque === "1 Bloque" && Día === "Viernes" ){
-        bloquefinal = 13;
-    }
-    else if (Bloque === "2 Bloque" && Día === "Viernes" ){
-        bloquefinal = 14;
-    }
-    else if (Bloque === "3 Bloque" && Día === "Viernes" ){
-        bloquefinal = 15;
-    }
+    bloquefinal = BUSCADAdeboque(Bloque,Día);
     if(repeticion == "semanal"){
         repeticionaula = 3;
     }else if (repeticion == "mensual"){
@@ -368,94 +364,115 @@ function ValidarUsuario(dni, password, response){
 };
 
         
-        function cargaSolicitudes(response){
-            
-            ListaNombredeaulas = [];
-            connection.query(`SELECT * FROM `+"schedule" +` WHERE `+"status"+` = 1`, function (error, result, fields) {
-                if(error){
-                   console.log(">> There is not a request for a schedule");
-                   throw error;  
-                }
-                else{
-                            var string = JSON.stringify(result);
-                            var json =  JSON.parse(string); 
-                            console.log(">> The json is saved the next step: search in rooms");
-                        if (json === [] || json === null || json === "null" || json === ""){
-                                console.log(">> The Json is empty")
-                                exports.json = json;
-                        }else{                            
-                            for (let i = 0; i  < result.length; i++) {
-                                const element = result[i].idroom;   
-                                    if(json != [] || json != null || json != "null" || json != ""){
-                                        
-                                    connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "id" + `=` + result[i].idroom +``, function (error, result, fields){
-                                        if(error){
-                                            throw err;
-                                        }else{
-                                            var string1 = JSON.stringify(result);
-                                            var json1 =  JSON.parse(string1); 
-                                            nombreAula = json1[0].name;
-                                            ListaNombredeaulas.push(nombreAula);
-                                            console.log(ListaNombredeaulas);
-                                    }
-                            });
+function cargaSolicitudes(response){
+
+ListaNombredeaulas = [];
+ListaNombredeProfesores = [];
+ListaHoriarios=[];
+connection.query(`SELECT * FROM `+"schedule" +` WHERE `+"status"+` = 1 ORDER BY id`, function (error, result, fields) {
+if(error){
+    console.log(">> There is not a request for a schedule");
+    throw error;  
+}
+else{
+            var string = JSON.stringify(result);
+            var json =  JSON.parse(string); 
+            console.log(">> The json is saved the next step: search in rooms");
+        if (json === [] || json === null || json === "null" || json === ""){
+                console.log(">> The Json is empty")
+                exports.json = json;
+        }else{                            
+            for (let i = 0; i<result.length; i++){
+                console.log(result[i])
+                const element = result[i].idroom;   
+                ListaHoriarios.push(result[i].block);
+                    if(json != [] || json != null || json != "null" || json != ""){
+                    connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "id" + `=` + result[i].idroom +``, function (error, result, fields){
+                        if(error){
+                            throw err;
+                        }else{
+                            if(result){
+                            var string1 = JSON.stringify(result);
+                            var json1 =  JSON.parse(string1); 
+                            nombreAula = json1[0].name;
+                            ListaNombredeaulas.push(nombreAula);
+                            }
                         }
-                        
+                    });
+            connection.query(`SELECT * FROM `+ "users" + ` WHERE ` + "id" + `=` + result[i].idusers +``, function (error, results, fields){
+                if(error){
+                    throw err;
+                }else{
+                    if(result){
+                    var string = JSON.stringify(results);
+                    var json =  JSON.parse(string); 
+                    var nombreProfe = json[0].name;
+                    ListaNombredeProfesores.push(nombreProfe);
+                    console.log(ListaNombredeProfesores);
                     }
-                } 
-             }    
-        });
+                }
+            })
+        }
+        
     }
+} 
+}    
+});
+}
+
 function RtaAdm(req){
-            var rsta = req.body.accion
-            console.log(">> rsta: "+rsta)
-            if(rsta =='aceptar'){
-                msg = req.body.aula;
-             connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "name" + `= "`+msg+`"`, function (error, resulta, fields){
-                    if(error){
-                        throw err;
-                    }else{
-                        var stringa = JSON.stringify(resulta);
-                        var jsona =  JSON.parse(stringa); 
-                        var idaula = jsona[0].id;
-                        console.log(">> id aula: " + idaula);
-                connection.query(`UPDATE `+"schedule"+` SET `+"status"+`= 2 WHERE `+"status"+` = 1 AND `+"idroom"+` =`+ idaula+``, function (error, result, fields) {
-                    if(error){
-                    }
-                    else{
-                        console.log(">> Una solicitud ha sido aprobada: " + msg); 
-                    }
-                });
-            
-            }
-               
-        });
-    }else{
-        console.log(">> rsta != aprobar")
-    }
-    if(rsta == 'rechazar'){
+    var rsta = req.body.accion
+    console.log(">> rsta: "+rsta)
+    if(rsta =='aceptar'){
         msg = req.body.aula;
-        console.log(msg);
-        connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "name" + `="`+msg+`"`, function (error, result, fields){
+        console.log('>> msg: ' + msg)
+        connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "name" + `= "`+msg+`"`, function (error, resulta, fields){
             if(error){
                 throw err;
             }else{
-                var string1 = JSON.stringify(result);
-                var json1 =  JSON.parse(string1); 
-                var idaula = json1[0].id;
+                var stringa = JSON.stringify(resulta);
+                var jsona =  JSON.parse(stringa); 
+                var idaula = jsona[0].id;
                 console.log(">> id aula: " + idaula);
-        connection.query(`UPDATE `+"schedule"+` SET `+"status"+`= 0 WHERE `+"status"+` = 1 AND `+"idroom"+` =`+ idaula+``, function (error, result, fields) {
+        connection.query(`UPDATE `+"schedule"+` SET `+"status"+`= 2 WHERE `+"status"+` = 1 AND `+"idroom"+` =`+ idaula+``, function (error, result, fields) {
             if(error){
             }
             else{
-                console.log(">> Una solicitud ha sido rechasada: " + msg); 
-                    }
-                });
+                console.log(">> Una solicitud ha sido aprobada: " + msg); 
+                
             }
         });
-    }else{
-        console.log(">> rsta != rechazar");
+    
     }
+        
+});
+}else{
+console.log(">> rsta != aprobar")
+}
+if(rsta == 'rechazar'){
+msg = req.body.aula;
+console.log(msg);
+connection.query(`SELECT * FROM `+ "rooms" + ` WHERE ` + "name" + `="`+msg+`"`, function (error, result, fields){
+    if(error){
+        throw err;
+    }else{
+        var string1 = JSON.stringify(result);
+        var json1 =  JSON.parse(string1); 
+        var idaula = json1[0].id;
+        console.log(">> id aula: " + idaula);
+connection.query(`UPDATE `+"schedule"+` SET `+"status"+`= 0 WHERE `+"status"+` = 1 AND `+"idroom"+` =`+ idaula+``, function (error, result, fields) {
+    if(error){
+    }
+    else{
+        console.log(">> Una solicitud ha sido rechasada: " + msg);
+
+            }
+        });
+    }
+});
+}else{
+console.log(">> rsta != rechazar");
+}
 }
 
 function Estadoaula(Día,Bloque,response,AULA,repeticion,idsub,idprof){
@@ -465,52 +482,7 @@ function Estadoaula(Día,Bloque,response,AULA,repeticion,idsub,idprof){
     var IDSUb = idsub; 
     var nombreAula = AULA;  
     var repeticionaula = repeticion; 
-
-    if (Bloque === "1 Bloque" && Día === "Lunes" ){
-        bloquefinal = 1;
-    }
-    else if (Bloque === "2 Bloque" && Día === "Lunes" ){
-        bloquefinal = 2;
-    }
-    else if (Bloque === "3 Bloque" && Día === "Lunes" ){
-        bloquefinal = 3;
-    }
-    else if (Bloque === "1 Bloque" && Día === "Martes" ){
-        bloquefinal = 4;
-    }
-    else if (Bloque === "2 Bloque" && Día === "Martes" ){
-        bloquefinal = 5;
-    }
-    else if (Bloque === "3 Bloque" && Día === "Martes" ){
-        bloquefinal = 6;
-    }
-    else if (Bloque === "1 Bloque" && Día === "Miercoles" ){
-        bloquefinal = 7;
-    } 
-    else if (Bloque === "2 Bloque" && Día === "Miercoles" ){
-        bloquefinal = 8;
-    }
-    else if (Bloque === "3 Bloque" && Día === "Miercoles" ){
-        bloquefinal = 9;
-    }
-    else if (Bloque === "1 Bloque" && Día === "Jueves" ){
-        bloquefinal = 10;
-    }
-    else if (Bloque === "2 Bloque" && Día === "Jueves" ){
-        bloquefinal = 11;
-    }
-    else if (Bloque === "3 Bloque" && Día === "Jueves" ){
-        bloquefinal = 12;
-    }
-    else if (Bloque === "1 Bloque" && Día === "Viernes" ){
-        bloquefinal = 13;
-    }
-    else if (Bloque === "2 Bloque" && Día === "Viernes" ){
-        bloquefinal = 14;
-    }
-    else if (Bloque === "3 Bloque" && Día === "Viernes" ){
-        bloquefinal = 15;
-    }
+    bloquefinal = BUSCADAdeboque(Bloque,Día);
     if(repeticion == "semanal"){
         repeticionaula = 3;
     }else if (repeticion == "mensual"){
@@ -523,21 +495,73 @@ function Estadoaula(Día,Bloque,response,AULA,repeticion,idsub,idprof){
         if(error){
             throw err;
         }else{
-            if(result.length != undefined)
+            if(result){
             var string1 = JSON.stringify(result);
             var json1 =  JSON.parse(string1); 
             var a = String(json1[0].status);
             console.log(">> Reslut: " + a);
             Estadoaulaglobal = a; 
             console.log(">> estado: "+ Estadoaulaglobal);
-            
-        }
-    });
 }
-
+    } 
+        }); 
+        	}
 function buscadaimagenes(Bloque,Día,respuesta){
     NombreDeAulasOcupadas = [];
     var bloquefinal;   
+    bloquefinal = BUSCADAdeboque(Bloque,Día);
+    
+    console.log(">> bloquefinal: "+bloquefinal); 
+    var sql = "SELECT * FROM  schedule WHERE block = "+bloquefinal+" AND status = 2 ORDER BY idroom"
+   
+    var nombre
+    var Nombreviejo;
+    connection.query(sql, function(error, results){
+        if(results){
+        for(var i = 0; i<results.length; i++){ 
+            var string = JSON.stringify(results);
+            var json =  JSON.parse(string); 
+            nombre = json[i].idroom;
+            console.log(i);
+            console.log(nombre);  
+            var max = results.length;
+            var cnt = 0;
+            if(++cnt === max){
+                 console.log(">> Resuts =''")
+            }else{
+                    var sql = "SELECT * FROM rooms WHERE id = "+nombre+" ORDER BY name"
+                    connection.query(sql, function(error, result){
+                if(result){
+                    console.log(result);
+                    var string1 = JSON.stringify(result); 
+                    var json1 =  JSON.parse(string1); 
+                    var nombre1 = json1[0].name;
+                    if(Nombreviejo == nombre1){
+                    Nombreviejo = nombre1;
+                    }else{
+                    Nombreviejo = nombre1;
+                    NombreDeAulasOcupadas.push(nombre1); 
+                    console.log(">> aulas ocupadas: "+NombreDeAulasOcupadas); 
+                    }
+                }else{
+                    console.log(">> no exsiste el aula solicitda, es imposible")
+                    console.log(result);
+                    NombreDeAulasOcupadas = results;
+                }
+        })
+    }
+}
+     console.log(NombreDeAulasOcupadas)
+}else{
+        console.log("Todas las aulas estan libres : "+results); 
+        NombreDeAulasOcupadas = results;
+    }
+});
+    
+}
+
+
+function BUSCADAdeboque(Bloque,Día){
     if (Bloque === "1 Bloque" && Día === "Lunes"){
         bloquefinal = 1;
     }
@@ -583,51 +607,5 @@ function buscadaimagenes(Bloque,Día,respuesta){
     else if (Bloque === "3 Bloque" && Día === "Viernes" ){
         bloquefinal = 15;
     }
-    console.log(">> bloquefinal: "+bloquefinal); 
-    var sql = "SELECT * FROM  schedule WHERE block = "+bloquefinal+" AND status = 2 ORDER BY idroom"
-   
-    var nombre
-    var Nombreviejo;
-    connection.query(sql, function(error, results){
-        if(results){
-        for(var i = 0; i<results.length; i++){ 
-            var string = JSON.stringify(results);
-            var json =  JSON.parse(string); 
-            nombre = json[i].idroom;
-            console.log(i);
-            console.log(nombre);  
-            var max = results.length;
-            var cnt = 0;
-            if(++cnt === max){
-                 console.log("se ha sumado: " + cnt + " cant de resultados")
-            }else{
-                    var sql = "SELECT * FROM rooms WHERE id = "+nombre+" ORDER BY name"
-                    connection.query(sql, function(error, result){
-                if(result){
-                    console.log(result);
-                    var string1 = JSON.stringify(result); 
-                    var json1 =  JSON.parse(string1); 
-                    var nombre1 = json1[0].name;
-                    if(Nombreviejo == nombre1){
-                    Nombreviejo = nombre1;
-                    }else{
-                    Nombreviejo = nombre1;
-                    NombreDeAulasOcupadas.push(nombre1); 
-                    console.log(">> aulas ocupadas: "+NombreDeAulasOcupadas); 
-                    }
-                }else{
-                    console.log(">> no exsiste el aula solicitda, es imposible")
-                    console.log(result);
-                    NombreDeAulasOcupadas = results;
-                }
-        })
-    }
-}
-     console.log(NombreDeAulasOcupadas)
-}else{
-        console.log("Todas las aulas estan libres : "+results); 
-        NombreDeAulasOcupadas = results;
-    }
-});
-    
+    return(bloquefinal)
 }

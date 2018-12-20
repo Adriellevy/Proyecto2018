@@ -6,6 +6,7 @@ var port = 8080;
 var server = http.createServer(app);
 var indexRouter = require('./routes/index');
 const bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
 
 //var dbConnection = require('./config/database');
 
@@ -21,6 +22,7 @@ app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json()); 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/', indexRouter);
+app.use(cookieParser());
 
 server.listen(port);
 console.log('Server on port '+port+'...');

@@ -11,7 +11,9 @@
 
 <body>
 <div class="container">
-
+    <div class="red">Administrador: 
+        <div id="Name"></div>
+    </div>
     <form id="signup" method="POST" action="/solicitudesAdm" >
 
         <div class="header">
@@ -21,17 +23,23 @@
             <p>Por favor seleccione el aula con la que desea interactuar</p>
                 
         </div>
-        
+        <div class="header">
         <div class="sep"></div>
 
         <div class="inputs">
 
-        <select name="ListaAulas" id="ListaAulas"></select>
-        <label id=""></label> 
-        
+        <select name="ListaAulas" id="ListaAulas">
+            <option value="1">Selecione alguna solicitud</option>
+        </select>
+        <h3>Profesores Y horarios </h3>
+
+            <p>Aca apareceran el profesor que a solicitado un aula y en que horario</p>
+        <label class="LosSelectQueCambian" id="LosSelectQueCambian"></label> 
+        <label class="LosSelectQueCambian" id="LosSelectQueCambian1"></label> 
+       
         <input type="submit" value="Aceptar" id="submit" onclick="enviar('aceptar');refresh()">
         <input type="submit" value="Rechazar" id="submit" onclick="enviar('rechazar');refresh()">
-        
+         </div>
         </div>
 
     </form>
@@ -39,48 +47,7 @@
 </div>
 ​<a id="Cerramos" href="/login">Cerrar sesion</a>
 </body>
-
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" ></script>
-  <script>
-    var miSelect=document.getElementById("ListaAulas");
-    // Creamos un objeto option
-    var miOption=document.createElement("option");
-    // Añadimos las propiedades value y label
-    miOption.setAttribute("value","1");
-    miOption.setAttribute("label","casa");
-    // Añadimos el option al select
-    // miSelect.appendChild(miOption);
-    var listaAulas = $('#ListaAulas');
-    function enviar(action){
-        $.post('/solicitudesAdm',{
-            accion: action, 
-            aula: listaAulas.val()
-        });
-        alert("solcitud enviada");
-        console.log("a");
-    }
-        $.get('/solicitud',function(result){
-            if(result == ""){
-                alert("No hay ninguna solcisitud pendiente, espere y lugo recarge la pagina"); 
-            }else
-            { 
-            alert(result);
-            for(var i = 0; i<result.length; i++){
-             $('#ListaAulas').append('<option id=”opcion1″ value='+result[i]+'>'+result[i]+'</option>');
-            }
-        }
-    });
-    var int=self.setInterval("refresh()",60000);
-	function refresh()
-	{
-        alert('Precione aceptar para que se recarge la pagina');
-        window.location.replace('/solicitudesAdm');
-        alert('se recargo');
-	}
-     </script>
-  <script type="text/javascript" src="../public/scripts/solicitud.js"></script>
-
-  
-
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" ></script>
+  <script type="text/javascript" src="/scripts/solicitud.js"></script>
 </body>
 </html>
