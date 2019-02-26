@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>conflictos</title>
+    <link rel="stylesheet" type="text/css" href="/styles/solicitudes.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">  
+    <link rel="icon" type="text/css" href="../Images/logo.png">
+</head>
+
+
+<body>
+<div class="container">
+    <div class="red">Administrador: 
+        <div id="Name"></div>
+    </div>
+    <form id="signup" method="POST" action="/conflictos" >
+
+        <div class="header">
+        
+            <h3>conflicto</h3>
+
+            <p>Por favor seleccione el aula con la que desea interactuar</p>
+                
+        </div>
+        <div class="header">
+        <div class="sep"></div>
+
+        <div class="inputs">
+
+        <select name="ListaAulas" id="ListaAulas">
+            <option value="1">Selecione algun conflicto</option>
+        </select>
+        <h3>Profesores Y horarios </h3>
+
+            <p>Aca apareceran el profesor que a solicitado un aula y en que horario</p>
+        <label class="LosSelectQueCambian" id="LosSelectQueCambian"></label> 
+        <label class="LosSelectQueCambian" id="LosSelectQueCambian1"></label> 
+       
+        <input type="submit" value="Aceptar" id="submit" onclick="enviar('aceptar');refresh()">
+        <input type="submit" value="Rechazar" id="submit" onclick="enviar('rechazar');refresh()">
+         </div>
+        </div>
+
+    </form>
+
+</div>
+​<a id="Cerramos" href="/login">Cerrar sesion</a>
+</body>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" ></script>
+  <script type="text/javascript" src="/scripts/conflictos.js"></script>
+</body>
+</html>

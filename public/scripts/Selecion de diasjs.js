@@ -4,6 +4,8 @@ document.getElementById('Name').innerHTML = getCookie("name");
 var Profesor = getCookie("name");
 var DNi = getCookie("DNI");
 var apellido = getCookie("LastName");
+var fecha = new Date();
+console.log(fecha)
 //chequeo si esta permitido
 if(DNi){
 $.post('/permisos',{
@@ -36,7 +38,8 @@ function enviar(accion){
 	ListaTiempo: tiempo ,
 	ListaAulas: aulas ,
 	idsub: mat ,
-	idprof: id
+	idprof: id,
+	fecha:date
 	}, function(data){
 		alert('Datos enviados!');
 	});
@@ -58,7 +61,8 @@ function EnEspera(){
 		ListaTiempo: tiempo ,
 		ListaAulas: aulas ,
 		idsub: mat ,
-		idprof: id
+		idprof: id,
+		fecha:date
 		},function(response){
 			console.log(response)
 			if(response == 2){

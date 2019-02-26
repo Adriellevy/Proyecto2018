@@ -3,6 +3,7 @@ var router = express.Router();
 var connection = require('../config/database');
 var path = require('path');
 var jsdom = require("jsdom");
+
 const { JSDOM } = jsdom;
 const { window } = new JSDOM();
 const { document } = (new JSDOM('')).window;
@@ -16,8 +17,11 @@ var NAulaglobal
 var tiempoglobal 
 var idsubglobal 
 var idprofglobal 
+var fechaglobal
 var ok;
 var NombreDeAulasOcupadas
+var Numerodelconflicto = 0;
+var ListaDeConfictos = [];
 var script = document.createElement('script');
 script.src = '//code.jquery.com/jquery-1.11.0.min.js';
 
@@ -27,6 +31,10 @@ router.get('/login', function (req, res) {
 
 router.get('/solicitudesProf', function(req, res){
     res.sendFile(path.join(__dirname, '../views/seleccionDias.html'));
+});
+
+router.get('/conflictos', function(req, res){
+    res.sendFile(path.join(__dirname, '../views/conflictos.html'));
 });
 
 router.get('/materias', function(req, res){
@@ -80,12 +88,13 @@ router.post('/solicitudesProf',function(req,res){
     var tiempo = req.body.ListaTiempo
     var idsub = req.body.idsub; 
     var idprof = req.body.idprof;
+    var fecha = req.body.fecha;
     console.log(">> Día solicitado: " + Día);
     console.log(">> Bloque solicitado: " + Bloque);
     console.log(">> Aula solicitada: "+ NAula);
     console.log(">> tiempo solicitado: "+ tiempo);
     console.log(">> ")
-    Solicitaraula(Día,Bloque,res,NAula,tiempo,idsub,idprof);
+    Solicitaraula(Día,Bloque,res,NAula,tiempo,idsub,idprof,fecha);
 });
 
 
@@ -96,7 +105,8 @@ router.post('/RespuestaAula',function(req,res){
      tiempoglobal = req.body.ListaTiempo
      idsubglobal = req.body.idsub; 
      idprofglobal = req.body.idprof;
-     Estadoaula(Díaglobal,Bloqueglobal,res,NAulaglobal,tiempoglobal,idsubglobal,idprofglobal);
+     fechaglobal = req.body.fecha;
+     Estadoaula(Díaglobal,Bloqueglobal,res,NAulaglobal,tiempoglobal,idsubglobal,idprofglobal,fechaglobal);
      console.log(Estadoaulaglobal)
      //res.send(Estadoaulaglobal);
      res.status(200).send(Estadoaulaglobal.toString());
@@ -164,6 +174,10 @@ router.post('/cargamapa',function(req,res){
 router.get('/pedirmapa',function(req,res){
         res.send(NombreDeAulasOcupadas);
 })
+router.post('/conflictos',function(req,res){
+    CargaDeConflictos();  
+    res.send(ListaDeConfictos);  
+}); 
 
 module.exports = router;
 
@@ -198,8 +212,146 @@ function permisos(DNI,res){
 }
 }
 
+function CargaDeConflictos(){
+    connection.query('SELECT * FROM `schedule` WHERE `status` = 2',function (error, result, fields){
+        if(error){
+            throw error;  
+        }else{
+            ListaDeConfictos=[];
+             if(result){
+                    for(var numc = 0; numc<result.length; numc++){
+                        var string1 = JSON.stringify(result);
+                        var json1 =  JSON.parse(string1);
+                    for(let j = 0; j < result.length; j++){
+                        console.log(">> j: "+j);
+                        console.log(">> Numerodelconflicto: "+numc);
+                            if(json1[numc].date == json1[j].date){
+                                if(json1[numc].idroom == json1[j].idroom){
+                                    if(json1[numc].id == json1[j].id){
+                                    console.log(">> numeros iguales");
+                                        }else{
+                                            
+                                                ListaDeConfictos.push(json1[numc]);
+                                                ListaDeConfictos.push(json1[j]);   
+                                        }
+                                    }
+                        }else{
+                                console.log(">> No hay conflictos");
+                                ListaDeConfictos.push(0);
+                            }
+                        }
+                    }   console.log(">>lista de conflictos positivos:"+ListaDeConfictos.length);
+                        console.log(ListaDeConfictos)
+                        
+               }else{
+                    console.log(">> No hay conflictos");
+                } 
+            } 
+                
+        })
+        
+    }
 
 
+    /*async.each(ListA, function (itemA, callback) { //loop through array
+                    //process itemA
+                  async.each(itemA.Children, function (itemAChild, callback1) { //loop through array
+                    //process itemAChild
+                    callback1(); 
+                    }, function(err) {
+                      console.log("InnerLoopFinished");
+                      callback();
+                    });
+                  }, function(err) {
+                    console.log("OuterLoopFinished");
+                    console.log('Process Finished');
+                });
+                 /*
+                 console.log("a");
+                 var Numerodelconflicto = 0;
+                 let j = 0
+        async.each(result,function (result, callback){
+            if(Numerodelconflicto<result.length){
+                console.log("aa");
+                var string1 = JSON.stringify(result);
+                var json1 =  JSON.parse(string1);
+            }
+            async.each(result.Children,function(resultChild,callback1){
+                if(j < result.length){
+                    console.log(">> j: "+j);
+                    console.log(">> Numerodelconflicto: "+Numerodelconflicto);
+                    if(json1[Numerodelconflicto].date == json1[j].date){
+                        if(json1[Numerodelconflicto].idroom == json1[j].idroom){
+                            if(json1[Numerodelconflicto].id == json1[j].id){
+                            console.log(">> numeros iguales");
+                            Numerodelconflicto++
+                            j++
+                                }else{
+                                Numerodelconflicto++
+                                j++
+                                ListaDeConfictos.push(json1[Numerodelconflicto]);
+                                ListaDeConfictos.push(json1[i]);
+                                console.log(">>lista de conflictos positivos:")
+                                console.log(ListaDeConfictos)
+                                }
+                            }
+                    }else{
+                        console.log(">> No hay conflictos");
+                        ListaDeConfictos.push(0);
+                    }
+                }
+                callback1();
+           
+        },function(err) {
+                console.log("InnerLoopFinished");
+                callback();
+              });
+            },function(err) {
+              console.log("OuterLoopFinished");
+              console.log('Process Finished');
+          }); 
+        
+         }
+        }
+        })
+        }
+       /* if(error){
+            throw error;  
+        }else{
+             if(result){
+                 console.log("a");
+            for(var Numerodelconflicto;Numerodelconflicto>result;Numerodelconflicto++){
+                console.log("a");
+
+                var string1 = JSON.stringify(result);
+                var json1 =  JSON.parse(string1);
+            for(let j = 0; j < result.length; j++){
+                console.log(">> j: "+j);
+                console.log(">> Numerodelconflicto: "+Numerodelconflicto);
+                    if(json1[Numerodelconflicto].date == json1[j].date){
+                        if(json1[Numerodelconflicto].idroom == json1[j].idroom){
+                            if(json1[Numerodelconflicto].id == json1[j].id){
+                            console.log(">> numeros iguales");
+                                }else{
+                                ListaDeConfictos.push(json1[Numerodelconflicto]);
+                                ListaDeConfictos.push(json1[i]);
+                                console.log(">>lista de conflictos positivos:")
+                                console.log(ListaDeConfictos)
+                                }
+                    }
+                }else{
+                        console.log(">> No hay conflictos");
+                        ListaDeConfictos.push(0);
+                    }
+                }
+            }
+       }else{
+            console.log(">> No hay conflictos");
+        } 
+    } 
+        
+})
+} */
 
 function AgregarUsuario(dni, nombre, apellido, password, rol, response){
     var sql = "SELECT * FROM users WHERE dni = "+dni;
@@ -307,7 +459,7 @@ function ValidarUsuario(dni, password, response){
     });
 } 
 
-function Solicitaraula(Día,Bloque,response,AULA,repeticion,idsub,idprof){
+function Solicitaraula(Día,Bloque,response,AULA,repeticion,idsub,idprof,fecha){
     Estadoaulaglobal = 1;
     var bloquefinal; 
     var IDPROf = idprof; 
@@ -345,12 +497,11 @@ function Solicitaraula(Día,Bloque,response,AULA,repeticion,idsub,idprof){
                 throw error;  
             }else{
                  if(result.length != undefined){
-            connection.query('INSERT INTO `schedule`(`idusers`, `idsubject`, `idroom`, `block`, `repeat`, `status`) VALUES ('+IDPROf+','+IDSUb+','+IdAula+',' +bloquefinal+','+repeticionaula+',1)',function (error, result, fields) {
+            connection.query('INSERT INTO `schedule`(`idusers`, `idsubject`, `idroom`, `block`, `repeat`, `status`,`date`) VALUES ('+IDPROf+','+IDSUb+','+IdAula+',' +bloquefinal+','+repeticionaula+',1,'+fecha+')',function (error, result, fields) {
                     if(error){
-                        console.log("a");
                         throw error;  
                     }else{
-                        console.log("ave")
+                        console.log(">> solicitud confirmada")
                     }
                 });   
             }else{
@@ -475,7 +626,7 @@ console.log(">> rsta != rechazar");
 }
 }
 
-function Estadoaula(Día,Bloque,response,AULA,repeticion,idsub,idprof){
+function Estadoaula(Día,Bloque,response,AULA,repeticion,idsub,idprof,fecha){
     ok = false;
     var bloquefinal; 
     var IDPROf = idprof; 
@@ -491,7 +642,7 @@ function Estadoaula(Día,Bloque,response,AULA,repeticion,idsub,idprof){
         repeticionaula = 1;
     }
     console.log(">> antes del query")
-    connection.query("SELECT * FROM `schedule` WHERE `idusers` = "+IDPROf+" AND `idsubject` = "+IDSUb+" AND `idroom` = "+idaulaglobal+" AND `block` = "+bloquefinal+" AND `repeat`= "+repeticionaula+"", function (error, result, fields){
+    connection.query("SELECT * FROM `schedule` WHERE `idusers` = "+IDPROf+" AND `idsubject` = "+IDSUb+" AND `idroom` = "+idaulaglobal+" AND `block` = "+bloquefinal+" AND `repeat`= "+repeticionaula+"AND `date`= "+fechaglobal+"", function (error, result, fields){
         if(error){
             throw err;
         }else{
@@ -559,7 +710,6 @@ function buscadaimagenes(Bloque,Día,respuesta){
 });
     
 }
-
 
 function BUSCADAdeboque(Bloque,Día){
     if (Bloque === "1 Bloque" && Día === "Lunes"){
